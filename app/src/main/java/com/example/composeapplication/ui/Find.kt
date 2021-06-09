@@ -13,7 +13,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -21,7 +20,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,18 +28,18 @@ import com.example.composeapplication.R
 import com.example.composeapplication.Utils
 import com.example.composeapplication.bean.Movie
 import com.example.composeapplication.bean.testMovies
-import com.example.composeapplication.viewmodel.MovieViewModel
+import com.example.composeapplication.viewmodel.ArticleViewModel
 
 @ExperimentalFoundationApi
 @Composable
-fun Find(movieViewModel: MovieViewModel, onClick: (Movie) -> Unit) {
+fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
     val warningTip = stringResource(id = R.string.input_search_warning)
     var textFieldValue by remember { mutableStateOf("") }
     var searchQuery by remember { mutableStateOf("") }
 
-    val baseContext = movieViewModel.getApplication<Application>().baseContext
+    val baseContext = articleViewModel.getApplication<Application>().baseContext
     if (!Utils.ensureNetworkAvailable(baseContext, false))
-        ShowDialog(R.string.search_dialog_tip, R.string.search_failure)
+//        ShowDialog(R.string.search_dialog_tip, R.string.search_failure)
     Column {
         Row {
 
@@ -78,7 +76,7 @@ fun Find(movieViewModel: MovieViewModel, onClick: (Movie) -> Unit) {
                             if (textFieldValue.length > 1) {
                                 searchQuery = textFieldValue
                                 if (searchQuery.isNotEmpty()) {
-                                    movieViewModel.searchMoviesComposeCoroutines(searchQuery)
+                                    articleViewModel.searchMoviesComposeCoroutines(searchQuery)
                                 }
                             } else Toast.makeText(
                                 baseContext,
@@ -109,7 +107,7 @@ fun Find(movieViewModel: MovieViewModel, onClick: (Movie) -> Unit) {
 
         Utils.logDebug(Utils.TAG_SEARCH, "searchQuery updated:$searchQuery")
         if (searchQuery.isNotEmpty()) {
-            movieViewModel.searchMoviesComposeCoroutines("功夫熊猫")
+            articleViewModel.searchMoviesComposeCoroutines("功夫熊猫")
         }
     }
     val movieData: State<List<Movie>>? = null

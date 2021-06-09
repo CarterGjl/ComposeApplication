@@ -50,4 +50,14 @@
     <string name="tab_store_recommend">Recommend movies</string>
     <string name="tab_favourite">Favourite</string>
     <string name="tab_profile">Profile</string>
+    <string name="article">article</string>
+    <string name="friends_list">Search</string>
+    <string name="login">login</string>
+    <string name="email">Email</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="forgot_password">忘记密码</string>
+    <string name="password">密码</string>
+    <string name="sign_in">登录</string>
+    <string name="detail">ArticleDetail</string>
 </resources>

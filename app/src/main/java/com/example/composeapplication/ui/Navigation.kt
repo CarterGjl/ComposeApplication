@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Store
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -20,15 +19,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import com.example.composeapplication.R
 import com.example.composeapplication.Utils
-import com.example.composeapplication.bean.Movie
-import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.const.Constants
-import com.example.composeapplication.viewmodel.MovieViewModel
+import com.example.composeapplication.viewmodel.ArticleViewModel
 
 @ExperimentalFoundationApi
 @Composable
 fun Navigation() {
-    val movieViewModel: MovieViewModel = viewModel()
+    val articleViewModel: ArticleViewModel = viewModel()
     val baseTitle = stringResource(id = R.string.app_name)
     val (title, setTitle) = remember { mutableStateOf(baseTitle) }
     val (canPop, setCanPop) = remember { mutableStateOf(false) }
@@ -55,7 +52,7 @@ fun Navigation() {
     ) {
         NavHost(navController, startDestination = Screen.Find.route) {
             composable(Screen.Find.route) {
-                FindScreen(navController, setTitle, movieViewModel)
+                FindScreen(navController, setTitle, articleViewModel)
                 isCurrentMovieDetail.value = false
             }
             composable(
@@ -110,10 +107,10 @@ fun Navigation() {
 fun FindScreen(
     navController: NavHostController,
     setTitle: (String) -> Unit,
-    movieViewModel: MovieViewModel
+    articleViewModel: ArticleViewModel
 ) {
     setTitle(stringResource(id = R.string.screen_find))
-    Find(movieViewModel = movieViewModel) { movie ->
+    Find(articleViewModel = articleViewModel) { movie ->
         setTitle("")
         navController.navigate(Constants.ROUTE_DETAIL_PRE + movie.imdbID)
     }

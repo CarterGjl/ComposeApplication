@@ -9,15 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.composeapplication.Utils
 import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
-import com.example.composeapplication.model.RemoteMovieData
+import com.example.composeapplication.model.RemoteSevice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private const val TAG = "MovieViewModel"
 
-class MovieViewModel(application: Application) : AndroidViewModel(application) {
-    private val remoteMovieData = RemoteMovieData.getInstance(application.applicationContext)
+class ArticleViewModel(application: Application) : AndroidViewModel(application) {
+    private val remoteMovieData = RemoteSevice.getInstance()
 
     private var movieLiveData = MutableLiveData<ResultData>()
     private var movieProLiveData = MutableLiveData<MoviePro>()
