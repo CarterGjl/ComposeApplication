@@ -3,6 +3,7 @@ package com.example.composeapplication.service
 import com.example.composeapplication.bean.LoginResponse
 import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
+import com.google.gson.JsonObject
 import retrofit2.http.*
 
 interface WanAndroidService {
@@ -29,4 +30,9 @@ interface WanAndroidService {
         @Field("password") password: String
     ): LoginResponse
 
+    @FormUrlEncoded
+    @POST("https://www.wanandroid.com/article/query/0/json")
+    suspend fun search(
+        @Field("k") key: String,
+    ): ResultData
 }

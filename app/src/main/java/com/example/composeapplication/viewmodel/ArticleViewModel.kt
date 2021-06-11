@@ -19,11 +19,9 @@ private const val TAG = "MovieViewModel"
 class ArticleViewModel(application: Application) : AndroidViewModel(application) {
     private val remoteMovieData = RemoteSevice.getInstance()
 
-    private var movieLiveData = MutableLiveData<ResultData>()
-    private var movieProLiveData = MutableLiveData<MoviePro>()
+    private var articalLiveData = MutableLiveData<ResultData>()
 
-    val movies: LiveData<ResultData> = movieLiveData
-    val moviePro: LiveData<MoviePro> = movieProLiveData
+    val articles: LiveData<ResultData> = articalLiveData
 
     fun searchMoviesComposeCoroutines(keyWorld: String) {
         viewModelScope.launch {
@@ -37,19 +35,9 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
             val result = withContext(Dispatchers.IO) {
                 remoteMovieData.getArticles(page)
             }
-            Log.d(TAG, "searchMoviesComposeCoroutines: $result")
+            Log.d(TAG, "getArticles: $result")
 
-            movieLiveData.value = result
+            articalLiveData.value = result
         }
-    }
-
-    suspend fun getMovieComposeCoroutines(id: String) {
-        Utils.logDebug(Utils.TAG_SEARCH, "MovieModel getMovieComposeCoroutines with id:$id")
-        if (!Utils.ensureNetworkAvailable(getApplication())) return
-
-        val gotMovie = remoteMovieData.getMovieByCoroutines(id)
-        Utils.logDebug(Utils.TAG_SEARCH, "MovieModel getMovieComposeCoroutines movie:$gotMovie")
-
-        movieProLiveData.value = gotMovie
     }
 }

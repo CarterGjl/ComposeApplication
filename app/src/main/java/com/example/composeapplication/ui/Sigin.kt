@@ -13,7 +13,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.isFocused
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -52,6 +51,7 @@ fun SignInContent(
         SignInState.InProgress -> SignInProgress()
         is SignInState.Error -> SignInError(state.error)
         SignInState.SignedIn -> Text(text = "success")
+        else -> {}
     }
 }
 
