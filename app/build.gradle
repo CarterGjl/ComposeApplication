@@ -72,7 +72,7 @@ dependencies {
 
     implementation 'com.google.accompanist:accompanist-insets:0.11.0'
     implementation 'com.google.accompanist:accompanist-pager:0.7.1'
-    implementation 'com.google.accompanist:accompanist-coil:0.10.0'
+    implementation 'com.google.accompanist:accompanist-coil:0.11.0'
 
     implementation "com.google.accompanist:accompanist-swiperefresh:0.11.0"
 }

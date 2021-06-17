@@ -22,7 +22,7 @@ class SearchViewModel : ViewModel() {
                 RemoteSevice.getInstance().searchArticle(key = searchKey)
             }
             val result = async.await()
-            Log.d(TAG, "searchArticle: " + result)
+            Log.d(TAG, "searchArticle: $result")
             _searchResult.value = result
         }
     }

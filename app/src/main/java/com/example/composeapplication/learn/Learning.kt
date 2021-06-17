@@ -1,26 +1,35 @@
 package com.example.composeapplication.learn
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.Navigation
+import com.example.composeapplication.ui.ShowDialog
 import com.example.composeapplication.ui.timer.*
+import com.example.composeapplication.viewmodel.ArticleViewModel
 
 //@Preview(showBackground = true)
 //@Composable
@@ -262,6 +271,83 @@ private fun MyApp() {
             Row {
                 StartButton(viewModel = viewModel)
                 StopButton(viewModel = viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun PasswordTextField(string: String?) {
+    val articleViewModel: ArticleViewModel = viewModel()
+
+    var password by remember {
+        if (string == null) {
+            mutableStateOf("")
+        } else {
+            mutableStateOf(string)
+        }
+    }
+
+    Column {
+        TextField(
+            value = password,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = {
+                password = it
+                articleViewModel.getArticles(0)
+            },
+            label = { Text("Enter password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+        val openDialog = remember { mutableStateOf(false) }
+        Button(onClick = { openDialog.value = true }) {
+            Text("Click me")
+        }
+        ShowDialog(R.string.app_name, R.string.about_content, openDialog)
+    }
+}
+
+@Composable
+fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    // describe the card for the current state of expanded
+    Card(modifier = Modifier
+        .background(color = Color.Gray)
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .padding(top = 8.dp)) {
+        Column(
+            Modifier
+                .width(280.dp)
+                .animateContentSize() // automatically animate size when it changes
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .clickable {
+                    onClick(data.link)
+                }
+        ) {
+//            CoilImage(
+//                data = data.envelopePic,
+//                contentDescription = "description of the image"
+//            )
+            Text(
+                text = data.title,
+                style = MaterialTheme.typography.subtitle1
+            )
+
+            // content of the card depends on the current value of expanded
+            if (expanded) {
+                Text(text = data.desc, Modifier.padding(top = 8.dp))
+                // change expanded in response to click events
+                IconButton(onClick = { expanded = false }, modifier = Modifier.fillMaxWidth()) {
+                    Icon(imageVector = Icons.Default.ExpandLess, contentDescription = "Expand less")
+                }
+            } else {
+                // change expanded in response to click events
+                IconButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
+                    Icon(imageVector = Icons.Default.ExpandMore, contentDescription = "Expand more")
+                }
             }
         }
     }
