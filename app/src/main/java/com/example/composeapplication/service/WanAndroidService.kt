@@ -3,15 +3,14 @@ package com.example.composeapplication.service
 import com.example.composeapplication.bean.LoginResponse
 import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
-import com.google.gson.JsonObject
 import retrofit2.http.*
 
 interface WanAndroidService {
-    //
+
     @GET("https://wanandroid.com/article/listproject/0/json")
     suspend fun requestSearchByCoroutines(
-//        @Query("s") keywords: String,
-//        @Query("apikey") apikey: String
+        @Query("s") keywords: String,
+        @Query("apikey") apikey: String
     ): ResultData
 
     @GET("http://ombapi.com/")

@@ -68,26 +68,27 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun ArticleScreen(padding: PaddingValues, onClick: (url: String) -> Unit) {
+fun ArticleScreen(onClick: (url: String) -> Unit) {
     val articleViewModel: ArticleViewModel = viewModel()
-    Log.d(TAG, "ArticleScreen: $padding")
-    Column(
-        Modifier
-            .padding(bottom = 50.dp)
-    ) {
+    // 拦截返回按钮
+//    BackHandler(
+//        onBack = {
+//            Log.d(TAG, "ArticleScreen: onBack ")
+//        }
+//    )
+    Column {
         SideEffect {
             articleViewModel.getArticles(0)
         }
         val result = articleViewModel.articles.observeAsState()
         if (result.value != null) {
-            ArticalList(result.value!!, onClick)
+            ArticleList(result.value!!, onClick)
         } else {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(color = Color.Gray)
             ) {
                 Text(text = "empty")
             }
@@ -97,7 +98,7 @@ fun ArticleScreen(padding: PaddingValues, onClick: (url: String) -> Unit) {
 }
 
 @Composable
-private fun ArticalList(
+private fun ArticleList(
     result: ResultData,
     onClick: (url: String) -> Unit
 ) {
@@ -106,12 +107,9 @@ private fun ArticalList(
         items(datas, key = { data ->
             data.id
         }) { data ->
-            ArticleItem(data) {
+            ArticleItem2(data) {
                 onClick(it)
             }
-//                        ExpandingCard(data) {
-//                            onClick(it)
-//                        }
         }
 //                    item {
 //                        Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
@@ -156,7 +154,11 @@ fun HomeScreen() {
             )
             TopAppBar(
                 title = {
-                    Text(text = "compose demo")
+                    Text(
+                        text = "Compose WanAndroid",
+                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colors.onPrimary
+                    )
                 },
                 backgroundColor = MaterialTheme.colors.primaryVariant,
                 elevation = 0.dp
@@ -168,7 +170,7 @@ fun HomeScreen() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             val routes = remember { items.map { it.route } }
-            if (currentRoute in routes){
+            if (currentRoute in routes) {
                 BottomNavigation {
                     items.forEach { screen ->
                         BottomNavigationItem(
@@ -180,7 +182,6 @@ fun HomeScreen() {
                             selected = currentRoute == screen.route,
                             onClick = {
                                 navController.navigate(screen.route) {
-//                                popUpTo = navController.graph.startDestination
                                     launchSingleTop = true
                                 }
                             })
@@ -189,28 +190,27 @@ fun HomeScreen() {
             }
 
         },
-        content = { innerPadding->
+        content = { innerPadding ->
             Log.d(TAG, "bottomBar: $innerPadding")
             NavHost(
                 navController = navController,
                 startDestination = Screen.Article.route,
                 modifier = Modifier.padding(innerPadding)
-            ){
-                composable(Screen.Article.route){
-                    ArticleScreen(innerPadding){
+            ) {
+                composable(Screen.Article.route) {
+                    ArticleScreen {
                         navController.navigate("article_detail?url=$it") {
-//                                popUpTo = navController.graph.startDestination
                             launchSingleTop = true
                         }
                     }
                 }
                 composable(Screen.FriendsList.route) {
-                    SearchScreen(modifier = Modifier.padding(innerPadding))
+                    SearchScreen()
                 }
-                composable(Screen.Login.route){
+                composable(Screen.Login.route) {
                     MineScreen()
                 }
-                composable(Screen.ArticleDetail.route){
+                composable(Screen.ArticleDetail.route) {
                     val url = it.arguments?.getString("url")
                     url?.let { detailUrl -> ArticleDetailScreen(detailUrl = detailUrl) }
                 }
@@ -225,19 +225,20 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     object Article : Screen("article", R.string.article, Icons.Filled.Article)
     object FriendsList : Screen("friendslist", R.string.friends_list, Icons.Filled.Search)
     object Login : Screen("login", R.string.login, Icons.Filled.AccountBox)
-    object ArticleDetail : Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
+    object ArticleDetail :
+        Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
 }
 
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = viewModel(),modifier: Modifier) {
+fun SearchScreen(viewModel: SearchViewModel = viewModel()) {
     val observeAsState by viewModel.searchResult.observeAsState()
-    Column(modifier = modifier.padding(bottom = 50.dp)) {
+    Column {
         SearchContent {
             viewModel.searchArticle(it)
         }
         if (observeAsState != null) {
-            ArticalList(result = observeAsState!!) {
-
+            ArticleList(result = observeAsState!!) {
+                Log.d(TAG, "SearchScreen: $it")
             }
         } else {
             Text(text = "empty")
@@ -272,7 +273,7 @@ private fun SearchContent(search: (key: String) -> Unit) {
                     }
                 )
             },
-            keyboardOptions =  KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
                 onSearch = {
                     search(searchKey)
@@ -287,8 +288,8 @@ private fun SearchContent(search: (key: String) -> Unit) {
 fun ArticleDetailScreen(detailUrl: String) {
     var refreshing by remember { mutableStateOf(true) }
     Column {
-        if (refreshing){
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth(),color = Color.Gray)
+        if (refreshing) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = Color.Gray)
         }
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -369,39 +370,74 @@ fun ArticleItem(data: Article, onClick: (url: String) -> Unit) {
     }
 }
 
-@Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
 @Composable
-fun MyText() {
-    Text(text = "dahfdasjk f")
-//    Text(
-//        text = "test",
-//        modifier = Modifier
-//            .border(
-//                width = 1.dp,
-//                color = Color.Red,
-//                shape = RoundedCornerShape(
-//                    topStart = 8.dp,
-//                    topEnd = 8.dp,
-//                    bottomStart = 8.dp,
-//                    bottomEnd = 8.dp
-//                )
-//            )
-//            .padding(10.dp)
-//    )
+fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
+    Surface(
+        shape = RoundedCornerShape(10.dp),
+        elevation = 10.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clickable {
+                    onClick(data.link)
+                }
+                .padding(15.dp)
+
+        ) {
+            Text(
+                text = data.title,
+                style = MaterialTheme.typography.subtitle1
+            )
+            Row(modifier = Modifier.padding(top = 8.dp)) {
+                Icon(imageVector = Icons.Filled.Timeline, contentDescription = "time")
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = data.niceDate,
+                    style = MaterialTheme.typography.body1
+                )
+            }
+            Row(modifier = Modifier.padding(top = 8.dp)) {
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Red,
+                    text = data.superChapterName,
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Color.Red,
+                            shape = RoundedCornerShape(
+                                topStart = 8.dp,
+                                topEnd = 8.dp,
+                                bottomStart = 8.dp,
+                                bottomEnd = 8.dp
+                            )
+                        )
+                        .padding(10.dp)
+                )
+            }
+        }
+    }
+
 }
 
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
 @Composable
 fun CardViewPreview() {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .background(color = Color.Gray)
-        .wrapContentHeight()
-        .padding(top = 8.dp),
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.Gray)
+            .wrapContentHeight()
+            .padding(top = 8.dp),
         elevation = 8.dp
     ) {
         Text(
-            text="This is a Card",
+            text = "This is a Card",
             modifier = Modifier.height(90.dp)
         )
     }

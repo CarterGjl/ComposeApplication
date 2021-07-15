@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -304,7 +305,7 @@ fun PasswordTextField(string: String?) {
         Button(onClick = { openDialog.value = true }) {
             Text("Click me")
         }
-        ShowDialog(R.string.app_name, R.string.about_content, openDialog)
+//        ShowDialog(R.string.app_name, R.string.about_content, openDialog)
     }
 }
 
@@ -350,5 +351,25 @@ fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
                 }
             }
         }
+    }
+
+    @Composable
+    fun MyText() {
+        Text(text = "dahfdasjk f")
+//    Text(
+//        text = "test",
+//        modifier = Modifier
+//            .border(
+//                width = 1.dp,
+//                color = Color.Red,
+//                shape = RoundedCornerShape(
+//                    topStart = 8.dp,
+//                    topEnd = 8.dp,
+//                    bottomStart = 8.dp,
+//                    bottomEnd = 8.dp
+//                )
+//            )
+//            .padding(10.dp)
+//    )
     }
 }
