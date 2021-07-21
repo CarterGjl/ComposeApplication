@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions

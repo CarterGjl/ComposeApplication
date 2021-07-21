@@ -43,8 +43,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.paging.LoadState
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.example.composeapplication.bean.Article
@@ -84,6 +82,7 @@ fun ArticleScreen(onClick: (url: String) -> Unit) {
 //    )
     Column(Modifier.fillMaxHeight()) {
         ArticleListPaging(onClick)
+        // 加入分页功能
 //        val result = articleViewModel.articles.observeAsState()
 //        if (result.value != null) {
 //            ArticleList(result.value!!, onClick)
@@ -126,7 +125,9 @@ private fun ArticleList(
     }
 }
 
-
+/*
+* 支持分页的文章列表
+* */
 @Composable
 private fun ArticleListPaging(
     onClick: (url: String) -> Unit
@@ -255,6 +256,8 @@ fun HomeScreen() {
                                     return@BottomNavigationItem
                                 }
                                 navController.navigate(screen.route) {
+                                    // Restore state when reselecting a previously selected item
+                                    restoreState = true
                                     launchSingleTop = true
                                 }
                             })
