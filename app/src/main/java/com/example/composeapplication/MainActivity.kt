@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun ArticleScreen(onClick: (url: String) -> Unit) {
-    val articleViewModel: ArticleViewModel = viewModel()
+//    val articleViewModel: ArticleViewModel = viewModel()
     // 拦截返回按钮
 //    BackHandler(
 //        onBack = {
@@ -256,6 +256,7 @@ fun HomeScreen() {
                                     return@BottomNavigationItem
                                 }
                                 navController.navigate(screen.route) {
+                                    popUpTo(Screen.Article.route)
                                     // Restore state when reselecting a previously selected item
                                     restoreState = true
                                     launchSingleTop = true
