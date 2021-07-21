@@ -1,5 +1,6 @@
 package com.example.composeapplication.ui
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.composeapplication.R
 import com.example.composeapplication.state.login.EmailState
 import com.example.composeapplication.state.login.PasswordState
@@ -327,12 +329,16 @@ fun SignInContent(
 }
 
 @Composable
-fun MineScreen(viewModel: SignInViewModel = viewModel()) {
+fun MineScreen(viewModel: SignInViewModel = viewModel(),navController: NavController) {
     val viewState:SignInState by viewModel.state.observeAsState(initial = SignInState.SignedOut)
     when (viewState) {
         is SignInState.SignedOut -> SignInScreen(viewModel = viewModel)
         SignInState.InProgress -> SignInProgress()
-        SignInState.SignedIn -> Text(text = "success")
+        SignInState.SignedIn -> {
+            navController.navigate("mine"){
+                popUpTo("article")
+            }
+        }
         is SignInState.Error -> {
             SignInError((viewState as SignInState.Error).error)
         }

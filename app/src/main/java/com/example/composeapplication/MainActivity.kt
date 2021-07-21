@@ -41,6 +41,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
+import androidx.paging.LoadState
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.ui.ComposeApplicationTheme
@@ -76,23 +82,21 @@ fun ArticleScreen(onClick: (url: String) -> Unit) {
 //            Log.d(TAG, "ArticleScreen: onBack ")
 //        }
 //    )
-    Column {
-        SideEffect {
-            articleViewModel.getArticles(0)
-        }
-        val result = articleViewModel.articles.observeAsState()
-        if (result.value != null) {
-            ArticleList(result.value!!, onClick)
-        } else {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-            ) {
-                Text(text = "empty")
-            }
-        }
+    Column(Modifier.fillMaxHeight()) {
+        ArticleListPaging(onClick)
+//        val result = articleViewModel.articles.observeAsState()
+//        if (result.value != null) {
+//            ArticleList(result.value!!, onClick)
+//        } else {
+//            Box(
+//                contentAlignment = Alignment.Center,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .fillMaxHeight()
+//            ) {
+//                Text(text = "empty")
+//            }
+//        }
     }
 
 }
@@ -111,15 +115,78 @@ private fun ArticleList(
                 onClick(it)
             }
         }
-//                    item {
-//                        Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
-//                            CircularProgressIndicator(color = Color.Red).also {
-//                                Log.d(TAG, "loading: ")
-//                            }
-//                        }
-//                    }
+//        item {
+//            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+//                CircularProgressIndicator(color = Color.Red).also {
+//                    Log.d(TAG, "loading: ")
+//                }
+//            }
+//        }
 
     }
+}
+
+
+@Composable
+private fun ArticleListPaging(
+    onClick: (url: String) -> Unit
+) {
+    val articleViewModel: ArticleViewModel = viewModel()
+    val collectAsLazyPagingItems = articleViewModel.articles1.collectAsLazyPagingItems()
+    LazyColumn(contentPadding = PaddingValues(8.dp),modifier = Modifier.fillMaxHeight()) {
+        items(collectAsLazyPagingItems) { data ->
+            ArticleItem2(data!!) {
+                onClick(it)
+            }
+        }
+        collectAsLazyPagingItems.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    item {
+                        Box(
+                            modifier = Modifier.fillParentMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(color = Color.Red).also {
+                                Log.d(TAG, "loading: ")
+                            }
+                        }
+                    }
+                }
+                loadState.append is LoadState.Loading -> {
+                    item {
+                        Box(contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillParentMaxWidth()) {
+                            CircularProgressIndicator(color = Color.Red).also {
+                                Log.d(TAG, "loading: ")
+                            }
+                        }
+                    }
+                }
+                loadState.refresh is LoadState.Error -> {
+                    val e = loadState.refresh as LoadState.Error
+                    item {
+                        Box(contentAlignment = Alignment.Center,modifier = Modifier.clickable {
+                            retry()
+                        }){
+                            Text(text = e.error.message!!)
+                        }
+                    }
+                }
+                loadState.append is LoadState.Error->{
+                    val e = loadState.append as LoadState.Error
+                    item {
+                        Box(contentAlignment = Alignment.Center,modifier = Modifier.clickable {
+                            retry()
+                        }){
+                            Text(text = e.error.message!!)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
@@ -181,6 +248,12 @@ fun HomeScreen() {
                             label = { Text(text = stringResource(id = screen.resourceId)) },
                             selected = currentRoute == screen.route,
                             onClick = {
+                                if (screen.route == "login") {
+                                    navController.navigate("nest") {
+                                        launchSingleTop = true
+                                    }
+                                    return@BottomNavigationItem
+                                }
                                 navController.navigate(screen.route) {
                                     launchSingleTop = true
                                 }
@@ -207,8 +280,16 @@ fun HomeScreen() {
                 composable(Screen.FriendsList.route) {
                     SearchScreen()
                 }
-                composable(Screen.Login.route) {
-                    MineScreen()
+//                composable(Screen.Login.route) {
+//                    MineScreen()
+//                }
+                navigation(startDestination = Screen.Login.route, NEST) {
+                    composable(Screen.Login.route) {
+                        MineScreen(navController = navController)
+                    }
+                    composable(MINE) {
+                        Text(text = "success")
+                    }
                 }
                 composable(Screen.ArticleDetail.route) {
                     val url = it.arguments?.getString("url")
@@ -219,6 +300,9 @@ fun HomeScreen() {
         }
     )
 }
+
+const val MINE = "mine"
+const val NEST = "nest"
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 
