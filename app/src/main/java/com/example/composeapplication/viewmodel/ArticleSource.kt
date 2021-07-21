@@ -16,12 +16,11 @@ class ArticleSource : PagingSource<Int, Article>() {
         return try {
             val instance = RemoteSevice.getInstance()
             val nextPage = params.key ?: 0
-            Log.d(TAG, "load: $nextPage")
             val data = instance.getArticles(nextPage)
             if (data.data.size < 15) {
                 return LoadResult.Error(Exception("no more result"))
             }
-            Log.d(TAG, "load: ${data.data.size}")
+            Log.d(TAG, "load: data size ${data.data.size} next page ${nextPage}")
             LoadResult.Page(
                 data = data.data.datas,
                 prevKey = if (nextPage == 0) null else nextPage - 1,
