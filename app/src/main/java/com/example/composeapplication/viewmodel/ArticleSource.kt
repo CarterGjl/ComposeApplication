@@ -18,14 +18,14 @@ class ArticleSource : PagingSource<Int, Article>() {
             val nextPage = params.key ?: 0
             Log.d(TAG, "load: $nextPage")
             val data = instance.getArticles(nextPage)
-            if (data.data.size < 15){
+            if (data.data.size < 15) {
                 return LoadResult.Error(Exception("no more result"))
             }
             Log.d(TAG, "load: ${data.data.size}")
             LoadResult.Page(
                 data = data.data.datas,
                 prevKey = if (nextPage == 0) null else nextPage - 1,
-                nextKey = data.data.curPage + 1
+                nextKey = nextPage + 1
             )
         } catch (e: Exception) {
             Log.e(TAG, "load: ${e.message}", e)
