@@ -60,7 +60,7 @@ fun Navigation() {
                 arguments = listOf(navArgument(Constants.ROUTE_DETAIL_KEY) {
                     type = NavType.StringType
                 })
-            ) { backStackEntry ->
+            ) {
 //                DetailScreen(
 //                    backStackEntry.arguments?.getString(Constants.ROUTE_DETAIL_KEY)!!,
 //                    setTitle,

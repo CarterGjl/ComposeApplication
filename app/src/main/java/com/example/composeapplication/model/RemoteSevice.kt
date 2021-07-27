@@ -6,7 +6,6 @@ import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.const.Constants
 import com.example.composeapplication.service.WanAndroidService
-import com.google.gson.JsonObject
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -56,6 +55,8 @@ class RemoteSevice private constructor() {
     suspend fun searchArticle(key: String):ResultData {
         return wanAndroidInterface.search(key = key)
     }
+
+    @Suppress("unused")
     suspend fun getMovieByCoroutines(movieID: String): MoviePro {
         return wanAndroidInterface.requestDetailByCoroutines(movieID, Constants.OMDB_API_KEY)
     }

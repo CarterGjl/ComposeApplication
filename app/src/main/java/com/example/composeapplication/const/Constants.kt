@@ -12,6 +12,4 @@ object Constants {
     const val ROUTE_FAVOURITE = "favourite"
     const val ROUTE_PROFILE = "profile"
 
-
-
 }

@@ -76,7 +76,7 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
                             if (textFieldValue.length > 1) {
                                 searchQuery = textFieldValue
                                 if (searchQuery.isNotEmpty()) {
-                                    articleViewModel.searchMoviesComposeCoroutines(searchQuery)
+                                    articleViewModel.searchMoviesComposeCoroutines()
                                 }
                             } else Toast.makeText(
                                 baseContext,
@@ -107,14 +107,11 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
 
         Utils.logDebug(Utils.TAG_SEARCH, "searchQuery updated:$searchQuery")
         if (searchQuery.isNotEmpty()) {
-            articleViewModel.searchMoviesComposeCoroutines("功夫熊猫")
+            articleViewModel.searchMoviesComposeCoroutines()
         }
     }
     val movieData: State<List<Movie>>? = null
-    val movies = movieData?.value
-    if (movies == null){
-        return
-    }
+    val movies = movieData?.value ?: return
     val scrollState = rememberLazyListState()
 
     LazyVerticalGrid(

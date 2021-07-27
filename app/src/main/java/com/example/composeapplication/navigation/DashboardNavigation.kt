@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.navigation
 
 import androidx.navigation.NavType
@@ -7,7 +9,7 @@ object DashboardNavigation {
 
     private const val KEY_USERID = "userId"
 
-    val route = "dashboard/${KEY_USERID}"
+    const val route = "dashboard/${KEY_USERID}"
     val arguments = listOf(
         navArgument(KEY_USERID){
             type = NavType.StringType

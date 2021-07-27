@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.navigation
 
 import androidx.navigation.compose.NamedNavArgument

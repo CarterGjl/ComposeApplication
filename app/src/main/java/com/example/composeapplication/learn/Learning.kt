@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.learn
 
 import androidx.compose.animation.animateContentSize
@@ -80,7 +82,7 @@ import com.example.composeapplication.viewmodel.ArticleViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MessageListener(messages: List<Message>) {
-    LazyColumn() {
+    LazyColumn {
         stickyHeader {
             Text(text = "1", Modifier.fillMaxWidth())
         }

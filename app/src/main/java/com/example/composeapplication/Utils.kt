@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication
 
 import android.content.Context
@@ -7,7 +9,6 @@ import android.util.Log
 import android.widget.Toast
 
 object Utils {
-    private val TAG: String = Utils::class.java.getSimpleName()
 
     // adb shell setprop log.tag.ComposeMovie.Debug D
     const val TAG_DEBUG = "ComposeMovie.Debug"

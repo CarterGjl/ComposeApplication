@@ -11,7 +11,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.composeapplication.Utils
 import com.example.composeapplication.bean.Article
-import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.model.RemoteSevice
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +20,7 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "MovieViewModel"
 
+@Suppress("unused")
 class ArticleViewModel(application: Application) : AndroidViewModel(application) {
     private val remoteMovieData = RemoteSevice.getInstance()
 
@@ -32,7 +32,7 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
 
     val articles: LiveData<ResultData> = articalLiveData
 
-    fun searchMoviesComposeCoroutines(keyWorld: String) {
+    fun searchMoviesComposeCoroutines() {
         viewModelScope.launch {
 
         }

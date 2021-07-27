@@ -1,5 +1,6 @@
 package com.example.composeapplication.bean
 
+@Suppress("unused")
 data class MovieResponse<T>(
     var TotalResults: String = "0",
     var Response: String = "false",

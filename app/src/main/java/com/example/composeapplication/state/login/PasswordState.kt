@@ -20,6 +20,7 @@ private fun passwordConfirmationError(): String {
     return "Passwords don't match"
 }
 
+@Suppress("unused")
 class ConfirmPasswordState(private val passwordState: PasswordState) : TextFieldState() {
     override val isValid
         get() = passwordAndConfirmationValid(passwordState.text, text)

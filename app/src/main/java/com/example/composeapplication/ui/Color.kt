@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.ui
 
 import androidx.compose.material.Colors

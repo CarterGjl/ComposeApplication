@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.service
 
 import com.example.composeapplication.bean.LoginResponse

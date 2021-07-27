@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.model.RemoteSevice
-import com.google.gson.JsonObject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 

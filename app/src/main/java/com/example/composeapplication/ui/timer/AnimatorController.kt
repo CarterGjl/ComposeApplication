@@ -8,6 +8,7 @@ import com.example.composeapplication.ui.timer.status.CompletedStatus
 import com.example.composeapplication.ui.timer.status.PausedStatus
 import com.example.composeapplication.ui.timer.status.StartedStatus
 
+@Suppress("unused")
 class AnimatorController(private val viewModel: TimerViewModel) {
 
     private var valueAnimator: ValueAnimator? = null

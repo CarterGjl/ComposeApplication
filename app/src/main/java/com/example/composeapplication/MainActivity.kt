@@ -39,7 +39,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import androidx.navigation.navigation
 import androidx.paging.LoadState
@@ -323,7 +322,7 @@ fun ArticleScreen(navController: NavController) {
 
 const val MINE = "mine"
 const val NEST = "nest"
-const val DIALOG = "dialog";
+const val DIALOG = "dialog"
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 

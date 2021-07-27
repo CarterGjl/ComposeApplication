@@ -1,6 +1,5 @@
 package com.example.composeapplication.bean
 
-import com.google.gson.JsonObject
 
 //{"data":null,"errorCode":-1,"errorMsg":"账号密码不匹配！"}
 

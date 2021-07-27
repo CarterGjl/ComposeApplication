@@ -1,6 +1,5 @@
 package com.example.composeapplication.state.login
 
-import java.util.regex.Pattern
 
 class EmailState : TextFieldState(validator = ::isEmailValid, errorFor = ::emailValidationError)
 
