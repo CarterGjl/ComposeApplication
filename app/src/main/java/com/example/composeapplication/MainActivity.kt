@@ -35,12 +35,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
 import androidx.navigation.navigation
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -299,14 +299,31 @@ fun HomeScreen() {
                     val url = it.arguments?.getString("url")
                     url?.let { detailUrl -> ArticleDetailScreen(detailUrl = detailUrl) }
                 }
+                dialog(DIALOG) {
+                    Dialog(onDismissRequest = {
+                        Log.d(TAG, "onDismissRequest: ")
+                    }) {
+
+                    }
+                }
             }
 
         }
     )
 }
 
+@Composable
+fun ArticleScreen(navController: NavController) {
+    Button(onClick = {
+        navController.navigate(DIALOG)
+    }) {
+        Text(text = "click")
+    }
+}
+
 const val MINE = "mine"
 const val NEST = "nest"
+const val DIALOG = "dialog";
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 

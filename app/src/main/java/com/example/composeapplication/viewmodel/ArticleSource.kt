@@ -9,6 +9,7 @@ import com.example.composeapplication.model.RemoteSevice
 private const val TAG = "ArticleSource"
 class ArticleSource : PagingSource<Int, Article>() {
     override fun getRefreshKey(state: PagingState<Int, Article>): Int {
+        Log.d(TAG, "getRefreshKey: ")
         return 0
     }
 
@@ -20,7 +21,7 @@ class ArticleSource : PagingSource<Int, Article>() {
             if (data.data.size < 15) {
                 return LoadResult.Error(Exception("no more result"))
             }
-            Log.d(TAG, "load: data size ${data.data.size} next page ${nextPage}")
+            Log.d(TAG, "load: data size ${data.data.size} next page $nextPage")
             LoadResult.Page(
                 data = data.data.datas,
                 prevKey = if (nextPage == 0) null else nextPage - 1,

@@ -26,6 +26,10 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
 
     private var articalLiveData = MutableLiveData<ResultData>()
 
+    init {
+        Log.d(TAG, ": ArticleViewModel init")
+    }
+
     val articles: LiveData<ResultData> = articalLiveData
 
     fun searchMoviesComposeCoroutines(keyWorld: String) {
