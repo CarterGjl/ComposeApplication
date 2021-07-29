@@ -52,7 +52,8 @@ import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
-
+// 官方demo地址
+// https://github.com/android/compose-samples
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
