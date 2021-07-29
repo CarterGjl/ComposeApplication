@@ -92,7 +92,7 @@ fun MemberItem() {
     }
 }
 
-@Preview
+@Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true,backgroundColor = 0xFF262629)
 @Composable
 fun MeetingList() {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
