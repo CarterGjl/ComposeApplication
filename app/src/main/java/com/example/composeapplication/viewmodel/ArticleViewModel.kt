@@ -38,6 +38,7 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         }
 
     }
+
     fun getArticles(page: Int) {
         viewModelScope.launch {
             if (!Utils.ensureNetworkAvailable(getApplication())) return@launch

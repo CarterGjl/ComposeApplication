@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">ComposeApplication</string>
-    <string name="home_page" >home</string>
-    <string name="project" >project</string>
-    <string name="mine" >mine</string>
-    <string name="official_account" >official_account</string>
+    <string name="home_page">home</string>
+    <string name="project">project</string>
+    <string name="mine">mine</string>
+    <string name="official_account">official_account</string>
 
     <string name="screen_find">Search movie</string>
     <string name="screen_store">Movie store</string>

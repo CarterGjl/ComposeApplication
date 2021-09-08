@@ -1,5 +1,6 @@
 package com.example.composeapplication
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
@@ -19,10 +20,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Article
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Timeline
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -39,38 +37,78 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.*
 import androidx.navigation.navigation
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.MineScreen
+import com.example.composeapplication.ui.banner.NewsBanner
+import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
+import com.example.composeapplication.ui.screen.LoadingPage
+import com.example.composeapplication.ui.screen.PicturePage
 import com.example.composeapplication.viewmodel.ArticleViewModel
+import com.example.composeapplication.viewmodel.BannerViewModel
+import com.example.composeapplication.viewmodel.MainViewModel
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
+
 // 官方demo地址
 // https://github.com/android/compose-samples
 private const val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
 
     @ExperimentalFoundationApi
+    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ProvideWindowInsets {
                 ComposeApplicationTheme {
-                    HomeScreen()
+                    MainPage()
                 }
             }
         }
     }
 }
-
+val a = test()
+fun test(){
+    GlobalScope.launch {
+        flow {
+            emit(1)
+            throw ArithmeticException("div 0")
+        }.catch {
+            Log.d(TAG, "onCreate:catch error $it")
+            println("catch error $it")
+        }.onCompletion {
+            Log.d(TAG, "onCreate finally")
+            println("finally")
+        }.collect {
+            Log.d(TAG, "onCreate collect $it")
+        }
+    }
+}
+@ExperimentalCoilApi
+@ExperimentalPagerApi
 @Composable
 fun ArticleScreen(onClick: (url: String) -> Unit) {
 //    val articleViewModel: ArticleViewModel = viewModel()
@@ -80,22 +118,18 @@ fun ArticleScreen(onClick: (url: String) -> Unit) {
 //            Log.d(TAG, "ArticleScreen: onBack ")
 //        }
 //    )
-    Column(Modifier.fillMaxHeight()) {
-        ArticleListPaging(onClick)
-        // 加入分页功能
-//        val result = articleViewModel.articles.observeAsState()
-//        if (result.value != null) {
-//            ArticleList(result.value!!, onClick)
-//        } else {
-//            Box(
-//                contentAlignment = Alignment.Center,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .fillMaxHeight()
-//            ) {
-//                Text(text = "empty")
-//            }
-//        }
+    val bannerViewModel: BannerViewModel = viewModel()
+    val banners by bannerViewModel.banners.observeAsState()
+    val state by bannerViewModel.stateLiveData.observeAsState()
+    LoadingPage(state = state!!, loadInit = {
+        bannerViewModel.getBanners()
+    }) {
+        Column(Modifier.fillMaxHeight()) {
+            banners?.apply {
+                NewsBanner(this)
+            }
+            ArticleListPaging(onClick)
+        }
     }
 
 }
@@ -134,53 +168,62 @@ private fun ArticleListPaging(
 ) {
     val articleViewModel: ArticleViewModel = viewModel()
     val collectAsLazyPagingItems = articleViewModel.articles1.collectAsLazyPagingItems()
-    LazyColumn(contentPadding = PaddingValues(8.dp),modifier = Modifier.fillMaxHeight()) {
-        items(collectAsLazyPagingItems) { data ->
-            ArticleItem2(data!!) {
-                onClick(it)
+    val state = rememberSwipeRefreshState(false)
+    SwipeRefresh(state = state, onRefresh = {
+        collectAsLazyPagingItems.refresh()
+    }) {
+        LazyColumn(contentPadding = PaddingValues(8.dp), modifier = Modifier.fillMaxHeight()) {
+            items(collectAsLazyPagingItems) { data ->
+                ArticleItem2(data!!) {
+                    onClick(it)
+                }
             }
-        }
-        collectAsLazyPagingItems.apply {
-            when {
-                loadState.refresh is LoadState.Loading -> {
-                    item {
-                        Box(
-                            modifier = Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator(color = Color.Red).also {
-                                Log.d(TAG, "loading: ")
+
+            collectAsLazyPagingItems.apply {
+                state.isRefreshing = loadState.refresh is LoadState.Loading
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item {
+                            Box(
+                                modifier = Modifier.fillParentMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(color = Color.Red).also {
+                                    Log.d(TAG, "loading: ")
+                                }
                             }
                         }
                     }
-                }
-                loadState.append is LoadState.Loading -> {
-                    item {
-                        Box(contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillParentMaxWidth()) {
-                            CircularProgressIndicator(color = Color.Red).also {
-                                Log.d(TAG, "loading: ")
+                    loadState.append is LoadState.Loading -> {
+                        item {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillParentMaxWidth()
+                            ) {
+                                CircularProgressIndicator(color = Color.Red).also {
+                                    Log.d(TAG, "loading: ")
+                                }
                             }
                         }
                     }
-                }
-                loadState.refresh is LoadState.Error -> {
-                    val e = loadState.refresh as LoadState.Error
-                    item {
-                        Box(contentAlignment = Alignment.Center,modifier = Modifier.clickable {
-                            retry()
-                        }){
-                            Text(text = e.error.message!!)
+                    loadState.refresh is LoadState.Error -> {
+                        val e = loadState.refresh as LoadState.Error
+                        item {
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
+                                retry()
+                            }) {
+                                Text(text = e.error.message!!)
+                            }
                         }
                     }
-                }
-                loadState.append is LoadState.Error->{
-                    val e = loadState.append as LoadState.Error
-                    item {
-                        Box(contentAlignment = Alignment.Center,modifier = Modifier.clickable {
-                            retry()
-                        }){
-                            Text(text = e.error.message!!)
+                    loadState.append is LoadState.Error -> {
+                        val e = loadState.append as LoadState.Error
+                        item {
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
+                                retry()
+                            }) {
+                                Text(text = e.error.message!!)
+                            }
                         }
                     }
                 }
@@ -204,6 +247,52 @@ fun BoxScope() {
 }
 
 
+@ExperimentalFoundationApi
+@ExperimentalPagerApi
+@Composable
+fun MainPage() {
+    Column {
+        Spacer(
+            modifier = Modifier
+                .statusBarsHeight()
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.primaryVariant)
+        )
+        TopAppBar(
+            title = {
+                Text(
+                    text = "Compose WanAndroid",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onPrimary
+                )
+            },
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            elevation = 0.dp
+        )
+        val viewModel: MainViewModel = viewModel()
+        val selectedIndex by viewModel.getSelectedIndex().observeAsState(0)
+        val pagerState = rememberPagerState(
+            pageCount = 5,
+            initialPage = selectedIndex,
+            initialOffscreenLimit = 4
+        )
+        HorizontalPager(
+            state = pagerState,
+            dragEnabled = false,
+            modifier = Modifier.weight(1f)
+        ) { page ->
+            when (page) {
+                0 -> ArticleScreen {
+                }
+                1 -> PicturePage()
+            }
+        }
+        BottomNavigationAlwaysShowLabelComponent(pagerState)
+    }
+}
+
+@ExperimentalFoundationApi
+@ExperimentalPagerApi
 @Composable
 fun HomeScreen() {
     val items = listOf(
@@ -213,60 +302,9 @@ fun HomeScreen() {
     )
     val navController = rememberNavController()
     Scaffold(topBar = {
-        Column {
-            Spacer(
-                modifier = Modifier
-                    .statusBarsHeight()
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.primaryVariant)
-            )
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Compose WanAndroid",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                },
-                backgroundColor = MaterialTheme.colors.primaryVariant,
-                elevation = 0.dp
-            )
-        }
+
 
     },
-        bottomBar = {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
-            val routes = remember { items.map { it.route } }
-            if (currentRoute in routes) {
-                BottomNavigation {
-                    items.forEach { screen ->
-                        BottomNavigationItem(
-
-                            icon = {
-                                Icon(screen.icon, contentDescription = currentRoute)
-                            },
-                            label = { Text(text = stringResource(id = screen.resourceId)) },
-                            selected = currentRoute == screen.route,
-                            onClick = {
-                                if (screen.route == "login") {
-                                    navController.navigate("nest") {
-                                        launchSingleTop = true
-                                    }
-                                    return@BottomNavigationItem
-                                }
-                                navController.navigate(screen.route) {
-                                    popUpTo(Screen.Article.route)
-                                    // Restore state when reselecting a previously selected item
-                                    restoreState = true
-                                    launchSingleTop = true
-                                }
-                            })
-                    }
-                }
-            }
-
-        },
         content = { innerPadding ->
             Log.d(TAG, "bottomBar: $innerPadding")
             NavHost(
@@ -275,6 +313,7 @@ fun HomeScreen() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(Screen.Article.route) {
+                    Log.d(TAG, "ArticleScreen: ")
                     ArticleScreen {
                         navController.navigate("article_detail?url=$it") {
                             launchSingleTop = true
@@ -282,7 +321,9 @@ fun HomeScreen() {
                     }
                 }
                 composable(Screen.FriendsList.route) {
-                    SearchScreen()
+                    Log.d(TAG, "SearchScreen: ")
+                    PicturePage()
+//                    SearchScreen()
                 }
 //                composable(Screen.Login.route) {
 //                    MineScreen()
@@ -328,7 +369,7 @@ const val DIALOG = "dialog"
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 
     object Article : Screen("article", R.string.article, Icons.Filled.Article)
-    object FriendsList : Screen("friendslist", R.string.friends_list, Icons.Filled.Search)
+    object FriendsList : Screen("friendslist", R.string.friends_list, Icons.Filled.Favorite)
     object Login : Screen("login", R.string.login, Icons.Filled.AccountBox)
     object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
