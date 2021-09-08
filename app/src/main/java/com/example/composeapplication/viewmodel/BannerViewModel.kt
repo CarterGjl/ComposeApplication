@@ -14,4 +14,6 @@ class BannerViewModel : BaseViewModel() {
             banners.value = banner.data
         }
     }
+
+
 }

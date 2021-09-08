@@ -1,19 +1,18 @@
 package com.example.composeapplication
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -27,23 +26,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.ui.ComposeApplicationTheme
@@ -74,13 +75,12 @@ import kotlinx.coroutines.launch
 // https://github.com/android/compose-samples
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     @ExperimentalFoundationApi
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ProvideWindowInsets {
                 ComposeApplicationTheme {
@@ -233,6 +233,59 @@ private fun ArticleListPaging(
 
 }
 
+@Composable
+private fun <T:Any> LoadingItem(
+    lazyPagingItems: LazyPagingItems<T>,
+    lazyListScope: LazyListScope
+) {
+    when {
+        lazyPagingItems.loadState.refresh is LoadState.Loading -> {
+            lazyListScope.item {
+                Box(
+                    modifier = Modifier.fillParentMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(color = Color.Red).also {
+                        Log.d(TAG, "loading: ")
+                    }
+                }
+            }
+        }
+        lazyPagingItems.loadState.append is LoadState.Loading -> {
+            lazyListScope.item {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillParentMaxWidth()
+                ) {
+                    CircularProgressIndicator(color = Color.Red).also {
+                        Log.d(TAG, "loading: ")
+                    }
+                }
+            }
+        }
+        lazyPagingItems.loadState.refresh is LoadState.Error -> {
+            val e = lazyPagingItems.loadState.refresh as LoadState.Error
+            lazyListScope.item {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
+                    lazyPagingItems.retry()
+                }) {
+                    Text(text = e.error.message!!)
+                }
+            }
+        }
+        lazyPagingItems.loadState.append is LoadState.Error -> {
+            val e = lazyPagingItems.loadState.append as LoadState.Error
+            lazyListScope.item {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
+                    lazyPagingItems.retry()
+                }) {
+                    Text(text = e.error.message!!)
+                }
+            }
+        }
+    }
+}
+
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
 @Composable
 fun BoxScope() {
@@ -272,7 +325,7 @@ fun MainPage() {
         val viewModel: MainViewModel = viewModel()
         val selectedIndex by viewModel.getSelectedIndex().observeAsState(0)
         val pagerState = rememberPagerState(
-            pageCount = 5,
+            pageCount = 3,
             initialPage = selectedIndex,
             initialOffscreenLimit = 4
         )

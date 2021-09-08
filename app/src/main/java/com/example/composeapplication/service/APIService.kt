@@ -1,8 +1,6 @@
 package com.example.composeapplication.service
 
-import com.example.composeapplication.bean.BannerResult
-import com.example.composeapplication.bean.PageModel
-import com.example.composeapplication.bean.PictureModel
+import com.example.composeapplication.bean.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Url
@@ -22,9 +20,17 @@ interface APIService {
     @GET("https://gank.io/api/v2/banners")
     suspend fun getBanner(): BannerResult
 
+    @GET(NEWS_URL)
+    suspend fun getNews(): NewsModelModel
+
     @GET("data/category/Girl/type/Girl/page/{page}/count/{count}")
     suspend fun getPics(
         @Path("page") page: Int = 1,
         @Path("count") count: Int = 21
     ): PageModel<List<PictureModel>>
+    @GET("data/category/Girl/type/Girl/page/{page}/count/{count}")
+    suspend fun getPics1(
+        @Path("page") page: Int = 1,
+        @Path("count") count: Int = 21
+    ): PageModel<List<DataGirl>>
 }

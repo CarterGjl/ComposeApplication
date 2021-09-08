@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,UnusedAttribute">
         <activity
+            android:name=".activity.bsae.BaseActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.PhotoActivity"
             android:exported="true" />
         <activity

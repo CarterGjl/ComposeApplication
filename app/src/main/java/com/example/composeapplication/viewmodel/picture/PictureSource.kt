@@ -6,7 +6,7 @@ import androidx.paging.PagingState
 import com.example.composeapplication.bean.PictureModel
 import com.example.composeapplication.model.Http
 
-private const val TAG = "ArticleSource"
+private const val TAG = "PictureSource"
 class PictureSource : PagingSource<Int, PictureModel>() {
     override fun getRefreshKey(state: PagingState<Int, PictureModel>): Int {
         Log.d(TAG, "getRefreshKey: ")

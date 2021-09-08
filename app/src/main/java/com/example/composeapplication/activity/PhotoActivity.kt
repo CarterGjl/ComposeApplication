@@ -29,9 +29,10 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.example.composeapplication.activity.bsae.BaseActivity
 
 private const val TAG = "PhotoActivity"
-class PhotoActivity : AppCompatActivity() {
+class PhotoActivity : BaseActivity() {
 
     companion object {
         const val PHOTO_URL = "photo_url"
