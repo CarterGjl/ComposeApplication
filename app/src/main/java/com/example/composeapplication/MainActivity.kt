@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
@@ -33,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -59,6 +61,7 @@ import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.example.composeapplication.viewmodel.search.SearchViewModel
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -79,14 +82,16 @@ private const val TAG = "MainActivity"
 
 class MainActivity : BaseActivity() {
 
+    @ExperimentalCoilApi
     @ExperimentalFoundationApi
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            ProvideWindowInsets {
+            ProvideWindowInsets(consumeWindowInsets = false) {
                 ComposeApplicationTheme {
-                    HomeMain()
+                    MainPage()
                 }
             }
         }
@@ -309,6 +314,8 @@ fun BoxScope() {
 @ExperimentalPagerApi
 @Composable
 fun MainPage() {
+
+
     Column {
         Spacer(
             modifier = Modifier
