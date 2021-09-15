@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +49,7 @@ import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.ui.ComposeApplicationTheme
+import com.example.composeapplication.ui.HomeMain
 import com.example.composeapplication.ui.MineScreen
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
@@ -84,7 +86,7 @@ class MainActivity : BaseActivity() {
         setContent {
             ProvideWindowInsets {
                 ComposeApplicationTheme {
-                    MainPage()
+                    HomeMain()
                 }
             }
         }
@@ -125,6 +127,8 @@ fun ArticleScreen(onClick: (url: String) -> Unit) {
         bannerViewModel.getBanners()
     }) {
         Column(Modifier.fillMaxHeight()) {
+//            DropdownDemo()
+
             banners?.apply {
                 NewsBanner(this)
             }
@@ -300,6 +304,7 @@ fun BoxScope() {
 }
 
 
+@ExperimentalCoilApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
 @Composable
@@ -314,7 +319,7 @@ fun MainPage() {
         TopAppBar(
             title = {
                 Text(
-                    text = "Compose WanAndroid",
+                    text = stringResource(id = R.string.app_name),
                     style = MaterialTheme.typography.subtitle1,
                     color = MaterialTheme.colors.onPrimary
                 )

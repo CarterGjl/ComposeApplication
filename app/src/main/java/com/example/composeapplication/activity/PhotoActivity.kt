@@ -2,22 +2,19 @@ package com.example.composeapplication.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.*
@@ -25,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
@@ -58,14 +57,15 @@ class PhotoActivity : BaseActivity() {
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PhotoViewPage(url: String, click: () -> Unit) {
+    val context = LocalContext.current
     var scale by remember {
         mutableStateOf(1f)
     }
-    var rotation by remember {
+    val rotation by remember {
         mutableStateOf(0f)
     }
     val state = rememberTransformableState{
-            zoomChange, _, rotationChange ->
+            zoomChange, _, _ ->
         scale *= zoomChange
         if (scale >= 6.0) scale = 6.0f
         else if (scale <= 1.0) scale = 1.0f
@@ -99,6 +99,20 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
                 )
                 .transformable(state = state)
                 .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onLongPress = {
+//                            val get = painter.imageLoader.bitmapPool.get(
+//                                220,
+//                                220,
+//                                painter.imageLoader.defaults.bitmapConfig
+//                            )
+//                            Toast
+//                                .makeText(context, "save $get", Toast.LENGTH_SHORT)
+//                                .show()
+                        },
+                    )
+                }
         )
         if (painter.state is  ImagePainter.State.Loading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -123,5 +137,37 @@ fun BackArrowDown(click: () -> Unit) {
             modifier = Modifier.clickable {
                 click()
             })
+    }
+}
+
+@Composable
+fun DropdownDemo() {
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf("A", "B", "C", "D", "E", "F")
+    val disabledValue = "B"
+    var selectedIndex by remember { mutableStateOf(0) }
+    Box(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.TopEnd),contentAlignment = Alignment.CenterEnd) {
+        Text(items[selectedIndex],modifier = Modifier.fillMaxWidth().clickable(onClick = { expanded = true }).background(
+            Color.Gray))
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.width(100.dp).background(
+                Color.Red)
+        ) {
+            items.forEachIndexed { index, s ->
+                DropdownMenuItem(onClick = {
+                    selectedIndex = index
+                    expanded = false
+                }) {
+                    val disabledText = if (s == disabledValue) {
+                        " (Disabled)"
+                    } else {
+                        ""
+                    }
+                    Text(text = s + disabledText)
+                }
+            }
+        }
     }
 }
