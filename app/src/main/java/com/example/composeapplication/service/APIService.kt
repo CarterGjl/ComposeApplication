@@ -1,6 +1,7 @@
 package com.example.composeapplication.service
 
 import com.example.composeapplication.bean.*
+import com.example.composeapplication.ui.weather.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Url
@@ -33,4 +34,7 @@ interface APIService {
         @Path("page") page: Int = 1,
         @Path("count") count: Int = 21
     ): PageModel<List<DataGirl>>
+
+    @GET
+    suspend fun getWeathers(@Url url: String = WEATHER_URL): WeatherResponse
 }

@@ -87,11 +87,6 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
             painter = painter,
             contentDescription = "picture",
             modifier = Modifier
-//                .draggable(orientation = Orientation.Vertical,
-//                    state = rememberDraggableState { delta ->
-//                        Log.d(TAG, "PhotoViewPage: $delta")
-//                        scale += delta
-//                    })
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,

@@ -1,9 +1,11 @@
 package com.example.composeapplication
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -26,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Devices
@@ -51,17 +53,16 @@ import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.ui.ComposeApplicationTheme
-import com.example.composeapplication.ui.HomeMain
 import com.example.composeapplication.ui.MineScreen
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
 import com.example.composeapplication.ui.screen.LoadingPage
 import com.example.composeapplication.ui.screen.PicturePage
+import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.example.composeapplication.viewmodel.search.SearchViewModel
-import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -87,18 +88,47 @@ class MainActivity : BaseActivity() {
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ProvideWindowInsets(consumeWindowInsets = false) {
                 ComposeApplicationTheme {
+//                    val insets = LocalWindowInsets.current
+//                    // 切记，这些信息都是px单位，使用时要根据需求转换单位
+//                    val imeBottom = with(LocalDensity.current) { insets.navigationBars.bottom.toDp() }
+//                    Scaffold(bottomBar = {
+//                        BottomNavigation(Modifier.height(height = 56.dp + imeBottom)) {
+//                            repeat(5) {
+//                                BottomNavigationItem(
+//                                    modifier = Modifier.navigationBarsPadding(),
+//                                    icon = {
+//                                        Icon(Icons.Filled.AccessTime, contentDescription = "")
+//
+//                                    },
+//
+//                                    label = {
+//                                        Text(
+//                                            text = "$it",
+//                                        )
+//                                    }, onClick = {
+//
+//                                    }, selected = true
+//                                )
+//                            }
+//
+//
+//                        }
+//                    }) {
+//                    }
                     MainPage()
+
+
                 }
             }
         }
     }
 }
+
 val a = test()
-fun test(){
+fun test() {
     GlobalScope.launch {
         flow {
             emit(1)
@@ -114,10 +144,11 @@ fun test(){
         }
     }
 }
+
 @ExperimentalCoilApi
 @ExperimentalPagerApi
 @Composable
-fun ArticleScreen(onClick: (url: String) -> Unit) {
+fun ArticleScreen(onClick: (url: String, title: String) -> Unit) {
 //    val articleViewModel: ArticleViewModel = viewModel()
     // 拦截返回按钮
 //    BackHandler(
@@ -146,7 +177,7 @@ fun ArticleScreen(onClick: (url: String) -> Unit) {
 @Composable
 private fun ArticleList(
     result: ResultData,
-    onClick: (url: String) -> Unit
+    onClick: (url: String, title: String) -> Unit
 ) {
     LazyColumn(contentPadding = PaddingValues(8.dp)) {
         val datas = result.data.datas
@@ -154,7 +185,7 @@ private fun ArticleList(
             data.id
         }) { data ->
             ArticleItem2(data) {
-                onClick(it)
+                onClick(it, data.title)
             }
         }
 //        item {
@@ -173,7 +204,7 @@ private fun ArticleList(
 * */
 @Composable
 private fun ArticleListPaging(
-    onClick: (url: String) -> Unit
+    onClick: (url: String, title: String) -> Unit
 ) {
     val articleViewModel: ArticleViewModel = viewModel()
     val collectAsLazyPagingItems = articleViewModel.articles1.collectAsLazyPagingItems()
@@ -184,7 +215,7 @@ private fun ArticleListPaging(
         LazyColumn(contentPadding = PaddingValues(8.dp), modifier = Modifier.fillMaxHeight()) {
             items(collectAsLazyPagingItems) { data ->
                 ArticleItem2(data!!) {
-                    onClick(it)
+                    onClick(it, data.title)
                 }
             }
 
@@ -218,9 +249,11 @@ private fun ArticleListPaging(
                     loadState.refresh is LoadState.Error -> {
                         val e = loadState.refresh as LoadState.Error
                         item {
-                            Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
-                                retry()
-                            }) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.clickable {
+                                    retry()
+                                }) {
                                 Text(text = e.error.message!!)
                             }
                         }
@@ -228,9 +261,11 @@ private fun ArticleListPaging(
                     loadState.append is LoadState.Error -> {
                         val e = loadState.append as LoadState.Error
                         item {
-                            Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable {
-                                retry()
-                            }) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.clickable {
+                                    retry()
+                                }) {
                                 Text(text = e.error.message!!)
                             }
                         }
@@ -243,7 +278,7 @@ private fun ArticleListPaging(
 }
 
 @Composable
-private fun <T:Any> LoadingItem(
+private fun <T : Any> LoadingItem(
     lazyPagingItems: LazyPagingItems<T>,
     lazyListScope: LazyListScope
 ) {
@@ -341,15 +376,18 @@ fun MainPage() {
             initialPage = selectedIndex,
             initialOffscreenLimit = 4
         )
+        val context = LocalContext.current
         HorizontalPager(
             state = pagerState,
             dragEnabled = false,
             modifier = Modifier.weight(1f)
         ) { page ->
             when (page) {
-                0 -> ArticleScreen {
+                0 -> ArticleScreen { url, title ->
+                    WebViewActivity.go(context as Activity, url, title = title)
                 }
                 1 -> PicturePage()
+                2 -> WeatherPage()
             }
         }
         BottomNavigationAlwaysShowLabelComponent(pagerState)
@@ -379,8 +417,8 @@ fun HomeScreen() {
             ) {
                 composable(Screen.Article.route) {
                     Log.d(TAG, "ArticleScreen: ")
-                    ArticleScreen {
-                        navController.navigate("article_detail?url=$it") {
+                    ArticleScreen { url, _ ->
+                        navController.navigate("article_detail?url=$url") {
                             launchSingleTop = true
                         }
                     }
@@ -403,7 +441,11 @@ fun HomeScreen() {
                 }
                 composable(Screen.ArticleDetail.route) {
                     val url = it.arguments?.getString("url")
-                    url?.let { detailUrl -> ArticleDetailScreen(detailUrl = detailUrl) }
+                    url?.let { detailUrl ->
+                        ArticleDetailScreen(
+                            detailUrl = detailUrl,
+                        )
+                    }
                 }
                 dialog(DIALOG) {
                     Dialog(onDismissRequest = {
@@ -448,9 +490,9 @@ fun SearchScreen(viewModel: SearchViewModel = viewModel()) {
             viewModel.searchArticle(it)
         }
         if (observeAsState != null) {
-            ArticleList(result = observeAsState!!) {
-                Log.d(TAG, "SearchScreen: $it")
-            }
+//            ArticlesList(result = observeAsState!!) { (url,title)->
+//                Log.d(TAG, "SearchScreen: $it")
+//            }
         } else {
             Text(text = "empty")
 
@@ -496,12 +538,38 @@ private fun SearchContent(search: (key: String) -> Unit) {
 }
 
 @Composable
-fun ArticleDetailScreen(detailUrl: String) {
+fun ArticleDetailScreen(detailUrl: String, title: String = "") {
+    val current = LocalContext.current
     var refreshing by remember { mutableStateOf(true) }
     Column {
+        Spacer(
+            modifier = Modifier
+                .statusBarsHeight()
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.primaryVariant)
+        )
+        TopAppBar(
+            title = {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onPrimary
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    (current as Activity).finish()
+                }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
+                }
+            },
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            elevation = 0.dp
+        )
         if (refreshing) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = Color.Gray)
         }
+        var webView:WebView? = null
         AndroidView(
             modifier = Modifier.fillMaxSize(),
             factory = { context ->
@@ -519,7 +587,16 @@ fun ArticleDetailScreen(detailUrl: String) {
                 Log.d(TAG, "ArticleDetailScreen: ")
                 // view 被 inflated
                 view.loadUrl(detailUrl)
+                webView = view
             })
+
+        BackHandler {
+            if (webView?.canGoBack() == true){
+                webView?.goBack()
+            } else {
+                (current as Activity).finish()
+            }
+        }
     }
 }
 
