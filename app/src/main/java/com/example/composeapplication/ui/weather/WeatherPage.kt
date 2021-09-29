@@ -33,7 +33,7 @@ fun WeatherPage() {
         loadInit = { viewModel.getWeathers() }) {
         Box(Modifier.fillMaxSize()) {
             Image(
-                painter = painterResource(R.mipmap.biz_news_local_weather_bg_big),
+                painter = painterResource(R.drawable.weather),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),

@@ -1,9 +1,6 @@
 package com.example.composeapplication.ui.bottom
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -19,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.example.composeapplication.Screen
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.imePadding
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
@@ -30,6 +25,7 @@ val items = listOf(
     Screen.Article,
     Screen.FriendsList,
     Screen.Login,
+    Screen.Test
 )
 
 @ExperimentalPagerApi

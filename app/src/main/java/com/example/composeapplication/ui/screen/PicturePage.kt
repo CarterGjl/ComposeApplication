@@ -38,7 +38,6 @@ private const val TAG = "PicturePage"
 @Composable
 fun PicturePage(viewModel: PictureViewModel = viewModel()) {
     val context = LocalContext.current
-//    viewModel.getPicList()
     val picList = viewModel.pics.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(false)
     Column(Modifier.fillMaxSize()) {
