@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.ComposeApplicationTheme
@@ -27,6 +29,7 @@ import com.example.composeapplication.ui.screen.MainPage
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -47,13 +50,10 @@ class MainActivity : BaseActivity() {
     @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            ProvideWindowInsets(consumeWindowInsets = false) {
-                ComposeApplicationTheme {
-                    MainPage()
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        navView.setupWithNavController(navController)
     }
 }
 

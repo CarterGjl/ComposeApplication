@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import com.example.composeapplication.bean.PictureModel
 import com.example.composeapplication.model.Http
 import com.example.composeapplication.viewmodel.picture.PictureSource
@@ -13,6 +14,13 @@ import kotlinx.coroutines.flow.Flow
 private const val TAG = "PictureViewModel"
 
 class PictureViewModel :BaseViewModel() {
+
+    var laLazyPagingItems : LazyPagingItems<PictureModel>? =null
+
+    fun setLazyPagingItems(laLazyPagingItems: LazyPagingItems<PictureModel>) {
+        this.laLazyPagingItems = laLazyPagingItems
+    }
+
     val picLiveData = MutableLiveData<List<PictureModel>>()
 
     fun getPicList() {

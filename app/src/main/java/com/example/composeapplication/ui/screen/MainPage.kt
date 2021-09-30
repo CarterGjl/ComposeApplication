@@ -21,12 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
-import com.example.composeapplication.ArticleScreen
 import com.example.composeapplication.R
-import com.example.composeapplication.WebViewActivity
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
 import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.MainViewModel
+import com.example.composeapplication.viewmodel.PictureViewModel
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -38,9 +37,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @ExperimentalPagerApi
 @Composable
-fun MainPage() {
-
-
+fun MainPage(viewModel: MainViewModel = viewModel(), pictureViewModel: PictureViewModel = viewModel(),) {
     val current = LocalContext.current
     Column {
         Spacer(
@@ -60,7 +57,6 @@ fun MainPage() {
             backgroundColor = MaterialTheme.colors.primaryVariant,
             elevation = 0.dp
         )
-        val viewModel: MainViewModel = viewModel()
         val selectedIndex by viewModel.getSelectedIndex().observeAsState(0)
         val pagerState = rememberPagerState(
             pageCount = 4,
@@ -74,9 +70,12 @@ fun MainPage() {
         ) { page ->
             when (page) {
                 0 -> ArticleScreen { url, title ->
-                    WebViewActivity.go(current as Activity, url, title = title)
+                    viewModel.navigateToWebViewPage(title = title, url = url)
+//                    WebViewActivity.go(current as Activity, url, title = title)
                 }
-                1 -> PicturePage()
+                1 -> PicturePage() {
+                    viewModel.navigateToPhotoPage(url = it)
+                }
                 2 -> WeatherPage()
                 3 -> FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
 

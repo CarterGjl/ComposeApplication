@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.ComposeApplicationTheme
+import com.example.composeapplication.ui.screen.ArticleDetailScreen
 import com.google.accompanist.insets.ProvideWindowInsets
 
 class WebViewActivity : BaseActivity() {

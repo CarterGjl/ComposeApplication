@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui.screen
 
-import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -27,18 +26,28 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.composeapplication.R
-import com.example.composeapplication.activity.PhotoActivity
+import com.example.composeapplication.bean.PictureModel
 import com.example.composeapplication.viewmodel.PictureViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 private const val TAG = "PicturePage"
+
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
 @Composable
-fun PicturePage(viewModel: PictureViewModel = viewModel()) {
-    val context = LocalContext.current
-    val picList = viewModel.pics.collectAsLazyPagingItems()
+fun PicturePage(
+    viewModel: PictureViewModel = viewModel(),
+    navigateToPhotoPage: (url: String) -> Unit = {}
+) {
+    val picList: LazyPagingItems<PictureModel> =
+        if (viewModel.laLazyPagingItems == null) {
+            val collectAsLazyPagingItems = viewModel.pics.collectAsLazyPagingItems()
+            viewModel.setLazyPagingItems(collectAsLazyPagingItems)
+            collectAsLazyPagingItems
+        } else {
+            viewModel.laLazyPagingItems!!
+        }
     val state = rememberSwipeRefreshState(false)
     Column(Modifier.fillMaxSize()) {
         SwipeRefresh(
@@ -70,7 +79,7 @@ fun PicturePage(viewModel: PictureViewModel = viewModel()) {
                             .width(120.dp)
                             .height(120.dp)
                             .clickable {
-                                PhotoActivity.go(context as Activity, item.url)
+                                navigateToPhotoPage(item.url)
                             }
                     )
                 }
@@ -104,19 +113,27 @@ fun PicturePage(viewModel: PictureViewModel = viewModel()) {
                         loadState.refresh is LoadState.Error -> {
                             val e = loadState.refresh as LoadState.Error
                             item {
-                                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillParentMaxWidth().clickable {
-                                    retry()
-                                }) {
-                                    Text(text = e.error.message!!,)
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .fillParentMaxWidth()
+                                        .clickable {
+                                            retry()
+                                        }) {
+                                    Text(text = e.error.message!!)
                                 }
                             }
                         }
                         loadState.append is LoadState.Error -> {
                             val e = loadState.append as LoadState.Error
                             item {
-                                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillParentMaxWidth().clickable {
-                                    retry()
-                                }) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .fillParentMaxWidth()
+                                        .clickable {
+                                            retry()
+                                        }) {
                                     Text(text = e.error.message!!)
                                 }
                             }
@@ -129,8 +146,9 @@ fun PicturePage(viewModel: PictureViewModel = viewModel()) {
     }
 
 }
+
 @ExperimentalFoundationApi
-fun <T: Any> LazyGridScope.items(
+fun <T : Any> LazyGridScope.items(
     lazyPagingItems: LazyPagingItems<T>,
     itemContent: @Composable LazyItemScope.(value: T?) -> Unit
 ) {

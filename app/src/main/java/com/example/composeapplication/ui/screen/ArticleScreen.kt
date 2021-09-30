@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui.screen
 
-import android.app.Activity
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -21,7 +20,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -177,8 +175,7 @@ fun ArticleScreen(navController: NavController) {
 }
 
 @Composable
-fun ArticleDetailScreen(detailUrl: String, title: String = "") {
-    val current = LocalContext.current
+fun ArticleDetailScreen(detailUrl: String, title: String = "",naviBack:()->Unit = {}) {
     var refreshing by remember { mutableStateOf(true) }
     Column {
         Spacer(
@@ -197,7 +194,7 @@ fun ArticleDetailScreen(detailUrl: String, title: String = "") {
             },
             navigationIcon = {
                 IconButton(onClick = {
-                    (current as Activity).finish()
+                    naviBack()
                 }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
                 }
@@ -232,7 +229,7 @@ fun ArticleDetailScreen(detailUrl: String, title: String = "") {
             if (webView?.canGoBack() == true){
                 webView?.goBack()
             } else {
-                (current as Activity).finish()
+                naviBack()
             }
         }
     }

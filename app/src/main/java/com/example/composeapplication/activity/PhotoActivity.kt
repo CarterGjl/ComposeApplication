@@ -69,8 +69,6 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
         scale *= zoomChange
         if (scale >= 6.0) scale = 6.0f
         else if (scale <= 1.0) scale = 1.0f
-
-//        rotation += rotationChange
     }
     val painter = rememberImagePainter(
         data = url,
@@ -97,14 +95,6 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onLongPress = {
-//                            val get = painter.imageLoader.bitmapPool.get(
-//                                220,
-//                                220,
-//                                painter.imageLoader.defaults.bitmapConfig
-//                            )
-//                            Toast
-//                                .makeText(context, "save $get", Toast.LENGTH_SHORT)
-//                                .show()
                         },
                     )
                 }
