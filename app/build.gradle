@@ -52,13 +52,13 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha05"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha06"
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
@@ -69,17 +69,17 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation('io.coil-kt:coil:1.3.2')
+    implementation('io.coil-kt:coil:1.4.0')
     implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.6.2'
 
-    implementation 'com.google.accompanist:accompanist-insets:0.18.0'
-    implementation 'com.google.accompanist:accompanist-pager:0.18.0'
-    implementation 'com.google.accompanist:accompanist-pager-indicators:0.18.0'
+    implementation 'com.google.accompanist:accompanist-insets:0.19.0'
+    implementation 'com.google.accompanist:accompanist-pager:0.19.0'
+    implementation 'com.google.accompanist:accompanist-pager-indicators:0.19.0'
     implementation 'com.google.accompanist:accompanist-coil:0.15.0'
 
-    implementation 'com.google.accompanist:accompanist-swiperefresh:0.18.0'
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.19.0'
     implementation "androidx.core:core-splashscreen:1.0.0-alpha01"
-    implementation "com.google.accompanist:accompanist-permissions:0.18.0"
+    implementation 'com.google.accompanist:accompanist-permissions:0.19.0'
     // 替代sharepreference
     implementation("androidx.datastore:datastore-preferences:1.0.0-rc01")
     implementation "androidx.datastore:datastore-preferences-core:1.0.0-rc01"
@@ -92,7 +92,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
 // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha27"
-    def version = "2.3.4"
+    def version = '2.3.5'
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"
 

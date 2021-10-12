@@ -25,11 +25,9 @@ import com.google.accompanist.pager.rememberPagerState
 fun NewsBanner(topStories: List<Banner>) {
     val context = LocalContext.current
     Box(modifier = Modifier.height(200.dp)) {
-        val pagerState = rememberPagerState(
-            pageCount = topStories.size,
-            infiniteLoop = true
-        )
+        val pagerState = rememberPagerState()
         HorizontalPager(
+            count = topStories.size,
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->

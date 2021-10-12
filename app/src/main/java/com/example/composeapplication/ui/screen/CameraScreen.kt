@@ -5,34 +5,28 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material.icons.outlined.Cameraswitch
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.example.composeapplication.R
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
-import java.lang.Exception
 
 @ExperimentalPermissionsApi
 @Composable
@@ -97,8 +91,15 @@ fun CameraPreview() {
         it.setSurfaceProvider(previewView.surfaceProvider)
     }
     var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-    Box(modifier = Modifier
-        .fillMaxSize()) {
+
+    val insets = LocalWindowInsets.current
+    // 切记，这些信息都是px单位，使用时要根据需求转换单位
+    val top = with(LocalDensity.current) { insets.statusBars.layoutInsets.top.toDp() }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         AndroidView(
             factory = { previewView },
             modifier = Modifier.fillMaxSize(),
@@ -107,7 +108,7 @@ fun CameraPreview() {
                 {
                     try {
                         cameraProvider.unbindAll()
-                        cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector,preview)
+                        cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview)
                     } catch (e: Exception) {
 
                     }
@@ -118,6 +119,7 @@ fun CameraPreview() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)
+                .padding(top = top)
                 .align(Alignment.TopEnd),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.Top
@@ -125,14 +127,14 @@ fun CameraPreview() {
             IconButton(
                 modifier = Modifier.size(30.dp),
                 onClick = {
-                cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-                    CameraSelector.DEFAULT_FRONT_CAMERA
-                } else{
-                    CameraSelector.DEFAULT_BACK_CAMERA
-                }
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector,preview)
-            }) {
+                    cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                        CameraSelector.DEFAULT_FRONT_CAMERA
+                    } else {
+                        CameraSelector.DEFAULT_BACK_CAMERA
+                    }
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview)
+                }) {
                 Icon(Icons.Outlined.Cameraswitch, "Camera", tint = Color.White)
             }
         }

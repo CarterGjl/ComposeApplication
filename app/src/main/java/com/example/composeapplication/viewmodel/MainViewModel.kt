@@ -1,6 +1,5 @@
 package com.example.composeapplication.viewmodel
 
-import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -17,6 +16,8 @@ sealed class Screen
 class WebViewScreen(val title: String, val url: String) : Screen()
 
 class PhotoScreen(val url: String) : Screen()
+
+object CameraScreen : Screen()
 
 
 class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -40,6 +41,10 @@ class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
     fun navigateToPhotoPage(url: String) {
         _navigateTo.value = Event(PhotoScreen(url = url))
+    }
+
+    fun navigateToCameraPage() {
+        _navigateTo.value = Event(CameraScreen)
     }
 
     fun saveSelectIndex(selectIndex: Int) {

@@ -19,4 +19,8 @@
         android:id="@+id/photoFragment"
         android:name="com.example.composeapplication.fragment.PhotoFragment"
         android:label="PhotoFragment" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.composeapplication.fragment.CameraFragment"
+        android:label="CameraFragment" />
 </navigation>
