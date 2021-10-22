@@ -42,7 +42,7 @@ fun HomeScreen() {
                         }
                     }
                 }
-                composable(Screen.FriendsList.route) {
+                composable(Screen.Picture.route) {
                     Log.d(TAG, "SearchScreen: ")
                     PicturePage()
 //                    SearchScreen()
@@ -50,8 +50,8 @@ fun HomeScreen() {
 //                composable(Screen.Login.route) {
 //                    MineScreen()
 //                }
-                navigation(startDestination = Screen.Login.route, NEST) {
-                    composable(Screen.Login.route) {
+                navigation(startDestination = Screen.Weather.route, NEST) {
+                    composable(Screen.Weather.route) {
                         MineScreen(navController = navController)
                     }
                     composable(MINE) {

@@ -10,21 +10,21 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.R
+import com.example.composeapplication.Screen
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
 import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @ExperimentalPermissionsApi
@@ -34,8 +34,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @Composable
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
-    val selectedIndex by viewModel.getSelectedIndex().observeAsState(0)
-    val pagerState = rememberPagerState(initialPage = selectedIndex)
+    val navController = rememberNavController()
     Scaffold(
         topBar = {
             Column {
@@ -59,7 +58,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
             }
         },
         bottomBar = {
-            BottomNavigationAlwaysShowLabelComponent(pagerState)
+            BottomNavigationAlwaysShowLabelComponent(navController)
         },
         floatingActionButton = {
             IconButton(onClick = {
@@ -70,22 +69,25 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
         }
     ) {
 
-        HorizontalPager(
-            count = 4,
-            state = pagerState,
-
-        ) { page ->
-            when (page) {
-                0 -> ArticleScreen { url, title ->
+        NavHost(navController = navController, startDestination = Screen.Article.route) {
+            composable(Screen.Article.route) {
+                ArticleScreen { url, title ->
                     viewModel.navigateToWebViewPage(title = title, url = url)
 //                    WebViewActivity.go(current as Activity, url, title = title)
                 }
-                1 -> PicturePage() {
+            }
+            composable(Screen.Picture.route) {
+                PicturePage {
                     viewModel.navigateToPhotoPage(url = it)
                 }
-                2 -> WeatherPage()
-//                3 ->
             }
+            composable(Screen.Weather.route) {
+                WeatherPage()
+            }
+            composable(Screen.Test.route) {
+                TestPage()
+            }
+
         }
     }
 }

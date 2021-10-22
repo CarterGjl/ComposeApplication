@@ -2,7 +2,6 @@ package com.example.composeapplication
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -23,19 +22,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import coil.annotation.ExperimentalCoilApi
+import com.example.composeapplication.activity.Test
 import com.example.composeapplication.activity.bsae.BaseActivity
-import com.example.composeapplication.ui.ComposeApplicationTheme
-import com.example.composeapplication.ui.screen.MainPage
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.launch
 
 
 // 官方demo地址
@@ -59,20 +54,20 @@ class MainActivity : BaseActivity() {
 
 val a = test()
 fun test() {
-    GlobalScope.launch {
-        flow {
-            emit(1)
-            throw ArithmeticException("div 0")
-        }.catch {
-            Log.d(TAG, "onCreate:catch error $it")
-            println("catch error $it")
-        }.onCompletion {
-            Log.d(TAG, "onCreate finally")
-            println("finally")
-        }.collect {
-            Log.d(TAG, "onCreate collect $it")
-        }
-    }
+//    GlobalScope.launch {
+//        flow {
+//            emit(1)
+//            throw ArithmeticException("div 0")
+//        }.catch {
+//            Log.d(TAG, "onCreate:catch error $it")
+//            println("catch error $it")
+//        }.onCompletion {
+//            Log.d(TAG, "onCreate finally")
+//            println("finally")
+//        }.collect {
+//            Log.d(TAG, "onCreate collect $it")
+//        }
+//    }
 }
 
 
@@ -89,6 +84,25 @@ fun BoxScope() {
         Text(text = "empty")
     }
 }
+fun  main() {
+    val scope = MainScope()
+//    scope.launch {
+//        val token = withContext(Dispatchers.IO) {
+//            getToken()
+//        }
+//        val profile = withContext(Dispatchers.IO) {
+////            loadProfile(token)
+//            login("2")
+//        }
+//    }
+}
+suspend fun login(await: String): String {
+    return withContext(Dispatchers.IO) {
+        // 延迟一秒登录
+        delay(1000)
+        "login"
+    }
+}
 
 const val MINE = "mine"
 const val NEST = "nest"
@@ -97,8 +111,8 @@ const val DIALOG = "dialog"
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 
     object Article : Screen("article", R.string.article, Icons.Filled.Article)
-    object FriendsList : Screen("friendslist", R.string.friends_list, Icons.Filled.Favorite)
-    object Login : Screen("login", R.string.login, Icons.Filled.AccountBox)
+    object Picture : Screen("picture", R.string.picture, Icons.Filled.Favorite)
+    object Weather : Screen("weather", R.string.weather, Icons.Filled.AccountBox)
     object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
     object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)

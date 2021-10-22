@@ -51,8 +51,8 @@
     <string name="tab_favourite">Favourite</string>
     <string name="tab_profile">Profile</string>
     <string name="article">article</string>
-    <string name="friends_list">Search</string>
-    <string name="login">login</string>
+    <string name="picture">picture</string>
+    <string name="weather">weather</string>
     <string name="test">test</string>
     <string name="email">Email</string>
     <string name="show_password">Show password</string>

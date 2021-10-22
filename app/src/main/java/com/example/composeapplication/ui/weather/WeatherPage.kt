@@ -1,5 +1,6 @@
 package com.example.composeapplication.ui.weather
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -21,9 +22,11 @@ import com.example.composeapplication.ui.weather.viewmodel.WeatherViewModel
 
 import com.example.composeapplication.R
 
+private const val TAG = "WeatherPage"
 
 @Composable
 fun WeatherPage() {
+    Log.d(TAG, "WeatherPage: ")
     val viewModel: WeatherViewModel = viewModel()
     val state by viewModel.stateLiveData.observeAsState()
     val weatherList by viewModel.weatherLiveData.observeAsState(listOf())

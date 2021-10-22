@@ -7,41 +7,39 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composeapplication.Screen
-import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
-import kotlinx.coroutines.launch
 
 val items = listOf(
     Screen.Article,
-    Screen.FriendsList,
-    Screen.Login,
+    Screen.Picture,
+    Screen.Weather,
     Screen.Test
 )
 
 @ExperimentalPagerApi
 @Composable
 fun BottomNavigationAlwaysShowLabelComponent(
-    pagerState: PagerState,
-    viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    navController: NavHostController
 ) {
-    val selectedIndex by viewModel.getSelectedIndex().observeAsState()
-    val rememberCoroutineScope = rememberCoroutineScope()
     val insets = LocalWindowInsets.current
     // 切记，这些信息都是px单位，使用时要根据需求转换单位
     val imeBottom = with(LocalDensity.current) { insets.navigationBars.bottom.toDp() }
-
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     BottomNavigation(Modifier.height(height = 56.dp + imeBottom)) {
-        items.forEachIndexed { index, screen ->
+        items.forEachIndexed { _, screen ->
             BottomNavigationItem(
                 icon = {
                     Icon(screen.icon, contentDescription = screen.route)
@@ -52,11 +50,23 @@ fun BottomNavigationAlwaysShowLabelComponent(
                     )
                 },
                 modifier = Modifier.navigationBarsPadding(),
-                selected = selectedIndex == index,
+                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
-                    viewModel.saveSelectIndex(index)
-                    rememberCoroutineScope.launch {
-                        pagerState.scrollToPage(index)
+                    if (currentDestination?.route == screen.route) {
+                        return@BottomNavigationItem
+                    }
+                    navController.navigate(screen.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
                     }
                 })
         }

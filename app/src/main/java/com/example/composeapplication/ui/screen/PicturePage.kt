@@ -40,14 +40,7 @@ fun PicturePage(
     viewModel: PictureViewModel = viewModel(),
     navigateToPhotoPage: (url: String) -> Unit = {}
 ) {
-    val picList: LazyPagingItems<PictureModel> =
-        if (viewModel.laLazyPagingItems == null) {
-            val collectAsLazyPagingItems = viewModel.pics.collectAsLazyPagingItems()
-            viewModel.setLazyPagingItems(collectAsLazyPagingItems)
-            collectAsLazyPagingItems
-        } else {
-            viewModel.laLazyPagingItems!!
-        }
+    val picList = viewModel.pics.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(false)
     Column(Modifier.fillMaxSize()) {
         SwipeRefresh(

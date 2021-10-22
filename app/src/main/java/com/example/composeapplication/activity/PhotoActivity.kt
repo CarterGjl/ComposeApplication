@@ -2,16 +2,14 @@ package com.example.composeapplication.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -23,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
@@ -57,7 +54,6 @@ class PhotoActivity : BaseActivity() {
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PhotoViewPage(url: String, click: () -> Unit) {
-    val context = LocalContext.current
     var scale by remember {
         mutableStateOf(1f)
     }
