@@ -15,14 +15,12 @@ import com.example.composeapplication.navigation.navigate
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.viewmodel.MainViewModel
-import com.example.composeapplication.viewmodel.PictureViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
-    private val pictureViewModel: PictureViewModel by viewModels()
 
     @ExperimentalCoilApi
     @ExperimentalPagerApi

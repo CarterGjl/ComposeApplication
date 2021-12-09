@@ -3,7 +3,7 @@
 package com.example.composeapplication.navigation
 
 import androidx.navigation.NavType
-import androidx.navigation.compose.navArgument
+import androidx.navigation.navArgument
 
 object DashboardNavigation {
 

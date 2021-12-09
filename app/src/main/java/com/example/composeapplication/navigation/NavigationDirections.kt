@@ -2,7 +2,7 @@
 
 package com.example.composeapplication.navigation
 
-import androidx.navigation.compose.NamedNavArgument
+import androidx.navigation.NamedNavArgument
 
 object NavigationDirections {
 
