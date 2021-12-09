@@ -1,6 +1,7 @@
 package com.example.composeapplication.ui.screen
 
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,13 +22,17 @@ import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.R
 import com.example.composeapplication.Screen
+import com.example.composeapplication.repository.WeatherForecastRepository
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
 import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
+private const val TAG = "MainPage"
 @ExperimentalPermissionsApi
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
@@ -34,7 +40,10 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @Composable
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
+    val rememberCoroutineScope = rememberCoroutineScope()
     val navController = rememberNavController()
+    val fetchWeatherForecast = WeatherForecastRepository()
+        .fetchWeatherForecast()
     Scaffold(
         topBar = {
             Column {
@@ -62,7 +71,14 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
         },
         floatingActionButton = {
             IconButton(onClick = {
-                viewModel.navigateToCameraPage()
+//                viewModel.navigateToCameraPage()
+                rememberCoroutineScope.launch {
+
+                    fetchWeatherForecast.collect {
+                            Log.d(TAG, "MainPage: $it")
+                    }
+                }
+
             }) {
                 Icon(imageVector = Icons.Filled.Camera, contentDescription = "camera")
             }

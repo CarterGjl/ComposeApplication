@@ -8,13 +8,6 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import android.net.wifi.WifiInfo
-
-import android.annotation.SuppressLint
-
-import android.net.wifi.WifiManager
-
-
 
 
 object Utils {

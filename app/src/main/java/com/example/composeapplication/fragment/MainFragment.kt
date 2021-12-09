@@ -1,21 +1,16 @@
 package com.example.composeapplication.fragment
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.navigation.navigate
 import com.example.composeapplication.ui.ComposeApplicationTheme
-import com.example.composeapplication.ui.screen.FeatureThatRequiresCameraPermission
 import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.example.composeapplication.viewmodel.PictureViewModel

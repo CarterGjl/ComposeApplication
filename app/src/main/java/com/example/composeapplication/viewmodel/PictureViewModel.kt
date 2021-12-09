@@ -2,9 +2,7 @@ package com.example.composeapplication.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.*
 import androidx.paging.compose.LazyPagingItems
 import com.example.composeapplication.bean.PictureModel
 import com.example.composeapplication.model.Http

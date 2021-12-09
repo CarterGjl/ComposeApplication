@@ -1,7 +1,6 @@
 package com.example.composeapplication
 
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -22,15 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import coil.annotation.ExperimentalCoilApi
-import com.example.composeapplication.activity.Test
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 // 官方demo地址
@@ -46,6 +44,12 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+//        val view = TextView(this)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            view.setRenderEffect(RenderEffect.createBlurEffect(2F, 3F, Shader.TileMode.CLAMP))
+//        }
+//        val defaultUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+//        RingtoneManager.getRingtone(this,defaultUri).play()
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
