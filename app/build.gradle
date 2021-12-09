@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.composeapplicationabc"
-        minSdkVersion 21
+        minSdk 23
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -83,7 +83,9 @@ dependencies {
     // 替代sharepreference
     implementation("androidx.datastore:datastore-preferences:1.0.0-rc01")
     implementation "androidx.datastore:datastore-preferences-core:1.0.0-rc01"
-    implementation("androidx.paging:paging-compose:1.0.0-alpha12")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha14")
+    implementation "androidx.paging:paging-runtime:3.1.0-rc01"
+    testImplementation "androidx.paging:paging-common:3.1.0-rc01"
 
     def camerax_version = "1.0.1"
 // CameraX core library using camera2 implementation

@@ -1,7 +1,9 @@
 package com.example.composeapplication.navigation
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.composeapplication.R
 import com.example.composeapplication.viewmodel.CameraScreen

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
@@ -85,7 +86,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
         }
     ) {
 
-        NavHost(navController = navController, startDestination = Screen.Article.route) {
+        NavHost(modifier = Modifier.padding(it), navController = navController, startDestination = Screen.Article.route) {
             composable(Screen.Article.route) {
                 ArticleScreen { url, title ->
                     viewModel.navigateToWebViewPage(title = title, url = url)
@@ -93,8 +94,8 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 }
             }
             composable(Screen.Picture.route) {
-                PicturePage {
-                    viewModel.navigateToPhotoPage(url = it)
+                PicturePage { url ->
+                    viewModel.navigateToPhotoPage(url = url)
                 }
             }
             composable(Screen.Weather.route) {

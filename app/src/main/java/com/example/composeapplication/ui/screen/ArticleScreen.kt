@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -75,73 +76,82 @@ private fun ArticleListPaging(
     onClick: (url: String, title: String) -> Unit
 ) {
     val articleViewModel: ArticleViewModel = viewModel()
-    val collectAsLazyPagingItems = articleViewModel.articles1.collectAsLazyPagingItems()
+    val viewState = remember {
+        articleViewModel.viewStates
+    }
+    val collectAsLazyPagingItems = viewState.pagingData.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(false)
-    SwipeRefresh(state = state, onRefresh = {
-        collectAsLazyPagingItems.refresh()
-    }) {
-        LazyColumn(contentPadding = PaddingValues(8.dp), modifier = Modifier.fillMaxHeight()) {
-            items(collectAsLazyPagingItems) { data ->
-                ArticleItem2(data!!) {
-                    onClick(it, data.title)
-                }
+    val listState = if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier.fillMaxHeight(),
+    ) {
+        items(collectAsLazyPagingItems) { data ->
+            ArticleItem2(data!!) {
+                onClick(it, data.title)
             }
+        }
 
-            collectAsLazyPagingItems.apply {
-                state.isRefreshing = loadState.refresh is LoadState.Loading
-                when {
-                    loadState.refresh is LoadState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier.fillParentMaxSize(),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator(color = Color.Red).also {
-                                    Log.d(TAG, "loading: ")
-                                }
+        collectAsLazyPagingItems.apply {
+            state.isRefreshing = loadState.refresh is LoadState.Loading
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    item {
+                        Box(
+                            modifier = Modifier.fillParentMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(color = Color.Red).also {
+                                Log.d(TAG, "loading: ")
                             }
                         }
                     }
-                    loadState.append is LoadState.Loading -> {
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillParentMaxWidth()
-                            ) {
-                                CircularProgressIndicator(color = Color.Red).also {
-                                    Log.d(TAG, "loading: ")
-                                }
+                }
+                loadState.append is LoadState.Loading -> {
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillParentMaxWidth()
+                        ) {
+                            CircularProgressIndicator(color = Color.Red).also {
+                                Log.d(TAG, "loading: ")
                             }
                         }
                     }
-                    loadState.refresh is LoadState.Error -> {
-                        val e = loadState.refresh as LoadState.Error
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.clickable {
-                                    retry()
-                                }) {
-                                Text(text = e.error.message!!)
-                            }
+                }
+                loadState.refresh is LoadState.Error -> {
+                    val e = loadState.refresh as LoadState.Error
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.clickable {
+                                retry()
+                            }) {
+                            Text(text = e.error.message!!)
                         }
                     }
-                    loadState.append is LoadState.Error -> {
-                        val e = loadState.append as LoadState.Error
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.clickable {
-                                    retry()
-                                }) {
-                                Text(text = e.error.message!!)
-                            }
+                }
+                loadState.append is LoadState.Error -> {
+                    val e = loadState.append as LoadState.Error
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.clickable {
+                                retry()
+                            }) {
+                            Text(text = e.error.message!!)
                         }
                     }
                 }
             }
         }
     }
+//    SwipeRefresh(state = state, onRefresh = {
+//        collectAsLazyPagingItems.refresh()
+//    }) {
+//
+//    }
 
 }
 
@@ -152,15 +162,11 @@ fun ArticleScreen(onClick: (url: String, title: String) -> Unit) {
     val bannerViewModel: BannerViewModel = viewModel()
     val banners by bannerViewModel.banners.observeAsState()
     val state by bannerViewModel.stateLiveData.observeAsState()
-    LoadingPage(state = state!!, loadInit = {
-        bannerViewModel.getBanners()
-    }) {
-        Column(Modifier.fillMaxHeight()) {
-            banners?.apply {
-                NewsBanner(this)
-            }
-            ArticleListPaging(onClick)
+    Column(Modifier.fillMaxHeight()) {
+        banners?.apply {
+            NewsBanner(this)
         }
+        ArticleListPaging(onClick)
     }
 
 }

@@ -25,11 +25,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composeapplication.activity.bsae.Demo.Companion.test
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.Navigation
 import com.example.composeapplication.ui.timer.*
 import com.example.composeapplication.viewmodel.ArticleViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 //@Preview(showBackground = true)
 //@Composable
@@ -370,5 +375,43 @@ fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
 //            )
 //            .padding(10.dp)
 //    )
+    }
+
+    fun  main() {
+        val scope = MainScope()
+//    scope.launch {
+//        val token = withContext(Dispatchers.IO) {
+//            getToken()
+//        }
+//        val profile = withContext(Dispatchers.IO) {
+////            loadProfile(token)
+//            login("2")
+//        }
+//    }
+    }
+    suspend fun login(await: String): String {
+        return withContext(Dispatchers.IO) {
+            // 延迟一秒登录
+            delay(1000)
+            "login"
+        }
+    }
+
+    val a = test()
+    fun test() {
+//    GlobalScope.launch {
+//        flow {
+//            emit(1)
+//            throw ArithmeticException("div 0")
+//        }.catch {
+//            Log.d(TAG, "onCreate:catch error $it")
+//            println("catch error $it")
+//        }.onCompletion {
+//            Log.d(TAG, "onCreate finally")
+//            println("finally")
+//        }.collect {
+//            Log.d(TAG, "onCreate collect $it")
+//        }
+//    }
     }
 }

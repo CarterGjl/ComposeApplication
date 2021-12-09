@@ -1,10 +1,9 @@
 package com.example.composeapplication.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.composeapplication.Event
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 private const val HOME_PAGE_SELECTED_INDEX = "home_page_selected_index"
@@ -33,6 +32,16 @@ class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
             mSelectLiveData.postValue(index)
         }
         return mSelectLiveData
+    }
+
+    var dataLoaded: Boolean = false
+
+    fun mockDataLoading(): Boolean {
+        viewModelScope.launch {
+            delay(1000)
+            dataLoaded = true
+        }
+        return dataLoaded
     }
 
     fun navigateToWebViewPage(title: String, url: String) {

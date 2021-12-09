@@ -14,4 +14,12 @@
     <color name="statusBarColor">@color/pink900</color>
     <color name="pink100">#FFF1F1</color>
     <color name="pink900">#3f2c2c</color>
+    <!--闪屏中心图标后面的背景色-->
+    <color name="splash_screen_icon_background">#8800FF</color>
+    <!--统一全局窗口背景色-->
+    <color name="window_common_background_color">#FFFFFF</color>
+
+    <!--android5.0 ~ android5.1.1之间的-->
+    <color name="splash_screen_statusBarColor">#000000</color>
+    <color name="splash_screen_navigationBarColor">#000000</color>
 </resources>

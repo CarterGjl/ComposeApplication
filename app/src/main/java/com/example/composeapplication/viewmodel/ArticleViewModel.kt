@@ -2,10 +2,12 @@ package com.example.composeapplication.viewmodel
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.*
+import androidx.paging.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -30,7 +32,7 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         Log.d(TAG, ": ArticleViewModel init")
     }
 
-    val articles: LiveData<ResultData> = articalLiveData
+    val articlesFrom: LiveData<ResultData> = articalLiveData
 
     fun searchMoviesComposeCoroutines() {
         viewModelScope.launch {
@@ -51,11 +53,20 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    val articles1: Flow<PagingData<Article>> = Pager(
-        PagingConfig(
-            pageSize = 15
-        )
-    ) {
+    private val articles: Flow<PagingData<Article>> = Pager(PagingConfig(pageSize = 15)) {
         ArticleSource()
-    }.flow
+    }.flow.cachedIn(viewModelScope)
+
+
+    var viewStates by mutableStateOf(ArticlesState(pagingData = articles))
+        private set
+
+
+    data class ArticlesState(
+        val isRefreshing: Boolean = false,
+        val listState: LazyListState = LazyListState(),
+        val pagingData: PagingArticle
+    )
 }
+
+typealias PagingArticle = Flow<PagingData<Article>>
