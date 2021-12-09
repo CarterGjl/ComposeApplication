@@ -20,9 +20,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.fragment.findNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.R
 import com.example.composeapplication.Screen
+import com.example.composeapplication.activity.bsae.Demo.Companion.title
 import com.example.composeapplication.repository.WeatherForecastRepository
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
 import com.example.composeapplication.ui.weather.WeatherPage
@@ -84,7 +86,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 Icon(imageVector = Icons.Filled.Camera, contentDescription = "camera")
             }
         }
-    ) {
+    ) { it ->
 
         NavHost(modifier = Modifier.padding(it), navController = navController, startDestination = Screen.Article.route) {
             composable(Screen.Article.route) {

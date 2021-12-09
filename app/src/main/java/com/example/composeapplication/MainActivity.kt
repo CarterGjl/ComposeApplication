@@ -51,7 +51,6 @@ import com.google.android.material.navigation.NavigationView
 @Suppress("EXPERIMENTAL_ANNOTATION_ON_OVERRIDE_WARNING")
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
-    private val mainViewModel: MainViewModel by viewModels()
 
     @ExperimentalCoilApi
     @ExperimentalPagerApi
@@ -88,7 +87,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
             return
         }
 
-        val flag = false
+        val flag = true
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R || flag) {
             // 使用alpha透明度动画过渡
             val splashScreenView = splashScreenViewProvider.view

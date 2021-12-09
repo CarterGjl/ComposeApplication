@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_ANNOTATION_ON_OVERRIDE_WARNING")
+
 package com.example.composeapplication.fragment
 
 import android.os.Bundle
