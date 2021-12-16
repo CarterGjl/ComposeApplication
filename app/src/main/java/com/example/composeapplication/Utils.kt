@@ -1,13 +1,19 @@
-@file:Suppress("unused", "LiftReturnOrAssignment", "NullableBooleanElvis")
+@file:Suppress("unused", "LiftReturnOrAssignment", "NullableBooleanElvis", "DEPRECATION")
 
 package com.example.composeapplication
 
 import android.content.Context
+import android.media.AudioAttributes
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import android.widget.Toast
 
+private val PATTERN = longArrayOf(200, 150)
 
 object Utils {
 
@@ -53,6 +59,31 @@ object Utils {
             //for check internet over Bluetooth
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
             else -> false
+        }
+    }
+
+    fun Context.vibrateOnce() {
+        val defaultVibrator: Vibrator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =
+                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            defaultVibrator = vibratorManager.defaultVibrator
+        } else {
+            defaultVibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            defaultVibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    300,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
+            val audioAttribute = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .build()
+            defaultVibrator.vibrate(PATTERN, -1, audioAttribute)
         }
     }
 }

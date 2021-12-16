@@ -22,7 +22,7 @@ data class Person(var name: String, var age: Int)
 fun main() {
     arrayListOf<String>().lastIndex
     val p = Person(name = "lilei",age = 18)
-    val (name,age) = p
+    val (_,age) = p
     println(age)
 }
 

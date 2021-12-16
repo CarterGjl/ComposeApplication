@@ -1,6 +1,10 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.viewmodel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
+import androidx.navigation.NavHostController
 import com.example.composeapplication.Event
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,9 +25,15 @@ object CameraScreen : Screen()
 
 class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
+    private var navController:NavHostController? = null
+
     private val mSelectLiveData = MutableLiveData<Int>()
 
     private val _navigateTo = MutableLiveData<Event<Screen>>()
+    private val id = MutableLiveData<Int>()
+
+    val titleId: LiveData<Int> = id
+
     val navigateTo: LiveData<Event<Screen>> = _navigateTo
 
     fun getSelectedIndex(): LiveData<Int> {
@@ -59,5 +69,21 @@ class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     fun saveSelectIndex(selectIndex: Int) {
         savedStateHandle.set(HOME_PAGE_SELECTED_INDEX, selectIndex)
         mSelectLiveData.value = selectIndex
+    }
+
+    fun showTitle(@StringRes id:Int){
+        this.id.value = id
+    }
+
+    fun setNavControllerA(navController: NavHostController) {
+        this.navController = navController
+    }
+
+    fun navigateTo(string: String) {
+        navController?.navigate(string)
+    }
+
+    fun popUp() {
+        navController?.popBackStack()
     }
 }

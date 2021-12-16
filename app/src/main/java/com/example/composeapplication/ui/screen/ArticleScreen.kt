@@ -44,7 +44,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 private const val TAG = "ArticleScreen"
 
 @Composable
-private fun ArticleList(
+fun ArticleList(
     result: ResultData,
     onClick: (url: String, title: String) -> Unit
 ) {

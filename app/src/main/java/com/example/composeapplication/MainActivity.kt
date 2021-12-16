@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -17,10 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessAlarms
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Article
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +35,6 @@ import androidx.navigation.ui.setupWithNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.screen.SplashAdScreen
-import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.material.navigation.NavigationView
@@ -165,4 +160,5 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
     object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
+    object Search : Screen("search", R.string.search, Icons.Filled.Search)
 }

@@ -43,7 +43,8 @@ fun WeatherPage() {
             )
             Column(
                 Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(PaddingValues(top = 220.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
