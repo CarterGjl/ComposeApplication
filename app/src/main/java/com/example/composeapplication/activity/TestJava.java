@@ -1,10 +1,5 @@
 package com.example.composeapplication.activity;
 
-
-import com.example.composeapplication.activity.test.Base64;
-
-import java.nio.charset.StandardCharsets;
-
 public class TestJava implements TestJavaA,TestJavaB {
 
     private String a;

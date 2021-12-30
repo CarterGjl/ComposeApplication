@@ -14,9 +14,10 @@ import com.example.composeapplication.ui.screen.FeatureThatRequiresCameraPermiss
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
 class CameraFragment : Fragment() {
 
-    @ExperimentalPermissionsApi
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -22,10 +22,10 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
 
-    @ExperimentalCoilApi
-    @ExperimentalPagerApi
-    @ExperimentalFoundationApi
-    @ExperimentalPermissionsApi
+    @OptIn(ExperimentalPermissionsApi::class,
+        androidx.compose.foundation.ExperimentalFoundationApi::class,
+        com.google.accompanist.pager.ExperimentalPagerApi::class
+    )
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

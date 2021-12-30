@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,8 +34,6 @@ import androidx.navigation.ui.setupWithNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.screen.SplashAdScreen
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.material.navigation.NavigationView
 
 
@@ -47,10 +44,6 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
 
-    @ExperimentalCoilApi
-    @ExperimentalPagerApi
-    @ExperimentalFoundationApi
-    @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
