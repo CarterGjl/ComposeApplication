@@ -1,12 +1,15 @@
 package com.example.composeapplication.ui.screen
 
+import android.os.Build
 import android.util.Log
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -37,7 +40,6 @@ import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
@@ -181,7 +183,11 @@ fun ArticleScreen(navController: NavController) {
 }
 
 @Composable
-fun ArticleDetailScreen(detailUrl: String, title: String = "",naviBack:()->Unit = {}) {
+fun ArticleDetailScreen(
+    detailUrl: String, title: String = "",
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    naviBack: () -> Unit = {}
+) {
     var refreshing by remember { mutableStateOf(true) }
     Column {
         Spacer(
@@ -226,6 +232,16 @@ fun ArticleDetailScreen(detailUrl: String, title: String = "",naviBack:()->Unit 
                 }
             },
             update = { view ->
+                view.apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val webViewTheme = if (darkTheme) {
+                            WebSettings.FORCE_DARK_ON
+                        } else {
+                            WebSettings.FORCE_DARK_OFF
+                        }
+                        settings.forceDark = webViewTheme
+                    }
+                }
                 // view 被 inflated
                 view.loadUrl(detailUrl)
                 webView = view
