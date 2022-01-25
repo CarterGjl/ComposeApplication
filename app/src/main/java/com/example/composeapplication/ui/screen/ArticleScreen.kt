@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+
 package com.example.composeapplication.ui.screen
 
 import android.annotation.SuppressLint
@@ -39,6 +41,7 @@ import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
+import com.example.composeapplication.viewmodel.State
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -74,6 +77,7 @@ fun ArticleList(
 /*
 * 支持分页的文章列表
 * */
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 private fun ArticleListPaging(
     onClick: (url: String, title: String) -> Unit
@@ -82,6 +86,9 @@ private fun ArticleListPaging(
     val viewState = remember {
         articleViewModel.viewStates
     }
+    val bannerViewModel: BannerViewModel = viewModel()
+    val banners by bannerViewModel.banners.observeAsState()
+
     val collectAsLazyPagingItems = viewState.pagingData.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(false)
     val listState = if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
@@ -90,6 +97,9 @@ private fun ArticleListPaging(
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier.fillMaxHeight(),
     ) {
+        item {
+            banners?.let { NewsBanner(it,onClick) }
+        }
         items(collectAsLazyPagingItems) { data ->
             ArticleItem2(data!!) {
                 onClick(it, data.title)
@@ -163,13 +173,14 @@ private fun ArticleListPaging(
 @Composable
 fun ArticleScreen(onClick: (url: String, title: String) -> Unit) {
     val bannerViewModel: BannerViewModel = viewModel()
-    val banners by bannerViewModel.banners.observeAsState()
-    val state by bannerViewModel.stateLiveData.observeAsState()
-    Column(Modifier.fillMaxHeight()) {
-        banners?.apply {
-            NewsBanner(this)
+    val state by bannerViewModel.stateLiveData.observeAsState(State.Loading)
+    LoadingPage(state = state, loadInit = {
+        bannerViewModel.getBanners()
+    }) {
+        Column(Modifier.fillMaxHeight()) {
+
+            ArticleListPaging(onClick)
         }
-        ArticleListPaging(onClick)
     }
 
 }

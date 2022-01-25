@@ -18,7 +18,7 @@ interface APIService {
             "http://api.k780.com/?app=weather.future&weaId=169&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json"
     }
 
-    @GET("https://gank.io/api/v2/banners")
+    @GET("https://www.wanandroid.com/banner/json")
     suspend fun getBanner(): BannerResult
 
     @GET(NEWS_URL)

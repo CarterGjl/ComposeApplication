@@ -1,15 +1,16 @@
 package com.example.composeapplication.ui.banner
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -22,8 +23,7 @@ import com.google.accompanist.pager.rememberPagerState
 @ExperimentalCoilApi
 @ExperimentalPagerApi
 @Composable
-fun NewsBanner(topStories: List<Banner>) {
-    val context = LocalContext.current
+fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -> Unit) {
     Box(modifier = Modifier.height(200.dp)) {
         val pagerState = rememberPagerState()
         HorizontalPager(
@@ -31,8 +31,9 @@ fun NewsBanner(topStories: List<Banner>) {
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
+            val banner = topStories[page]
             Image(
-                painter = rememberImagePainter(data = topStories[page].image, builder = {
+                painter = rememberImagePainter(data = banner.imagePath, builder = {
                     crossfade(true)
                 }),
                 null,
@@ -40,9 +41,23 @@ fun NewsBanner(topStories: List<Banner>) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-//                        NewsDetailActivity.go(context, topStories[page].title, topStories[page].url)
+                        onClick(banner.url, banner.title)
                     }
             )
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(Color(0x80000000))
+                        .padding(8.dp)
+                ) {
+                    Text(text = banner.title)
+                }
+            }
+
         }
         HorizontalPagerIndicator(
             pagerState = pagerState,

@@ -26,14 +26,21 @@ data class Girl(
 
 data class BannerResult(
     val data: List<Banner>,
-    val status: Int
+    val errorCode: Int,
+    val errorMsg: String
 )
 
 data class Banner(
-    val image: String,
+    val desc: String,
+    val id: Int,
+    val imagePath: String,
+    val isVisible: Int,
+    val order: Int,
     val title: String,
+    val type: Int,
     val url: String
 )
+
 
 class TopStoryModel(
     val id: Int,
