@@ -16,6 +16,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -75,14 +78,32 @@ private fun SearchContent(search: (key: String) -> Unit) {
     var searchKey by remember {
         mutableStateOf("")
     }
+    val focusRequester = remember {
+        FocusRequester()
+    }
+    LaunchedEffect(true) {
+        focusRequester.requestFocus()
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                cursorColor = Color.White
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(8.dp)
+                .focusRequester(focusRequester),
             value = searchKey,
+
+            label = {
+                Text(
+                    text = "搜索文章",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onPrimary
+                )
+            },
             onValueChange = { searchValue ->
                 searchKey = searchValue
             },
