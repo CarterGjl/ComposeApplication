@@ -88,9 +88,7 @@ private fun SearchContent(search: (key: String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                cursorColor = Color.White
-            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)

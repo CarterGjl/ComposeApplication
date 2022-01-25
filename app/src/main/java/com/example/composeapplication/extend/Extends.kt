@@ -12,7 +12,7 @@ fun String.parseHighlight(): AnnotatedString {
         var highlight = false
         for (part in parts) {
             if (highlight) {
-                withStyle(style = SpanStyle(color = Color.Yellow)) {
+                withStyle(style = SpanStyle(color = Color.Red)) {
                     append(part)
                 }
             } else {

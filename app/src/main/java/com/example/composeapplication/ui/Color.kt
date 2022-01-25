@@ -43,5 +43,7 @@ val green300 = Color(0xFFb8c9b8)
 val black = Color(0xFF1C1E28)
 val darkBlue = Color(0xFF212E54)
 val blue = Color(0xFF071C74)
+val colorPrimaryDark1 = Color(0xFF303030)
+val colorPrimaryDark2 = Color(0xFF232323)
 val white = Color.White
 val screenBGColor = darkBlue
