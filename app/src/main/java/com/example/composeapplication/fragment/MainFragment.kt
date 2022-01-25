@@ -23,8 +23,8 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
 
     @OptIn(ExperimentalPermissionsApi::class,
-        androidx.compose.foundation.ExperimentalFoundationApi::class,
-        com.google.accompanist.pager.ExperimentalPagerApi::class
+        ExperimentalFoundationApi::class,
+        ExperimentalPagerApi::class
     )
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

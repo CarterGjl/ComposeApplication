@@ -1,10 +1,10 @@
 package com.example.composeapplication.ui.screen
 
+import android.annotation.SuppressLint
+import android.net.http.SslError
 import android.os.Build
 import android.util.Log
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +35,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.DIALOG
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.ResultData
+import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
@@ -182,6 +183,7 @@ fun ArticleScreen(navController: NavController) {
     }
 }
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun ArticleDetailScreen(
     detailUrl: String, title: String = "",
@@ -199,7 +201,7 @@ fun ArticleDetailScreen(
         TopAppBar(
             title = {
                 Text(
-                    text = title,
+                    text = title.parseHighlight(),
                     style = MaterialTheme.typography.subtitle1,
                     color = MaterialTheme.colors.onPrimary
                 )
@@ -224,12 +226,33 @@ fun ArticleDetailScreen(
                 // Sets up
                 WebView(context).apply {
                     webViewClient = object : WebViewClient() {
-                        override fun onPageFinished(view: WebView?, url: String?) {
+                        override fun onPageFinished(view: WebView?, url: String) {
                             super.onPageFinished(view, url)
                             refreshing = false
                         }
+
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView?,
+                            request: WebResourceRequest
+                        ): Boolean {
+                            if (request.url.scheme?.startsWith("http") == true) {
+                                return super.shouldOverrideUrlLoading(view, request)
+                            }
+                            return true
+                        }
+                        @SuppressLint("WebViewClientOnReceivedSslError")
+                        override fun onReceivedSslError(
+                            view: WebView?,
+                            handler: SslErrorHandler?,
+                            error: SslError?
+                        ) {
+                            super.onReceivedSslError(view, handler, error)
+                            handler?.proceed()
+                        }
                     }
+
                 }
+
             },
             update = { view ->
                 view.apply {
@@ -241,6 +264,8 @@ fun ArticleDetailScreen(
                         }
                         settings.forceDark = webViewTheme
                     }
+                    settings.javaScriptEnabled = true
+                    settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 }
                 // view 被 inflated
                 view.loadUrl(detailUrl)
@@ -335,7 +360,7 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
 
         ) {
             Text(
-                text = data.title,
+                text = data.title.parseHighlight(),
                 style = MaterialTheme.typography.subtitle1
             )
             Row(modifier = Modifier.padding(top = 8.dp)) {

@@ -36,7 +36,7 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.4.31'
+        kotlinCompilerVersion '1.6.0'
     }
 }
 
@@ -94,7 +94,7 @@ dependencies {
 // CameraX Lifecycle Library
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
 // CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha27"
+    implementation "androidx.camera:camera-view:1.0.0-alpha32"
     def version = '2.3.5'
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"

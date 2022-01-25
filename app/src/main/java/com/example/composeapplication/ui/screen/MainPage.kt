@@ -98,7 +98,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 TestPage()
             }
             mycomposable(Screen.Search.route) {
-                SearchScreen()
+                SearchScreen(mainViewModel = viewModel)
             }
 
         }
