@@ -2,6 +2,7 @@
 
 package com.example.composeapplication.service
 
+import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.LoginResponse
 import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
@@ -21,8 +22,11 @@ interface WanAndroidService {
         @Query("apikey") apikey: String
     ): MoviePro
 
-    @GET("https://wanandroid.com/article/listproject/{page}/json")
+    @GET("https://www.wanandroid.com/article/list/{page}/json")
     suspend fun getArticles(@Path("page") page: Int): ResultData
+
+    @GET("https://www.wanandroid.com//hotkey/json")
+    suspend fun getHotKeys(): HotKeyResult
 
     @FormUrlEncoded
     @POST("https://www.wanandroid.com/user/login")

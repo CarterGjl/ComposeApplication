@@ -8,10 +8,7 @@ import android.os.Build
 import android.util.Log
 import android.webkit.*
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -25,8 +22,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -36,40 +38,91 @@ import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.DIALOG
 import com.example.composeapplication.bean.Article
+import com.example.composeapplication.bean.HotKey
+import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.State
+import com.example.composeapplication.viewmodel.search.SearchViewModel
+import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.jetbrains.annotations.NotNull
 
 
 private const val TAG = "ArticleScreen"
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ArticleList(
-    result: ResultData,
+    result: ResultData?,
+    viewModel: SearchViewModel = viewModel(),
+    searchViewModel: SearchViewModel = viewModel(),
     onClick: (url: String, title: String) -> Unit
 ) {
+    val hotkeys: List<HotKey> by viewModel.hotKeyResult.observeAsState(emptyList())
+    LaunchedEffect(true) {
+        viewModel.getHotKeys()
+    }
     LazyColumn(contentPadding = PaddingValues(8.dp)) {
-        val datas = result.data.datas
-        items(datas, key = { data ->
-            data.id
-        }) { data ->
-            ArticleItem2(data) {
-                onClick(it, data.title)
+
+        stickyHeader {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .background(Color(0x80000000))
+            ) {
+                ListItem(text = {
+                    Text(text = "搜索热词")
+                })
             }
+
         }
+
         item {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Color.Red).also {
-                    Log.d(TAG, "loading: ")
+            if (hotkeys.isNotEmpty()) {
+                Box {
+                    HotkeyItem(
+                        hotkeys = hotkeys,
+                        onSelected = { text ->
+                            searchViewModel.searchArticle(text)
+                        })
                 }
             }
         }
+        val datas = result?.data?.datas
+        stickyHeader {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .background(Color(0x80000000))
+            ) {
+                ListItem(text = {
+                    Text(text = "搜索结果")
+                })
+            }
+        }
+        datas?.let {
+            items(datas, key = { data ->
+                data.id
+            }) { data ->
+                ArticleItem2(data) {
+                    onClick(it, data.title)
+                }
+            }
+        }
+
+//        item {
+//            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+//                CircularProgressIndicator(color = Color.Red).also {
+//                    Log.d(TAG, "loading: ")
+//                }
+//            }
+//        }
 
     }
 }
@@ -91,14 +144,15 @@ private fun ArticleListPaging(
 
     val collectAsLazyPagingItems = viewState.pagingData.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(false)
-    val listState = if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
+    val listState =
+        if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier.fillMaxHeight(),
     ) {
         item {
-            banners?.let { NewsBanner(it,onClick) }
+            banners?.let { NewsBanner(it, onClick) }
         }
         items(collectAsLazyPagingItems) { data ->
             ArticleItem2(data!!) {
@@ -251,6 +305,7 @@ fun ArticleDetailScreen(
                             }
                             return true
                         }
+
                         @SuppressLint("WebViewClientOnReceivedSslError")
                         override fun onReceivedSslError(
                             view: WebView?,
@@ -284,7 +339,7 @@ fun ArticleDetailScreen(
             })
 
         BackHandler {
-            if (webView?.canGoBack() == true){
+            if (webView?.canGoBack() == true) {
                 webView?.goBack()
             } else {
                 naviBack()
@@ -405,5 +460,65 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
     }
 
 }
+
+/**
+ * 搜索热词的item
+ */
+@Composable
+fun HotkeyItem(
+    hotkeys: List<HotKey>,
+    onSelected: (key: String) -> Unit
+) {
+    FlowRow(Modifier.padding(10.dp)) {
+        hotkeys.forEach {
+            LabelTextButton(
+                text = it.name,
+                isSelect = false,
+                modifier = Modifier.padding(end = 5.dp, bottom = 5.dp),
+                onClick = {
+                    onSelected(it.name)
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun LabelTextButton(
+    @NotNull text: String,
+    modifier: Modifier = Modifier,
+    isSelect: Boolean = true,
+    specTextColor: Color? = null,
+    cornerValue: Dp = 25.dp / 2,
+    isLoading: Boolean = false,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
+) {
+    Text(
+        text = text,
+        modifier = modifier
+            .height(25.dp)
+            .clip(shape = RoundedCornerShape(cornerValue))
+            .background(
+                color = if (isSelect && !isLoading) Color.Black else Color.LightGray,
+            )
+            .padding(
+                horizontal = 10.dp,
+                vertical = 3.dp
+            )
+            .combinedClickable(
+                enabled = !isLoading,
+                onClick = { onClick?.invoke() },
+                onLongClick = { onLongClick?.invoke() }
+            ),
+        fontSize = 13.sp,
+        textAlign = TextAlign.Center,
+        color = specTextColor ?: if (isSelect) Color.White else Color.White,
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 1,
+    )
+}
+
 
 

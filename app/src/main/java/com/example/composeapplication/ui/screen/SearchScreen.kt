@@ -64,10 +64,8 @@ fun SearchScreen(
         SearchContent {
             viewModel.searchArticle(it)
         }
-        if (observeAsState != null) {
-            ArticleList(result = observeAsState!!) { url, title ->
-                mainViewModel.navigateToWebViewPage(title = title, url = url)
-            }
+        ArticleList(result = observeAsState) { url, title ->
+            mainViewModel.navigateToWebViewPage(title = title, url = url)
         }
     }
 
@@ -87,6 +85,7 @@ private fun SearchContent(search: (key: String) -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         OutlinedTextField(
             colors = TextFieldDefaults.outlinedTextFieldColors(),
             modifier = Modifier

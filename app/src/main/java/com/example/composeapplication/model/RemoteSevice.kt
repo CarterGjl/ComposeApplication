@@ -1,6 +1,7 @@
 package com.example.composeapplication.model
 
 import android.annotation.SuppressLint
+import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.LoginResponse
 import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
@@ -54,6 +55,10 @@ class RemoteSevice private constructor() {
 
     suspend fun searchArticle(key: String):ResultData {
         return wanAndroidInterface.search(key = key)
+    }
+
+    suspend fun getHotKeys(): HotKeyResult {
+        return wanAndroidInterface.getHotKeys()
     }
 
     @Suppress("unused")
