@@ -18,54 +18,74 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.example.composeapplication.Screen
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.insets.statusBarsHeight
+import java.net.URLEncoder
 
 
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = viewModel(),
+    navController: NavController,
     mainViewModel: MainViewModel = viewModel()
 ) {
     val observeAsState by viewModel.searchResult.observeAsState()
 
-    Column {
+    Scaffold(
+        topBar = {
+            Column {
+                Spacer(
+                    modifier = Modifier
+                        .statusBarsHeight()
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.primaryVariant)
+                )
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "搜索文章",
+                            style = MaterialTheme.typography.subtitle1,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            mainViewModel.popUp()
+                        }) {
+                            Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+                        }
+                    },
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    elevation = 0.dp
+                )
+            }
+        }
+    ) {
         Column {
-            Spacer(
-                modifier = Modifier
-                    .statusBarsHeight()
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.primaryVariant)
-            )
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "搜索文章",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        mainViewModel.popUp()
-                    }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+
+            SearchContent {
+                viewModel.searchArticle(it)
+            }
+            ArticleList(result = observeAsState) { url, title ->
+                val encode = URLEncoder.encode(url, "utf-8")
+                navController.navigate(Screen.WebView.route + "?title=$title&url=$encode"){
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
-                },
-                backgroundColor = MaterialTheme.colors.primaryVariant,
-                elevation = 0.dp
-            )
-        }
-        SearchContent {
-            viewModel.searchArticle(it)
-        }
-        ArticleList(result = observeAsState) { url, title ->
-            mainViewModel.navigateToWebViewPage(title = title, url = url)
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
+                }
+            }
         }
     }
 

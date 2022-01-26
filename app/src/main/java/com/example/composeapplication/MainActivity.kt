@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
+import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -29,12 +30,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.core.view.postDelayed
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.activity.bsae.BaseActivity
+import com.example.composeapplication.ui.ComposeApplicationTheme
+import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.ui.screen.SplashAdScreen
-import com.google.android.material.navigation.NavigationView
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 // 官方demo地址
@@ -44,14 +46,22 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
 
+    @OptIn(ExperimentalPermissionsApi::class,
+        androidx.compose.foundation.ExperimentalFoundationApi::class,
+        com.google.accompanist.pager.ExperimentalPagerApi::class,
+        ExperimentalCoilApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val splashScreen = installSplashScreen()
-        setContentView(R.layout.activity_main)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navView.setupWithNavController(navController)
+        setContent {
+            ProvideWindowInsets(consumeWindowInsets = false) {
+                ComposeApplicationTheme {
+                    MainPage()
+                }
+            }
+        }
         splashScreen.setKeepVisibleCondition {
             false
         }
@@ -154,4 +164,5 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
     object Search : Screen("search", R.string.search, Icons.Filled.Search)
+    object WebView : Screen("webview", R.string.search, Icons.Filled.Search)
 }

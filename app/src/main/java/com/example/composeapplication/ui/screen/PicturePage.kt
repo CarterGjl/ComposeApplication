@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyGridScope
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +28,7 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.composeapplication.R
 import com.example.composeapplication.bean.PictureModel
+import com.example.composeapplication.ui.screen.widget.MyAppBar
 import com.example.composeapplication.viewmodel.PictureViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -42,98 +44,104 @@ fun PicturePage(
 ) {
     val picList = viewModel.pics.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(false)
-    Column(Modifier.fillMaxSize()) {
-        SwipeRefresh(
-            state = state,
-            onRefresh = {
-                picList.refresh()
-            }
-        ) {
-            LazyVerticalGrid(
-                cells = GridCells.Fixed(3),
-                contentPadding = PaddingValues(5.dp),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
-            ) {
-                items(picList) { item ->
-                    Image(
-                        painter = rememberImagePainter(
-                            item!!.url,
-                            builder = {
-                                crossfade(true)
-                                placeholder(R.drawable.ic_loading)
-                                transformations(CircleCropTransformation())
-                            }),
-                        null,
-                        contentScale = ContentScale.Inside,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .width(120.dp)
-                            .height(120.dp)
-                            .clickable {
-                                navigateToPhotoPage(item.url)
-                            }
-                    )
+    Scaffold(
+        topBar = {
+            MyAppBar(id = R.string.picture)
+        }
+    ) {
+        Column(Modifier.fillMaxSize()) {
+            SwipeRefresh(
+                state = state,
+                onRefresh = {
+                    picList.refresh()
                 }
-                picList.apply {
-                    state.isRefreshing = loadState.refresh is LoadState.Loading
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            item {
-                                Box(
-                                    modifier = Modifier.fillParentMaxSize(),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(color = Color.Red).also {
-                                        Log.d(TAG, "loading: ")
+            ) {
+                LazyVerticalGrid(
+                    cells = GridCells.Fixed(3),
+                    contentPadding = PaddingValues(5.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                ) {
+                    items(picList) { item ->
+                        Image(
+                            painter = rememberImagePainter(
+                                item!!.url,
+                                builder = {
+                                    crossfade(true)
+                                    placeholder(R.drawable.ic_loading)
+                                    transformations(CircleCropTransformation())
+                                }),
+                            null,
+                            contentScale = ContentScale.Inside,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .width(120.dp)
+                                .height(120.dp)
+                                .clickable {
+                                    navigateToPhotoPage(item.url)
+                                }
+                        )
+                    }
+                    picList.apply {
+                        state.isRefreshing = loadState.refresh is LoadState.Loading
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillParentMaxSize(),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        CircularProgressIndicator(color = Color.Red).also {
+                                            Log.d(TAG, "loading: ")
+                                        }
                                     }
                                 }
                             }
-                        }
-                        loadState.append is LoadState.Loading -> {
-                            item {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillParentMaxWidth()
-                                ) {
-                                    CircularProgressIndicator(color = Color.Red).also {
-                                        Log.d(TAG, "loading: ")
+                            loadState.append is LoadState.Loading -> {
+                                item {
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier.fillParentMaxWidth()
+                                    ) {
+                                        CircularProgressIndicator(color = Color.Red).also {
+                                            Log.d(TAG, "loading: ")
+                                        }
                                     }
                                 }
                             }
-                        }
-                        loadState.refresh is LoadState.Error -> {
-                            val e = loadState.refresh as LoadState.Error
-                            item {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        .fillParentMaxWidth()
-                                        .clickable {
-                                            retry()
-                                        }) {
-                                    Text(text = e.error.message!!)
+                            loadState.refresh is LoadState.Error -> {
+                                val e = loadState.refresh as LoadState.Error
+                                item {
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier
+                                            .fillParentMaxWidth()
+                                            .clickable {
+                                                retry()
+                                            }) {
+                                        Text(text = e.error.message!!)
+                                    }
                                 }
                             }
-                        }
-                        loadState.append is LoadState.Error -> {
-                            val e = loadState.append as LoadState.Error
-                            item {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        .fillParentMaxWidth()
-                                        .clickable {
-                                            retry()
-                                        }) {
-                                    Text(text = e.error.message!!)
+                            loadState.append is LoadState.Error -> {
+                                val e = loadState.append as LoadState.Error
+                                item {
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier
+                                            .fillParentMaxWidth()
+                                            .clickable {
+                                                retry()
+                                            }) {
+                                        Text(text = e.error.message!!)
+                                    }
                                 }
                             }
                         }
                     }
+                    state.isRefreshing = picList.loadState.refresh is LoadState.Loading
                 }
-                state.isRefreshing = picList.loadState.refresh is LoadState.Loading
             }
         }
     }

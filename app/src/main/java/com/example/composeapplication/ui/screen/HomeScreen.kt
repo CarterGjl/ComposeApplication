@@ -36,7 +36,7 @@ fun HomeScreen() {
             ) {
                 composable(Screen.Article.route) {
                     Log.d(TAG, "ArticleScreen: ")
-                    ArticleScreen { url, _ ->
+                    ArticleScreen(navController = navController) { url, _ ->
                         navController.navigate("article_detail?url=$url") {
                             launchSingleTop = true
                         }

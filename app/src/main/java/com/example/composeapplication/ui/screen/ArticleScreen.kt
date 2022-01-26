@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -37,12 +38,14 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.DIALOG
+import com.example.composeapplication.R
+import com.example.composeapplication.Screen
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.HotKey
-import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
+import com.example.composeapplication.ui.screen.widget.MyAppBar
 import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.State
@@ -225,15 +228,33 @@ private fun ArticleListPaging(
 @ExperimentalCoilApi
 @ExperimentalPagerApi
 @Composable
-fun ArticleScreen(onClick: (url: String, title: String) -> Unit) {
+fun ArticleScreen(
+    navController: NavController,
+    onClick: (url: String, title: String) -> Unit
+) {
     val bannerViewModel: BannerViewModel = viewModel()
     val state by bannerViewModel.stateLiveData.observeAsState(State.Loading)
-    LoadingPage(state = state, loadInit = {
-        bannerViewModel.getBanners()
-    }) {
-        Column(Modifier.fillMaxHeight()) {
+    Scaffold(
+        topBar = {
+            MyAppBar(
+                id = R.string.article,
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.Search.route)
+                    }) {
+                        Icon(Icons.Filled.Search, contentDescription = "Search")
+                    }
+                }
+            )
+        },
+    ) {
+        LoadingPage(state = state, loadInit = {
+            bannerViewModel.getBanners()
+        }) {
+            Column(Modifier.fillMaxHeight()) {
 
-            ArticleListPaging(onClick)
+                ArticleListPaging(onClick)
+            }
         }
     }
 
@@ -255,6 +276,7 @@ fun ArticleDetailScreen(
     darkTheme: Boolean = isSystemInDarkTheme(),
     naviBack: () -> Unit = {}
 ) {
+    Log.d(TAG, "ArticleDetailScreen: ")
     var refreshing by remember { mutableStateOf(true) }
     Column {
         Spacer(
@@ -290,6 +312,7 @@ fun ArticleDetailScreen(
             factory = { context ->
                 // Sets up
                 WebView(context).apply {
+                    Log.d(TAG, "ArticleDetailScreen: apply")
                     webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView?, url: String) {
                             super.onPageFinished(view, url)
@@ -316,7 +339,7 @@ fun ArticleDetailScreen(
                             handler?.proceed()
                         }
                     }
-
+                    loadUrl(detailUrl)
                 }
 
             },
@@ -334,7 +357,7 @@ fun ArticleDetailScreen(
                     settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 }
                 // view 被 inflated
-                view.loadUrl(detailUrl)
+                Log.d(TAG, "ArticleDetailScreen: update")
                 webView = view
             })
 
