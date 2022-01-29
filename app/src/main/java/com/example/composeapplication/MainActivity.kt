@@ -165,4 +165,5 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
     object Search : Screen("search", R.string.search, Icons.Filled.Search)
     object WebView : Screen("webview", R.string.search, Icons.Filled.Search)
+    object TypeTree : Screen("type", R.string.knowledge, Icons.Filled.Search)
 }

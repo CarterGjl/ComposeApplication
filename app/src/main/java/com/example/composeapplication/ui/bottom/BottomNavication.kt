@@ -24,7 +24,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 
 val items = listOf(
     Screen.Article,
-    Screen.Picture,
+    Screen.TypeTree,
     Screen.Weather,
     Screen.Test
 )

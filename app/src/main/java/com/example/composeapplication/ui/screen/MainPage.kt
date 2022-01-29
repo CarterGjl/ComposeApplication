@@ -29,8 +29,12 @@ import androidx.navigation.*
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.annotation.ExperimentalCoilApi
+import com.example.composeapplication.AppRuntime
 import com.example.composeapplication.Screen
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
+import com.example.composeapplication.ui.screen.type.TypeContentScreen
+import com.example.composeapplication.ui.screen.type.TypeScreen
+import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -40,6 +44,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.gson.Gson
 import java.net.URLDecoder
 import java.net.URLEncoder
 
@@ -53,6 +58,7 @@ import java.net.URLEncoder
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
     val navController = rememberAnimatedNavController()
+    AppRuntime.navController = navController
     viewModel.setNavControllerA(navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -60,7 +66,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
         bottomBar = {
             when (currentDestination?.route) {
                 Screen.Article.route,
-                Screen.Picture.route -> {
+                Screen.TypeTree.route -> {
                     BottomNavigationAlwaysShowLabelComponent(navController)
                 }
             }
@@ -82,7 +88,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
             mycomposable(Screen.Article.route) {
                 ArticleScreen(navController = navController) { url, title ->
                     val encode = URLEncoder.encode(url, "utf-8")
-                    navController.navigate(Screen.WebView.route + "?title=$title&url=$encode"){
+                    navController.navigate(Screen.WebView.route + "?title=$title&url=$encode") {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
@@ -108,7 +114,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
             mycomposable(Screen.Search.route) {
                 SearchScreen(mainViewModel = viewModel, navController = navController)
             }
-            mycomposable("camera"){
+            mycomposable("camera") {
                 val current = LocalContext.current
                 ProvideWindowInsets {
                     FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
@@ -119,6 +125,26 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                         current.startActivity(intent)
                     })
                 }
+            }
+            composable(Screen.TypeTree.route) {
+                TypeScreen { knowledge ->
+                    val toJson = Gson().toJson(knowledge)
+                    navController.navigate("type_content?knowledge=$toJson") {
+                        popUpTo(navController.graph[Screen.TypeTree.route].id) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
+                }
+            }
+            composable("type_content?knowledge={knowledge}") { backStackEntry ->
+                val knowledge: String = backStackEntry.arguments?.getString("knowledge") ?: ""
+                val fromJson = Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
+                TypeContentScreen(knowledge = fromJson)
             }
             composable(
                 route = Screen.WebView.route + "?title={title}&url={url}",
@@ -131,7 +157,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 val title: String = backStackEntry.arguments?.getString("title") ?: ""
                 val url: String = backStackEntry.arguments?.getString("url") ?: ""
                 val decode = URLDecoder.decode(url, "utf-8")
-                ArticleDetailScreen(detailUrl = decode, title){
+                ArticleDetailScreen(detailUrl = decode, title) {
                     navController.popBackStack()
                 }
             }

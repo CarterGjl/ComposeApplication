@@ -53,6 +53,7 @@
     <string name="article">Article</string>
     <string name="picture">picture</string>
     <string name="weather">weather</string>
+    <string name="knowledge">知识体系</string>
     <string name="test">test</string>
     <string name="email">Email</string>
     <string name="show_password">Show password</string>

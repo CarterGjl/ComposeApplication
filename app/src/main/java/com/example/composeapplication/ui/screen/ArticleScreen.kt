@@ -71,7 +71,10 @@ fun ArticleList(
     LaunchedEffect(true) {
         viewModel.getHotKeys()
     }
-    LazyColumn(contentPadding = PaddingValues(8.dp)) {
+    LazyColumn(
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp)
+    ) {
 
         stickyHeader {
             Box(
@@ -151,7 +154,8 @@ private fun ArticleListPaging(
         if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
     LazyColumn(
         state = listState,
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(15.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.fillMaxHeight(),
     ) {
         item {
@@ -436,7 +440,6 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
         elevation = 10.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp)
     ) {
         Column(
             modifier = Modifier

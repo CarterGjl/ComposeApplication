@@ -6,6 +6,7 @@ import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.LoginResponse
 import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
+import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import retrofit2.http.*
 
 interface WanAndroidService {
@@ -25,6 +26,12 @@ interface WanAndroidService {
     @GET("https://www.wanandroid.com/article/list/{page}/json")
     suspend fun getArticles(@Path("page") page: Int): ResultData
 
+    @GET("https://www.wanandroid.com/article/list/{page}/json")
+    suspend fun getArticleList(
+        @Path("page") page: Int,
+        @Query("cid") cid: Int
+    ): ResultData
+
     @GET("https://www.wanandroid.com//hotkey/json")
     suspend fun getHotKeys(): HotKeyResult
 
@@ -40,4 +47,11 @@ interface WanAndroidService {
     suspend fun search(
         @Field("k") key: String,
     ): ResultData
+
+    /**
+     * 知识体系
+     * http://www.wanandroid.com/tree/json
+     */
+    @GET("https://www.wanandroid.com/tree/json")
+    suspend fun getTypeTreeList(): TreeListResponse
 }
