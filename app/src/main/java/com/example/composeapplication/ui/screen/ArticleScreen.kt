@@ -50,6 +50,7 @@ import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.State
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -83,7 +84,7 @@ fun ArticleList(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color(0x80000000))
+                    .background(Color.Black)
             ) {
                 ListItem(text = {
                     Text(text = "搜索热词")
@@ -108,7 +109,7 @@ fun ArticleList(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color(0x80000000))
+                    .background(Color.Black)
             ) {
                 ListItem(text = {
                     Text(text = "搜索结果")
@@ -521,7 +522,10 @@ fun HotkeyItem(
     hotkeys: List<HotKey>,
     onSelected: (key: String) -> Unit
 ) {
-    FlowRow(Modifier.padding(10.dp)) {
+    FlowRow(
+        Modifier.fillMaxWidth().padding(8.dp),
+        mainAxisSize = SizeMode.Expand
+    ) {
         hotkeys.forEach {
             LabelTextButton(
                 text = it.name,
@@ -553,16 +557,16 @@ fun LabelTextButton(
             .height(25.dp)
             .clip(shape = RoundedCornerShape(cornerValue))
             .background(
-                color = if (isSelect && !isLoading) Color.Black else Color.LightGray,
-            )
-            .padding(
-                horizontal = 10.dp,
-                vertical = 3.dp
+                color = if (isSelect && !isLoading) Color.Black else MaterialTheme.colors.primaryVariant,
             )
             .combinedClickable(
                 enabled = !isLoading,
                 onClick = { onClick?.invoke() },
                 onLongClick = { onLongClick?.invoke() }
+            )
+            .padding(
+                horizontal = 10.dp,
+                vertical = 3.dp
             ),
         fontSize = 13.sp,
         textAlign = TextAlign.Center,
