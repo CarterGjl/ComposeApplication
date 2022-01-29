@@ -58,6 +58,8 @@ import java.net.URLEncoder
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
     val navController = rememberAnimatedNavController()
+    val rememberScaffoldState = rememberScaffoldState()
+    AppRuntime.rememberScaffoldState = rememberScaffoldState
     AppRuntime.navController = navController
     viewModel.setNavControllerA(navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -78,7 +80,8 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
             }) {
                 Icon(imageVector = Icons.Filled.Camera, contentDescription = "camera")
             }
-        }
+        },
+        scaffoldState = rememberScaffoldState
     ) {
         AnimatedNavHost(
             modifier = Modifier.padding(it),

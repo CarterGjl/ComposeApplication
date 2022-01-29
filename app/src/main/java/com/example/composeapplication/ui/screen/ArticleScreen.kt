@@ -16,15 +16,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Timeline
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -42,7 +42,6 @@ import com.example.composeapplication.R
 import com.example.composeapplication.Screen
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.HotKey
-import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.ui.screen.widget.MyAppBar
@@ -59,14 +58,18 @@ import org.jetbrains.annotations.NotNull
 
 private const val TAG = "ArticleScreen"
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
+    androidx.compose.ui.ExperimentalComposeUiApi::class,
+    androidx.compose.ui.ExperimentalComposeUiApi::class
+)
 @Composable
 fun ArticleList(
-    result: ResultData?,
+    result: List<Article>,
     viewModel: SearchViewModel = viewModel(),
     searchViewModel: SearchViewModel = viewModel(),
     onClick: (url: String, title: String) -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val hotkeys: List<HotKey> by viewModel.hotKeyResult.observeAsState(emptyList())
     LaunchedEffect(true) {
         viewModel.getHotKeys()
@@ -95,12 +98,12 @@ fun ArticleList(
                     HotkeyItem(
                         hotkeys = hotkeys,
                         onSelected = { text ->
+                            keyboardController?.hide()
                             searchViewModel.searchArticle(text)
                         })
                 }
             }
         }
-        val datas = result?.data?.datas
         stickyHeader {
             Box(
                 Modifier
@@ -112,8 +115,31 @@ fun ArticleList(
                 })
             }
         }
-        datas?.let {
-            items(datas, key = { data ->
+        if (result.isEmpty()) {
+            item {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Column(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.mipmap.status_empty),
+                            modifier = Modifier.size(200.dp),
+                            contentDescription = ""
+                        )
+                        Text(
+                            text = "这里空空的。。。",
+                            style = MaterialTheme.typography.body1,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
+            }
+        }
+        result.let {
+            items(result, key = { data ->
                 data.id
             }) { data ->
                 ArticleItem2(data) {
@@ -456,7 +482,7 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
                 style = MaterialTheme.typography.subtitle1
             )
             Row(modifier = Modifier.padding(top = 8.dp)) {
-                Icon(imageVector = Icons.Filled.Timeline, contentDescription = "time")
+                Icon(imageVector = Icons.Filled.Update, contentDescription = "time")
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
                     text = data.niceDate,

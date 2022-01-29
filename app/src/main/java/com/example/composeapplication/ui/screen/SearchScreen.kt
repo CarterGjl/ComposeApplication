@@ -15,9 +15,12 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,13 +33,15 @@ import com.google.accompanist.insets.statusBarsHeight
 import java.net.URLEncoder
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = viewModel(),
     navController: NavController,
     mainViewModel: MainViewModel = viewModel()
 ) {
-    val observeAsState by viewModel.searchResult.observeAsState()
+    val observeAsState by viewModel.searchResult.observeAsState(emptyList())
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
         topBar = {
@@ -48,6 +53,12 @@ fun SearchScreen(
                         .background(MaterialTheme.colors.primaryVariant)
                 )
                 TopAppBar(
+                    actions = {
+                        SearchContent {
+                            keyboardController?.hide()
+                            viewModel.searchArticle(it)
+                        }
+                    },
                     title = {
                         Text(
                             text = "搜索文章",
@@ -69,13 +80,9 @@ fun SearchScreen(
         }
     ) {
         Column {
-
-            SearchContent {
-                viewModel.searchArticle(it)
-            }
             ArticleList(result = observeAsState) { url, title ->
                 val encode = URLEncoder.encode(url, "utf-8")
-                navController.navigate(Screen.WebView.route + "?title=$title&url=$encode"){
+                navController.navigate(Screen.WebView.route + "?title=$title&url=$encode") {
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
                     }
@@ -107,20 +114,16 @@ private fun SearchContent(search: (key: String) -> Unit) {
     ) {
 
         OutlinedTextField(
-            colors = TextFieldDefaults.outlinedTextFieldColors(),
+            colors = TextFieldDefaults.textFieldColors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                backgroundColor = Color.Transparent,
+                cursorColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
                 .focusRequester(focusRequester),
             value = searchKey,
-
-            label = {
-                Text(
-                    text = "搜索文章",
-                    style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.onPrimary
-                )
-            },
             onValueChange = { searchValue ->
                 searchKey = searchValue
             },

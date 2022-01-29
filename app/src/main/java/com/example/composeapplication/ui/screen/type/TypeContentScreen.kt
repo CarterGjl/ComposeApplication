@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -94,6 +96,13 @@ private fun TypeContentAppbar(
                     style = MaterialTheme.typography.subtitle1,
                     color = MaterialTheme.colors.onPrimary,
                 )
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    navController?.popBackStack()
+                }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
+                }
             },
             backgroundColor = MaterialTheme.colors.primaryVariant,
             elevation = 0.dp
