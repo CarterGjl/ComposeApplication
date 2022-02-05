@@ -13,22 +13,6 @@ private const val TAG = "TypeContentViewModel"
 class TypeContentViewModel : BaseViewModel() {
 
     val articalLiveData = MutableLiveData<List<Article>>()
-    val tabIndex = MutableLiveData(0)
-    val tabDatas = ArrayList<String>().apply {
-        add("第1tab")
-        add("第2tab")
-        add("第3tab")
-        add("第4tab")
-        add("第5tab")
-        add("第6tab")
-        add("第7tab")
-        add("第8tab")
-        add("第9tab")
-    }
-
-    fun changIndex(index: Int) {
-        tabIndex.value = index
-    }
 
     var currentId = 0
     fun getArticleList(page: Int = 0, cid: Int) {

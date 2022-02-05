@@ -138,13 +138,11 @@ fun ArticleList(
                 }
             }
         }
-        result.let {
-            items(result, key = { data ->
-                data.id
-            }) { data ->
-                ArticleItem2(data) {
-                    onClick(it, data.title)
-                }
+        items(result, key = { data ->
+            data.id
+        }) { data ->
+            ArticleItem2(data) {
+                onClick(it, data.title)
             }
         }
 

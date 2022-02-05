@@ -104,7 +104,7 @@ fun TypeListItem(
 @Preview(showBackground = true)
 @Composable
 fun TypeListItemPreview() {
-    TypeScreen(onClick = {knowledge ->
+    TypeScreen(onClick = {
 
     })
 }
