@@ -19,15 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.example.composeapplication.AppRuntime
 import com.example.composeapplication.AppRuntime.navController
 import com.example.composeapplication.Screen
 import com.example.composeapplication.ui.screen.ArticleItem2
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.screen.type.viewmodel.TypeContentViewModel
 import com.google.accompanist.insets.statusBarsHeight
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -77,8 +74,7 @@ fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
 @Composable
 private fun TypeContentAppbar(
     knowledge: TreeListResponse.Knowledge,
-    pagerState: PagerState,
-    typeContentViewModel: TypeContentViewModel = viewModel()
+    pagerState: PagerState
 ) {
     val tabDatas = knowledge.children
     val tabIndex = pagerState.currentPage
