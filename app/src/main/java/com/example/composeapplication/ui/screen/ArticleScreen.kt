@@ -16,7 +16,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Timeline
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -37,6 +40,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import com.example.composeapplication.AppRuntime.navController
 import com.example.composeapplication.DIALOG
 import com.example.composeapplication.R
 import com.example.composeapplication.Screen
@@ -44,6 +48,7 @@ import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.HotKey
 import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
+import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.screen.widget.MyAppBar
 import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
@@ -54,13 +59,14 @@ import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.gson.Gson
 import org.jetbrains.annotations.NotNull
 
 
 private const val TAG = "ArticleScreen"
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
-    androidx.compose.ui.ExperimentalComposeUiApi::class,
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class
 )
 @Composable
@@ -84,7 +90,7 @@ fun ArticleList(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.Black)
+                    .background(MaterialTheme.colors.primaryVariant)
             ) {
                 ListItem(text = {
                     Text(text = "搜索热词")
@@ -109,7 +115,7 @@ fun ArticleList(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.Black)
+                    .background(MaterialTheme.colors.primaryVariant)
             ) {
                 ListItem(text = {
                     Text(text = "搜索结果")
@@ -139,13 +145,11 @@ fun ArticleList(
                 }
             }
         }
-        result.let {
-            items(result, key = { data ->
-                data.id
-            }) { data ->
-                ArticleItem2(data) {
-                    onClick(it, data.title)
-                }
+        items(result, key = { data ->
+            data.id
+        }) { data ->
+            ArticleItem2(data) {
+                onClick(it, data.title)
             }
         }
 
@@ -490,11 +494,30 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
                     style = MaterialTheme.typography.body1
                 )
             }
+//            Row(modifier = Modifier.padding(top = 8.dp)) {
+//                Text(
+//                    style = MaterialTheme.typography.body1,
+//                    color = Color.Red,
+//                    text = data.superChapterName,
+//                    modifier = Modifier
+//                        .border(
+//                            width = 1.dp,
+//                            color = Color.Red,
+//                            shape = RoundedCornerShape(
+//                                topStart = 8.dp,
+//                                topEnd = 8.dp,
+//                                bottomStart = 8.dp,
+//                                bottomEnd = 8.dp
+//                            )
+//                        )
+//                        .padding(10.dp)
+//                )
+//            }
             Row(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
                     style = MaterialTheme.typography.body1,
                     color = Color.Red,
-                    text = data.superChapterName,
+                    text = data.chapterName,
                     modifier = Modifier
                         .border(
                             width = 1.dp,
@@ -506,6 +529,26 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
                                 bottomEnd = 8.dp
                             )
                         )
+                        .clickable {
+                            val list: List<TreeListResponse.Knowledge.Children> = listOf(
+                                TreeListResponse.Knowledge.Children(
+                                    data.chapterId,
+                                    data.chapterName, 0, 0, 0, 0, null
+                                )
+                            )
+                            val knowledge = TreeListResponse.Knowledge(
+                                0, "", 0, 0, 0, 0, list
+                            )
+                            val toJson = Gson().toJson(knowledge)
+                            navController?.navigate("type_content?knowledge=$toJson") {
+
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                        }
                         .padding(10.dp)
                 )
             }
@@ -523,7 +566,9 @@ fun HotkeyItem(
     onSelected: (key: String) -> Unit
 ) {
     FlowRow(
-        Modifier.fillMaxWidth().padding(8.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         mainAxisSize = SizeMode.Expand
     ) {
         hotkeys.forEach {
