@@ -56,7 +56,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
         val splashScreen = installSplashScreen()
         setContent {
-            ProvideWindowInsets(consumeWindowInsets = false) {
+            ProvideWindowInsets(consumeWindowInsets = false, windowInsetsAnimationsEnabled = true) {
                 ComposeApplicationTheme {
                     MainPage()
                 }

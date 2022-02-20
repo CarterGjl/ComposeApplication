@@ -1,4 +1,3 @@
-@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
 
 package com.example.composeapplication.ui.screen
 
@@ -59,6 +58,7 @@ import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.accompanist.web.WebView
 import com.google.gson.Gson
 import org.jetbrains.annotations.NotNull
 

@@ -99,4 +99,5 @@ dependencies {
     def version = '2.4.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"
+    implementation"com.google.accompanist:accompanist-webview:0.24.2-alpha"
 }
