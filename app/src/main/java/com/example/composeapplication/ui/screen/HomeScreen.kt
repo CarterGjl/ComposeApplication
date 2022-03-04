@@ -52,7 +52,7 @@ fun HomeScreen() {
 //                }
                 navigation(startDestination = Screen.Weather.route, NEST) {
                     composable(Screen.Weather.route) {
-                        MineScreen(navController = navController)
+                        MineScreen()
                     }
                     composable(MINE) {
                         Text(text = "success")

@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -25,6 +26,7 @@ import com.example.composeapplication.R
 import com.example.composeapplication.state.login.EmailState
 import com.example.composeapplication.state.login.PasswordState
 import com.example.composeapplication.state.login.TextFieldState
+import com.example.composeapplication.ui.screen.widget.MyAppBar
 import com.example.composeapplication.viewmodel.SignInState
 import com.example.composeapplication.viewmodel.SignInViewModel
 import kotlinx.coroutines.launch
@@ -229,7 +231,8 @@ fun Password(
             }
         )
     )
-    passwordState.getError()?.let { error -> TextFieldError(textError = error) }
+
+    TextFieldError(textError = passwordState.errorText)
 }
 
 @Composable
@@ -245,38 +248,37 @@ fun TextFieldError(textError: String) {
 }
 
 @Composable
-fun SignInScreen(viewModel: SignInViewModel) {
+fun SignInScreen(viewModel: SignInViewModel, viewState: SignInState) {
     SignIn(
-        onNavigationEvent = { event ->
-            when (event) {
-                is SignInEvent.SignIn -> {
-                    viewModel.signIn(event.email,event.password)
-                }
-                SignInEvent.NavigateBack -> {
+        viewState
+    ) { event ->
+        when (event) {
+            is SignInEvent.SignIn -> {
+                viewModel.signIn(event.email, event.password)
+            }
+            SignInEvent.NavigateBack -> {
 
-                }
-                SignInEvent.SignInAsGuest -> {
+            }
+            SignInEvent.SignInAsGuest -> {
 
-                }
-                SignInEvent.SignUp -> {
+            }
+            SignInEvent.SignUp -> {
 
-                }
             }
         }
-    )
+    }
 }
 
 @Composable
-fun SignIn(onNavigationEvent: (SignInEvent) -> Unit) {
+fun SignIn(viewState: SignInState, onNavigationEvent: (SignInEvent) -> Unit) {
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxWidth()) {
-        SignInContent(
-            onSignInSubmitted = { email, password ->
-                onNavigationEvent(SignInEvent.SignIn(email, password))
-            }
-        )
+        SignInContent(viewState
+        ) { email, password ->
+            onNavigationEvent(SignInEvent.SignIn(email, password))
+        }
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
             onClick = {
@@ -294,17 +296,35 @@ fun SignIn(onNavigationEvent: (SignInEvent) -> Unit) {
     }
 }
 
+
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun SignInContentPreview() {
+//    SignInContent(viewState = viewState) { email, password ->
+//    }
+//}
+
 @Composable
 fun SignInContent(
+    viewState: SignInState,
     onSignInSubmitted: (email: String, password: String) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 160.dp, start = 20.dp, end = 20.dp)
+    ) {
         val focusRequester = remember { FocusRequester() }
         val emailState = remember { EmailState() }
         Email(emailState, omImeAction = { focusRequester.requestFocus() })
 
         Spacer(modifier = Modifier.height(16.dp))
-
+//    when(viewState){
+//        is SignInState.Error -> {
+//            passwordState.errorText = viewState.error
+//        }
+//        SignInState.InProgress -> passwordState.errorText = ""
+//    }
         val passwordState = remember { PasswordState() }
         Password(
             label = stringResource(id = R.string.password),
@@ -328,20 +348,34 @@ fun SignInContent(
 }
 
 @Composable
-fun MineScreen(viewModel: SignInViewModel = viewModel(),navController: NavController) {
-    val viewState:SignInState by viewModel.state.observeAsState(initial = SignInState.SignedOut)
-    when (viewState) {
-        is SignInState.SignedOut -> SignInScreen(viewModel = viewModel)
-        SignInState.InProgress -> SignInProgress()
-        SignInState.SignedIn -> {
-            navController.navigate("mine"){
-                popUpTo("article")
+fun LoginScreen(viewModel: SignInViewModel = viewModel(), navController: NavController) {
+
+    Scaffold(
+        topBar = {
+            MyAppBar(id = R.string.sign_in)
+        }
+    ) {
+
+        val viewState: SignInState by viewModel.state.observeAsState(initial = SignInState.SignedOut)
+        when (viewState) {
+            is SignInState.SignedOut,
+            is SignInState.Error
+            -> SignInScreen(viewModel = viewModel,viewState)
+            SignInState.InProgress -> SignInProgress()
+            SignInState.SignedIn -> {
+                navController.navigate("mine") {
+                    popUpTo("article")
+                }
             }
         }
-        is SignInState.Error -> {
-            SignInError((viewState as SignInState.Error).error)
-        }
     }
+
+
+}
+
+@Composable
+fun MineScreen() {
+
 }
 
 sealed class SignInEvent {

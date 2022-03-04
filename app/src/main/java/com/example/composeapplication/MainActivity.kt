@@ -161,6 +161,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     object Picture : Screen("picture", R.string.picture, Icons.Filled.Favorite)
     object Weather : Screen("weather", R.string.weather, Icons.Filled.AccountBox)
     object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
+    object Mine : Screen("mine", R.string.mine, Icons.Filled.AdminPanelSettings)
     object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
     object Search : Screen("search", R.string.search, Icons.Filled.Search)

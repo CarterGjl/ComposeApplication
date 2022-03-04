@@ -26,7 +26,7 @@ val items = listOf(
     Screen.Article,
     Screen.TypeTree,
     Screen.Weather,
-    Screen.Test
+    Screen.Mine
 )
 
 @ExperimentalPagerApi

@@ -23,6 +23,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
@@ -31,6 +33,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.AppRuntime
 import com.example.composeapplication.Screen
+import com.example.composeapplication.ui.ComposeApplicationTheme
+import com.example.composeapplication.ui.LoginScreen
+import com.example.composeapplication.ui.MineScreen
 import com.example.composeapplication.ui.bottom.BottomNavigationAlwaysShowLabelComponent
 import com.example.composeapplication.ui.screen.type.TypeContentScreen
 import com.example.composeapplication.ui.screen.type.TypeScreen
@@ -149,6 +154,14 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 val fromJson = Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
                 TypeContentScreen(knowledge = fromJson)
             }
+            navigation("login", Screen.Mine.route) {
+                composable("login") {
+                    LoginScreen(navController = navController)
+                }
+                composable("mine_page") {
+                    MineScreen()
+                }
+            }
             composable(
                 route = Screen.WebView.route + "?title={title}&url={url}",
                 arguments = listOf(
@@ -166,6 +179,19 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
             }
 
         }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalPagerApi::class,
+    ExperimentalCoilApi::class
+)
+@Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
+@Composable
+fun MainPagePreview() {
+    ComposeApplicationTheme {
+        MainPage()
     }
 }
 
