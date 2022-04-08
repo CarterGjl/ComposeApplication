@@ -6,8 +6,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -112,15 +112,13 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
     }
     val movieData: State<List<Movie>>? = null
     val movies = movieData?.value ?: return
-    val scrollState = rememberLazyListState()
 
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxWidth()
             .padding(2.dp),
         // cells = GridCells.Adaptive(minSize = 128.dp),
-        cells = GridCells.Fixed(3),
-        state = scrollState,
+        columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(2.dp)
     ) {
         items(movies.size) { index ->

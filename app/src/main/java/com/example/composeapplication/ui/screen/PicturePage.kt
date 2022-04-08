@@ -5,10 +5,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyGridScope
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -17,17 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.composeapplication.R
-import com.example.composeapplication.bean.PictureModel
 import com.example.composeapplication.ui.screen.widget.MyAppBar
 import com.example.composeapplication.viewmodel.PictureViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -57,13 +52,14 @@ fun PicturePage(
                 }
             ) {
                 LazyVerticalGrid(
-                    cells = GridCells.Fixed(3),
+                    columns = GridCells.Fixed(3),
                     contentPadding = PaddingValues(5.dp),
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth()
                 ) {
-                    items(picList) { item ->
+                    items(picList.itemCount) { index ->
+                        val item = picList[index]
                         Image(
                             painter = rememberImagePainter(
                                 item!!.url,
@@ -89,7 +85,7 @@ fun PicturePage(
                             loadState.refresh is LoadState.Loading -> {
                                 item {
                                     Box(
-                                        modifier = Modifier.fillParentMaxSize(),
+                                        modifier = Modifier.fillMaxWidth(),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         CircularProgressIndicator(color = Color.Red).also {
@@ -102,7 +98,7 @@ fun PicturePage(
                                 item {
                                     Box(
                                         contentAlignment = Alignment.Center,
-                                        modifier = Modifier.fillParentMaxWidth()
+                                        modifier = Modifier.fillMaxWidth()
                                     ) {
                                         CircularProgressIndicator(color = Color.Red).also {
                                             Log.d(TAG, "loading: ")
@@ -116,7 +112,7 @@ fun PicturePage(
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
-                                            .fillParentMaxWidth()
+                                            .fillMaxWidth()
                                             .clickable {
                                                 retry()
                                             }) {
@@ -130,7 +126,7 @@ fun PicturePage(
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
-                                            .fillParentMaxWidth()
+                                            .fillMaxWidth()
                                             .clickable {
                                                 retry()
                                             }) {
@@ -146,14 +142,4 @@ fun PicturePage(
         }
     }
 
-}
-
-@ExperimentalFoundationApi
-fun <T : Any> LazyGridScope.items(
-    lazyPagingItems: LazyPagingItems<T>,
-    itemContent: @Composable LazyItemScope.(value: T?) -> Unit
-) {
-    items(lazyPagingItems.itemCount) { index ->
-        itemContent(lazyPagingItems[index])
-    }
 }

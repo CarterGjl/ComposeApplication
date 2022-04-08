@@ -6,6 +6,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -45,7 +46,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @Suppress("EXPERIMENTAL_ANNOTATION_ON_OVERRIDE_WARNING")
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
-
     @OptIn(ExperimentalPermissionsApi::class,
         androidx.compose.foundation.ExperimentalFoundationApi::class,
         com.google.accompanist.pager.ExperimentalPagerApi::class,
@@ -54,6 +54,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.d(TAG, "onCreate:BOARD  ${Build.BOARD} BRAND ${Build.BRAND} HARDWARE ${Build.HARDWARE}")
         val splashScreen = installSplashScreen()
         setContent {
             ProvideWindowInsets(consumeWindowInsets = false, windowInsetsAnimationsEnabled = true) {
@@ -134,6 +135,10 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
                         splashScreenViewProvider.iconAnimationDurationMillis
                 ) - System.currentTimeMillis()
         view.postDelayed(delayMillis) { animator.start() }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }
 
