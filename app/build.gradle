@@ -4,8 +4,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion '32.0.0'
+    compileSdkPreview 'Tiramisu'
+    buildToolsVersion '33.0.0 rc2'
 
     defaultConfig {
         applicationId "com.example.composeapplicationabc"
@@ -36,7 +36,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.6.10'
     }
 }
 

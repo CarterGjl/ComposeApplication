@@ -79,7 +79,7 @@ fun SearchScreen(
             }
         }
     ) {
-        Column {
+        Column(Modifier.padding(it)) {
             ArticleList(result = observeAsState) { url, title ->
                 val encode = URLEncoder.encode(url, "utf-8")
                 navController.navigate(Screen.WebView.route + "?title=$title&url=$encode") {

@@ -43,6 +43,7 @@ fun TypeScreen(
             treeViewModel.getTreeResponse()
         }) {
             LazyColumn(
+                modifier = Modifier.padding(it),
                 contentPadding = PaddingValues(15.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {

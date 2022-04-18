@@ -34,7 +34,7 @@ import java.net.URLEncoder
 
 private const val TAG = "TypeContentScreen"
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
     val pagerState = rememberPagerState()
@@ -47,7 +47,9 @@ fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
         HorizontalPager(
             count = knowledge.children?.size ?: 0,
             state = pagerState,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
         ) { page ->
             val banner = knowledge.children?.get(page)
             Column(

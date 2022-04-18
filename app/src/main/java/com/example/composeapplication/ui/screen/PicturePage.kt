@@ -44,7 +44,10 @@ fun PicturePage(
             MyAppBar(id = R.string.picture)
         }
     ) {
-        Column(Modifier.fillMaxSize()) {
+        Column(
+            Modifier
+                .padding(it)
+                .fillMaxSize()) {
             SwipeRefresh(
                 state = state,
                 onRefresh = {

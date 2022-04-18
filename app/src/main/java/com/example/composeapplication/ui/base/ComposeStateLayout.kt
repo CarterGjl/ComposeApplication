@@ -1,7 +1,6 @@
 package com.example.composeapplication.ui.base
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 

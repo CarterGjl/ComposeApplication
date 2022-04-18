@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui.screen
 
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import com.example.composeapplication.R
 import com.example.composeapplication.activity.util.getStatusBarHeight
 import com.example.composeapplication.activity.util.px2dp
 import com.example.composeapplication.viewmodel.SplashViewModel
-import kotlinx.coroutines.delay
 
 @ExperimentalCoilApi
 @Composable
