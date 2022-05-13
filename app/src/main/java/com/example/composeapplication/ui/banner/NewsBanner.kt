@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui.banner
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import com.example.composeapplication.bean.Banner
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -32,10 +31,8 @@ fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -
             modifier = Modifier.fillMaxSize()
         ) { page ->
             val banner = topStories[page]
-            Image(
-                painter = rememberImagePainter(data = banner.imagePath, builder = {
-                    crossfade(true)
-                }),
+            AsyncImage(
+                model = banner.imagePath,
                 null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier

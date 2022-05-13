@@ -2,6 +2,7 @@ package com.example.composeapplication.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Store
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -51,7 +53,10 @@ fun Navigation() {
         }
 
     ) {
-        NavHost(navController, startDestination = Screen.Find.route) {
+        NavHost(
+            navController, modifier = Modifier.padding(it), startDestination = Screen.Find
+                .route
+        ) {
             composable(Screen.Find.route) {
                 FindScreen(navController, setTitle, articleViewModel)
                 isCurrentMovieDetail.value = false

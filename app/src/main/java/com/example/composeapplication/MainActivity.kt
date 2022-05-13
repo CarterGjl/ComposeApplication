@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,19 +38,19 @@ import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.ui.screen.SplashAdScreen
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 // 官方demo地址
 // https://github.com/android/compose-samples
 
-@Suppress("EXPERIMENTAL_ANNOTATION_ON_OVERRIDE_WARNING")
+@Suppress("OPT_IN_IS_NOT_ENABLED")
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
     @OptIn(ExperimentalPermissionsApi::class,
-        androidx.compose.foundation.ExperimentalFoundationApi::class,
-        com.google.accompanist.pager.ExperimentalPagerApi::class,
-        ExperimentalCoilApi::class
+        ExperimentalFoundationApi::class,
+        ExperimentalPagerApi::class, ExperimentalCoilApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

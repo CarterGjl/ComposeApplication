@@ -1,3 +1,4 @@
+@file:Suppress("OPT_IN_IS_NOT_ENABLED", "DEPRECATION", "unused")
 
 package com.example.composeapplication.ui.screen
 
@@ -381,7 +382,10 @@ fun ArticleDetailScreen(
             },
             update = { view ->
                 view.apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                    if (Build.VERSION.SDK_INT >= 33) {
+                        settings.isAlgorithmicDarkeningAllowed = darkTheme
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         val webViewTheme = if (darkTheme) {
                             WebSettings.FORCE_DARK_ON
                         } else {

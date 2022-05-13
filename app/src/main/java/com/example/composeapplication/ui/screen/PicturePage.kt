@@ -15,12 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import coil.transform.CircleCropTransformation
 import com.example.composeapplication.R
 import com.example.composeapplication.ui.screen.widget.MyAppBar
@@ -64,13 +67,15 @@ fun PicturePage(
                     items(picList.itemCount) { index ->
                         val item = picList[index]
                         Image(
-                            painter = rememberImagePainter(
-                                item!!.url,
-                                builder = {
-                                    crossfade(true)
-                                    placeholder(R.drawable.ic_loading)
-                                    transformations(CircleCropTransformation())
-                                }),
+                            painter = rememberAsyncImagePainter(
+                                ImageRequest.Builder(LocalContext.current)
+                                    .data(item!!.url)
+                                    .size(Size.ORIGINAL)
+                                    .crossfade(true)
+                                    .placeholder(R.drawable.ic_loading)
+                                    .transformations(CircleCropTransformation())
+                                    .build()
+                            ),
                             null,
                             contentScale = ContentScale.Inside,
                             modifier = Modifier

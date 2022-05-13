@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.composeapplication.R
 import com.example.composeapplication.activity.util.getStatusBarHeight
 import com.example.composeapplication.activity.util.px2dp
@@ -38,9 +38,7 @@ fun SplashAdScreen(onCloseAd:()->Unit,splashViewModel: SplashViewModel = viewMod
             })
         }
         Image(
-            painter = rememberImagePainter(data = R.drawable.splash, builder = {
-                crossfade(true)
-            }),
+            painter = rememberAsyncImagePainter(model = R.drawable.splash),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

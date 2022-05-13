@@ -22,12 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.*
 import com.example.composeapplication.activity.bsae.BaseActivity
 
-private const val TAG = "PhotoActivity"
 class PhotoActivity : BaseActivity() {
 
     companion object {
@@ -51,7 +48,6 @@ class PhotoActivity : BaseActivity() {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PhotoViewPage(url: String, click: () -> Unit) {
     var scale by remember {
@@ -66,12 +62,7 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
         if (scale >= 6.0) scale = 6.0f
         else if (scale <= 1.0) scale = 1.0f
     }
-    val painter = rememberImagePainter(
-        data = url,
-        builder = {
-            crossfade(true)
-        }
-    )
+    val painter = rememberAsyncImagePainter(url)
     Box(
         Modifier
             .fillMaxSize()
@@ -95,7 +86,7 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
                     )
                 }
         )
-        if (painter.state is  ImagePainter.State.Loading) {
+        if (painter.state is  AsyncImagePainter.State.Loading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
         BackArrowDown(click = click)
