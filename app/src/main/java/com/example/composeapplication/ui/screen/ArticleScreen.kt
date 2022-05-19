@@ -40,12 +40,12 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
-import com.example.composeapplication.AppRuntime.navController
 import com.example.composeapplication.DIALOG
 import com.example.composeapplication.R
 import com.example.composeapplication.Screen
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.bean.HotKey
+import com.example.composeapplication.extend.LocalNavHostController
 import com.example.composeapplication.extend.parseHighlight
 import com.example.composeapplication.ui.banner.NewsBanner
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
@@ -471,6 +471,7 @@ fun ArticleItem(data: Article, onClick: (url: String) -> Unit) {
 
 @Composable
 fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
+    val navHostController = LocalNavHostController.current
     Surface(
         shape = RoundedCornerShape(10.dp),
         elevation = 10.dp,
@@ -545,7 +546,8 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
                                 0, "", 0, 0, 0, 0, list
                             )
                             val toJson = Gson().toJson(knowledge)
-                            navController?.navigate("type_content?knowledge=$toJson") {
+
+                            navHostController.navigate("type_content?knowledge=$toJson") {
 
                                 // Avoid multiple copies of the same destination when
                                 // reselecting the same item

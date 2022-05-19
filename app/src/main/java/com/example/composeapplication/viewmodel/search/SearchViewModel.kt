@@ -14,11 +14,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 private const val TAG = "SearchViewModel"
+
 class SearchViewModel : ViewModel() {
 
     private val _searchResult = MutableLiveData<List<Article>>()
     var searchResult = _searchResult
-    val pageStateData: MutableLiveData<PageStateData> = MutableLiveData(PageStateData(PageState.EMPTY))
+    val pageStateData: MutableLiveData<PageStateData> =
+        MutableLiveData(PageStateData(PageState.EMPTY))
     private val _hotKeyResult = MutableLiveData<List<HotKey>>()
     var hotKeyResult = _hotKeyResult
 
@@ -29,7 +31,7 @@ class SearchViewModel : ViewModel() {
             }
             val result = async.await()
             Log.d(TAG, "searchArticle: $result")
-            if (result.data.datas.isEmpty()){
+            if (result.data.datas.isEmpty()) {
                 AppRuntime.rememberScaffoldState?.snackbarHostState?.showSnackbar("未搜索到关键词相关文章")
                 pageStateData.value = PageStateData(PageState.EMPTY)
                 return@launch
@@ -40,7 +42,7 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun getHotKeys(){
+    fun getHotKeys() {
         viewModelScope.launch {
             val async = viewModelScope.async {
                 RemoteSevice.getInstance().getHotKeys()

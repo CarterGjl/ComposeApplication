@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -150,22 +147,28 @@ fun CustomLoadingLayout(stateLayoutData: StateLayoutData) {
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
 @Composable
 fun CardViewPreview() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.Gray)
-            .wrapContentHeight()
-            .padding(top = 8.dp),
-        elevation = 8.dp
-    ) {
-        Text(
-            text = "This is a Card",
-            modifier = Modifier.height(90.dp)
-        )
+    Column() {
+
+        var checked by remember { mutableStateOf(true) }
+        Switch(modifier = Modifier.fillMaxSize(), checked = checked, onCheckedChange = {
+            checked = !checked
+        })
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color.Gray)
+                .wrapContentHeight()
+                .padding(top = 8.dp),
+            elevation = 8.dp
+        ) {
+            Text(
+                text = "This is a Card",
+                modifier = Modifier.height(90.dp)
+            )
+        }
     }
+
 }
-
-
 
 
 

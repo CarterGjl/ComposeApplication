@@ -35,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.AppRuntime
 import com.example.composeapplication.Screen
+import com.example.composeapplication.extend.ProvideNavHostController
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.LoginScreen
 import com.example.composeapplication.ui.MineScreen
@@ -67,7 +68,6 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
     val navController = rememberAnimatedNavController()
     val rememberScaffoldState = rememberScaffoldState()
     AppRuntime.rememberScaffoldState = rememberScaffoldState
-    AppRuntime.navController = navController
     viewModel.setNavControllerA(navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -90,96 +90,98 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
         },
         scaffoldState = rememberScaffoldState
     ) {
-        AnimatedNavHost(
-            modifier = Modifier.padding(it),
-            navController = navController,
-            startDestination = Screen.Article.route
-        ) {
-            mycomposable(Screen.Article.route) {
-                ArticleScreen(navController = navController) { url, title ->
-                    val encode = URLEncoder.encode(url, "utf-8")
-                    navController.navigate(Screen.WebView.route + "?title=$title&url=$encode") {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
-                    }
-                }
-            }
-            mycomposable(Screen.Picture.route) {
-                PicturePage { url ->
-                    viewModel.navigateToPhotoPage(url = url)
-                }
-            }
-            mycomposable(Screen.Weather.route) {
-                WeatherPage()
-            }
-            mycomposable(Screen.Test.route) {
-                TestPage()
-            }
-            mycomposable(Screen.Search.route) {
-                SearchScreen(mainViewModel = viewModel, navController = navController)
-            }
-            mycomposable("camera") {
-                val current = LocalContext.current
-                ProvideWindowInsets {
-                    FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
-                        val intent =
-                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.fromParts("package", current.packageName, null)
+        ProvideNavHostController(navHostController = navController) {
+            AnimatedNavHost(
+                modifier = Modifier.padding(it),
+                navController = navController,
+                startDestination = Screen.Article.route
+            ) {
+                mycomposable(Screen.Article.route) {
+                    ArticleScreen(navController = navController) { url, title ->
+                        val encode = URLEncoder.encode(url, "utf-8")
+                        navController.navigate(Screen.WebView.route + "?title=$title&url=$encode") {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
                             }
-                        current.startActivity(intent)
-                    })
-                }
-            }
-            composable(Screen.TypeTree.route) {
-                TypeScreen { knowledge ->
-                    val toJson = Gson().toJson(knowledge)
-                    navController.navigate("type_content?knowledge=$toJson") {
-                        popUpTo(navController.graph[Screen.TypeTree.route].id) {
-                            saveState = true
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
+                            launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
                         }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
                     }
                 }
-            }
-            composable("type_content?knowledge={knowledge}") { backStackEntry ->
-                val knowledge: String = backStackEntry.arguments?.getString("knowledge") ?: ""
-                val fromJson = Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
-                TypeContentScreen(knowledge = fromJson)
-            }
-            navigation("login", Screen.Mine.route) {
-                composable("login") {
-                    LoginScreen(navController = navController)
+                mycomposable(Screen.Picture.route) {
+                    PicturePage { url ->
+                        viewModel.navigateToPhotoPage(url = url)
+                    }
                 }
-                composable("mine_page") {
-                    MineScreen()
+                mycomposable(Screen.Weather.route) {
+                    WeatherPage()
                 }
-            }
-            composable(
-                route = Screen.WebView.route + "?title={title}&url={url}",
-                arguments = listOf(
-                    navArgument("title") { defaultValue = "" },
-                    navArgument("url") { defaultValue = "" }
-                ),
-            ) { backStackEntry ->
+                mycomposable(Screen.Test.route) {
+                    TestPage()
+                }
+                mycomposable(Screen.Search.route) {
+                    SearchScreen(mainViewModel = viewModel, navController = navController)
+                }
+                mycomposable("camera") {
+                    val current = LocalContext.current
+                    ProvideWindowInsets {
+                        FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
+                            val intent =
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                    data = Uri.fromParts("package", current.packageName, null)
+                                }
+                            current.startActivity(intent)
+                        })
+                    }
+                }
+                composable(Screen.TypeTree.route) {
+                    TypeScreen { knowledge ->
+                        val toJson = Gson().toJson(knowledge)
+                        navController.navigate("type_content?knowledge=$toJson") {
+                            popUpTo(navController.graph[Screen.TypeTree.route].id) {
+                                saveState = true
+                            }
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
+                            launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
+                        }
+                    }
+                }
+                composable("type_content?knowledge={knowledge}") { backStackEntry ->
+                    val knowledge: String = backStackEntry.arguments?.getString("knowledge") ?: ""
+                    val fromJson = Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
+                    TypeContentScreen(knowledge = fromJson)
+                }
+                navigation("login", Screen.Mine.route) {
+                    composable("login") {
+                        LoginScreen(navController = navController)
+                    }
+                    composable("mine_page") {
+                        MineScreen()
+                    }
+                }
+                composable(
+                    route = Screen.WebView.route + "?title={title}&url={url}",
+                    arguments = listOf(
+                        navArgument("title") { defaultValue = "" },
+                        navArgument("url") { defaultValue = "" }
+                    ),
+                ) { backStackEntry ->
 
-                val title: String = backStackEntry.arguments?.getString("title") ?: ""
-                val url: String = backStackEntry.arguments?.getString("url") ?: ""
-                val decode = URLDecoder.decode(url, "utf-8")
-                ArticleDetailScreen(detailUrl = decode, title) {
-                    navController.popBackStack()
+                    val title: String = backStackEntry.arguments?.getString("title") ?: ""
+                    val url: String = backStackEntry.arguments?.getString("url") ?: ""
+                    val decode = URLDecoder.decode(url, "utf-8")
+                    ArticleDetailScreen(detailUrl = decode, title) {
+                        navController.popBackStack()
+                    }
                 }
-            }
 
+            }
         }
     }
 }

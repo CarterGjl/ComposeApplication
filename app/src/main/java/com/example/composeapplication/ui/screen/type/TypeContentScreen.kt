@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composeapplication.AppRuntime.navController
 import com.example.composeapplication.Screen
+import com.example.composeapplication.extend.LocalNavHostController
 import com.example.composeapplication.ui.screen.ArticleItem2
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.screen.type.viewmodel.TypeContentViewModel
@@ -78,6 +78,7 @@ private fun TypeContentAppbar(
     knowledge: TreeListResponse.Knowledge,
     pagerState: PagerState
 ) {
+    val navHostController = LocalNavHostController.current
     val tabDatas = knowledge.children
     val tabIndex = pagerState.currentPage
     Column {
@@ -97,7 +98,7 @@ private fun TypeContentAppbar(
             },
             navigationIcon = {
                 IconButton(onClick = {
-                    navController?.popBackStack()
+                    navHostController.popBackStack()
                 }) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
                 }
@@ -174,6 +175,7 @@ fun TypeContentDetail(
     knowledge: TreeListResponse.Knowledge,
     typeContentViewModel: TypeContentViewModel = viewModel()
 ) {
+    val navHostController = LocalNavHostController.current
     val list by typeContentViewModel.articalLiveData.observeAsState(initial = emptyList())
     val currentPage = pagerState.currentPage
     val id = knowledge.children?.get(currentPage)?.id ?: 0
@@ -189,7 +191,7 @@ fun TypeContentDetail(
         items(list) { data ->
             ArticleItem2(data = data, onClick = {
                 val encode = URLEncoder.encode(it, "utf-8")
-                navController?.navigate(Screen.WebView.route + "?title=${data.title}&url=$encode") {
+                navHostController.navigate(Screen.WebView.route + "?title=${data.title}&url=$encode") {
                     // Avoid multiple copies of the same destination when
                     // reselecting the same item
                     launchSingleTop = true
