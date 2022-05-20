@@ -23,8 +23,12 @@ fun ExpressLocationItem() {
             }
         },
 
-    ) {
-        Row(Modifier.defaultMinSize(minHeight = 100.dp)) {
+        ) {
+        Row(
+            Modifier
+                .padding(it)
+                .defaultMinSize(minHeight = 100.dp)
+        ) {
             Text(text = "test")
             VerticalDivider(color = Color.Black)
         }
