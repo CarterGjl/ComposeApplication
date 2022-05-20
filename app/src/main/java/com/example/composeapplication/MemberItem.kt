@@ -96,7 +96,9 @@ fun MemberItem() {
 @Composable
 fun MeetingList() {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(count = 10) {
+        items(count = 10, key = {
+
+        }) {
             MemberItem()
         }
     }

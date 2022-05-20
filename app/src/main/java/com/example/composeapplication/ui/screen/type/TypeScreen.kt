@@ -47,7 +47,9 @@ fun TypeScreen(
                 contentPadding = PaddingValues(15.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                items(observeAsState) { knowledge ->
+                items(observeAsState, key = {
+                    it.id
+                }) { knowledge ->
                     TypeListItem(knowledge = knowledge, onClick)
                 }
             }
