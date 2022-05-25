@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.SplashScreen" parent="Theme.SplashScreenBase">
+    <style name="Theme.SplashScreenDemo" parent="Theme.SplashScreen">
         <item name="android:windowLayoutInDisplayCutoutMode">default</item>
     </style>
 </resources>

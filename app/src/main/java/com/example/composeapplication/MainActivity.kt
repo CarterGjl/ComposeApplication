@@ -64,7 +64,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
                 }
             }
         }
-        splashScreen.setKeepVisibleCondition {
+        splashScreen.setKeepOnScreenCondition {
             false
         }
 

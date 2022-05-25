@@ -383,18 +383,22 @@ fun ArticleDetailScreen(
             update = { view ->
                 view.apply {
 
-                    if (Build.VERSION.SDK_INT >= 33) {
-                        settings.isAlgorithmicDarkeningAllowed = darkTheme
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        val webViewTheme = if (darkTheme) {
-                            WebSettings.FORCE_DARK_ON
-                        } else {
-                            WebSettings.FORCE_DARK_OFF
+
+                    settings.apply {
+                        if (Build.VERSION.SDK_INT >= 33) {
+                            isAlgorithmicDarkeningAllowed = darkTheme
+                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            val webViewTheme = if (darkTheme) {
+                                WebSettings.FORCE_DARK_ON
+                            } else {
+                                WebSettings.FORCE_DARK_OFF
+                            }
+                            forceDark = webViewTheme
                         }
-                        settings.forceDark = webViewTheme
+                        javaScriptEnabled = true
+                        mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                        domStorageEnabled = true
                     }
-                    settings.javaScriptEnabled = true
-                    settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 }
                 // view 被 inflated
                 Log.d(TAG, "ArticleDetailScreen: update")
