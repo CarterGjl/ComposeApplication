@@ -4,7 +4,6 @@ package com.example.composeapplication.service
 
 import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.LoginResponse
-import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import retrofit2.http.*
@@ -16,12 +15,6 @@ interface WanAndroidService {
         @Query("s") keywords: String,
         @Query("apikey") apikey: String
     ): ResultData
-
-    @GET("http://ombapi.com/")
-    suspend fun requestDetailByCoroutines(
-        @Query("i") id: String,
-        @Query("apikey") apikey: String
-    ): MoviePro
 
     @GET("https://www.wanandroid.com/article/list/{page}/json")
     suspend fun getArticles(@Path("page") page: Int): ResultData

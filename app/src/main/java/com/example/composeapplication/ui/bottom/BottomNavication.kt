@@ -1,6 +1,7 @@
 package com.example.composeapplication.ui.bottom
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -8,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,8 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composeapplication.Screen
 import com.example.composeapplication.viewmodel.MainViewModel
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 val items = listOf(
@@ -35,12 +33,9 @@ fun BottomNavigationAlwaysShowLabelComponent(
     navController: NavHostController,
     mainViewModel: MainViewModel = viewModel()
 ) {
-    val insets = LocalWindowInsets.current
-    // 切记，这些信息都是px单位，使用时要根据需求转换单位
-    val imeBottom = with(LocalDensity.current) { insets.navigationBars.bottom.toDp() }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    BottomNavigation(Modifier.height(height = 56.dp + imeBottom)) {
+    BottomNavigation(Modifier.height(80.dp)) {
         items.forEachIndexed { _, screen ->
             BottomNavigationItem(
                 icon = {

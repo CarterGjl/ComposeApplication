@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.ArticleDetailScreen
-import com.google.accompanist.insets.ProvideWindowInsets
 
 class WebViewActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,9 +18,7 @@ class WebViewActivity : BaseActivity() {
 
         setContent {
             ComposeApplicationTheme {
-                ProvideWindowInsets(consumeWindowInsets = false) {
-                    ArticleDetailScreen(detailUrl = url!!, title!!)
-                }
+                ArticleDetailScreen(detailUrl = url!!, title!!)
             }
         }
     }

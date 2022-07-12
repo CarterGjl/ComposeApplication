@@ -22,7 +22,7 @@ class AnimatorController(private val viewModel: TimerViewModel) {
                 viewModel.timeLef.value = (it.animatedValue as Int).toLong()
             }
             valueAnimator?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     complete()
                 }

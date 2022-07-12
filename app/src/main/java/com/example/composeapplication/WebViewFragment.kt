@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.ArticleDetailScreen
-import com.google.accompanist.insets.ProvideWindowInsets
 
 class WebViewFragment : Fragment() {
     var title:String? = null
@@ -26,10 +25,8 @@ class WebViewFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeApplicationTheme {
-                    ProvideWindowInsets(consumeWindowInsets = false) {
-                        ArticleDetailScreen(detailUrl = url!!, title!!){
-                            findNavController().popBackStack()
-                        }
+                    ArticleDetailScreen(detailUrl = url!!, title!!){
+                        findNavController().popBackStack()
                     }
                 }
             }

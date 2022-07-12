@@ -1,4 +1,4 @@
-@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED", "OPT_IN_IS_NOT_ENABLED")
 
 package com.example.composeapplication.ui.screen.type
 
@@ -24,7 +24,6 @@ import com.example.composeapplication.extend.LocalNavHostController
 import com.example.composeapplication.ui.screen.ArticleItem2
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.screen.type.viewmodel.TypeContentViewModel
-import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -84,7 +83,7 @@ private fun TypeContentAppbar(
     Column {
         Spacer(
             modifier = Modifier
-                .statusBarsHeight()
+                .windowInsetsTopHeight(WindowInsets.statusBars)
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.primaryVariant)
         )

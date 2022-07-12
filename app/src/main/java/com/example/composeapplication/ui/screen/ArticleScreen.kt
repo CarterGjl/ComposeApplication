@@ -1,4 +1,4 @@
-@file:Suppress("OPT_IN_IS_NOT_ENABLED", "DEPRECATION", "unused")
+@file:Suppress("OPT_IN_IS_NOT_ENABLED", "unused")
 
 package com.example.composeapplication.ui.screen
 
@@ -56,7 +56,6 @@ import com.example.composeapplication.viewmodel.State
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
-import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
@@ -289,7 +288,8 @@ fun ArticleScreen(
             Column(
                 Modifier
                     .padding(it)
-                    .fillMaxHeight()) {
+                    .fillMaxHeight()
+            ) {
                 ArticleListPaging(onClick)
             }
         }
@@ -315,13 +315,11 @@ fun ArticleDetailScreen(
 ) {
     Log.d(TAG, "ArticleDetailScreen: ")
     var refreshing by remember { mutableStateOf(true) }
-    Column {
-        Spacer(
-            modifier = Modifier
-                .statusBarsHeight()
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.primaryVariant)
-        )
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colors.primaryVariant)
+            .statusBarsPadding()
+    ) {
         TopAppBar(
             title = {
                 Text(

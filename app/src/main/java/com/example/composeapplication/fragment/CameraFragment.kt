@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import com.example.composeapplication.ui.screen.FeatureThatRequiresCameraPermission
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
@@ -26,15 +25,13 @@ class CameraFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val current = LocalContext.current
-                ProvideWindowInsets {
-                    FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
-                        val intent =
-                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.fromParts("package", current.packageName, null)
-                            }
-                        current.startActivity(intent)
-                    })
-                }
+                FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
+                    val intent =
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", current.packageName, null)
+                        }
+                    current.startActivity(intent)
+                })
             }
         }
     }

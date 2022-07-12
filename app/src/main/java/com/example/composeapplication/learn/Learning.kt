@@ -2,8 +2,10 @@
 
 package com.example.composeapplication.learn
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,69 +22,70 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composeapplication.activity.bsae.Demo.Companion.test
+import com.example.composeapplication.R
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.Navigation
 import com.example.composeapplication.ui.timer.*
 import com.example.composeapplication.viewmodel.ArticleViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import dev.chrisbanes.accompanist.coil.CoilImage
 
-//@Preview(showBackground = true)
-//@Composable
-//fun NewsStory() {
-//    val image = painterResource(R.drawable.header)
-//    MaterialTheme {
-//        val typography = MaterialTheme.typography
-//        Column(
-//            modifier = Modifier.padding(16.dp)
-//        ) {
-//            val imageModifier = Modifier
-//                .height(180.dp)
-//                .fillMaxWidth()
-//                .clickable {
-//                    Log.d(TAG, "NewsStory: ")
-//                }
-//                .clip(shape = RoundedCornerShape(4.dp))
-//            Image(
-//                painter = image,
-//                modifier = imageModifier,
-//                contentScale = ContentScale.Crop,
-//                contentDescription = ""
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
-//            Text(
-//                "A day wandering through the sandhills " +
-//                        "in Shark Fin Cove, and a few of the " +
-//                        "sights I saw",
-//                style = typography.h6,
-//                maxLines = 2,
-//                overflow = TextOverflow.Ellipsis
-//            )
-//            Text(
-//                "Davenport, California",
-//                style = typography.body2
-//            )
-//            Text(
-//                "December 2018",
-//                style = typography.body2
-//            )
-//            val arrayList = ArrayList<Message>()
-//            for (index in 0..1000) {
-//                arrayList.add(Message("$index"))
-//            }
-//            MessageListener(messages = arrayList)
-//        }
-//    }
-//}
+private const val TAG = "Learning"
+@Preview(showBackground = true)
+@Composable
+fun NewsStory() {
+    val image = painterResource(R.drawable.header)
+    MaterialTheme {
+        val typography = MaterialTheme.typography
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            val imageModifier = Modifier
+                .height(180.dp)
+                .fillMaxWidth()
+                .clickable {
+                    Log.d(TAG, "NewsStory: ")
+                }
+                .clip(shape = RoundedCornerShape(4.dp))
+            Image(
+                painter = image,
+                modifier = imageModifier,
+                contentScale = ContentScale.Crop,
+                contentDescription = ""
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                "A day wandering through the sandhills " +
+                        "in Shark Fin Cove, and a few of the " +
+                        "sights I saw",
+                style = typography.h6,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                "Davenport, California",
+                style = typography.body2
+            )
+            Text(
+                "December 2018",
+                style = typography.body2
+            )
+            val arrayList = ArrayList<Message>()
+            for (index in 0..1000) {
+                arrayList.add(Message("$index"))
+            }
+            MessageListener(messages = arrayList)
+        }
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -115,16 +118,6 @@ fun DefaultPreview() {
 //        Greeting("Android")
     }
 }
-
-//enum class CourseTabs(
-//    @StringRes val title: Int,
-//    @DrawableRes val icon: Int
-//) {
-//    HOME_PAGE(R.string.home_page, R.drawable.ic_launcher_background),
-//    PROJECT(R.string.project, R.drawable.ic_launcher_background),
-//    OFFICIAL_ACCOUNT(R.string.official_account, R.drawable.ic_launcher_background),
-//    MINE(R.string.mine, R.drawable.ic_launcher_background)
-//}
 
 
 data class Message(val message: String)
@@ -185,65 +178,6 @@ val blueDark = Color(0xFF0B182E)
 
 val Purple300 = Color(0xFFCD52FC)
 val Purple700 = Color(0xFF8100EF)
-//@Composable
-//fun Home() {
-//    val (selectedTab, setSelectedTab) = remember {
-//        mutableStateOf(CourseTabs.HOME_PAGE)
-//    }
-//    val tabs = CourseTabs.values()
-//    Scaffold(backgroundColor = MaterialTheme.colors.primarySurface, bottomBar = {
-//        BottomNavigation(Modifier.height(56.dp)) {
-//            tabs.forEach { tab ->
-//                BottomNavigationItem(
-//                    icon = { Icon(painterResource(tab.icon), contentDescription = null) },
-//                    label = { Text(stringResource(tab.title).toUpperCase(Locale.ROOT)) },
-//                    selected = tab == selectedTab,
-//                    onClick = { setSelectedTab(tab) },
-//                    alwaysShowLabel = false,
-//                    selectedContentColor = MaterialTheme.colors.secondary,
-//                    unselectedContentColor = LocalContentColor.current,
-//                    modifier = Modifier.padding(8.dp)
-//                )
-//            }
-//        }
-//    }) { innerPadding ->
-//        val padding = Modifier.padding(innerPadding)
-//        when (selectedTab) {
-//            CourseTabs.HOME_PAGE -> {
-//                One(padding)
-//            }
-//            CourseTabs.MINE -> {
-//                Two(padding)
-//            }
-//            CourseTabs.OFFICIAL_ACCOUNT -> {
-//                Three(padding)
-//            }
-//            CourseTabs.PROJECT -> {
-//                Four(padding)
-//            }
-//            else -> {
-//
-//            }
-//        }
-//    }
-//}
-
-//@Composable
-//fun Greeting(name: String = "test") {
-//    val painterResource = painterResource(id = R.drawable.header)
-//    Column {
-//        Image(painter = painterResource, contentDescription = "for test")
-//
-//        Text(name)
-//        Button(
-//            onClick = {
-//                Log.d(TAG, "Greeting: ")
-//            },
-//        ) {
-//            Text(text = name)
-//        }
-//    }
-//}
 
 @ExperimentalFoundationApi
 @Composable
@@ -267,7 +201,9 @@ private fun MyApp() {
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -332,10 +268,10 @@ fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
                     onClick(data.link)
                 }
         ) {
-//            CoilImage(
-//                data = data.envelopePic,
-//                contentDescription = "description of the image"
-//            )
+            CoilImage(
+                data = data.envelopePic,
+                contentDescription = "description of the image"
+            )
             Text(
                 text = data.title,
                 style = MaterialTheme.typography.subtitle1
@@ -357,61 +293,5 @@ fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
         }
     }
 
-    @Composable
-    fun MyText() {
-        Text(text = "dahfdasjk f")
-//    Text(
-//        text = "test",
-//        modifier = Modifier
-//            .border(
-//                width = 1.dp,
-//                color = Color.Red,
-//                shape = RoundedCornerShape(
-//                    topStart = 8.dp,
-//                    topEnd = 8.dp,
-//                    bottomStart = 8.dp,
-//                    bottomEnd = 8.dp
-//                )
-//            )
-//            .padding(10.dp)
-//    )
-    }
 
-    fun  main() {
-        val scope = MainScope()
-//    scope.launch {
-//        val token = withContext(Dispatchers.IO) {
-//            getToken()
-//        }
-//        val profile = withContext(Dispatchers.IO) {
-////            loadProfile(token)
-//            login("2")
-//        }
-//    }
-    }
-    suspend fun login(await: String): String {
-        return withContext(Dispatchers.IO) {
-            // 延迟一秒登录
-            delay(1000)
-            "login"
-        }
-    }
-
-    val a = test()
-    fun test() {
-//    GlobalScope.launch {
-//        flow {
-//            emit(1)
-//            throw ArithmeticException("div 0")
-//        }.catch {
-//            Log.d(TAG, "onCreate:catch error $it")
-//            println("catch error $it")
-//        }.onCompletion {
-//            Log.d(TAG, "onCreate finally")
-//            println("finally")
-//        }.collect {
-//            Log.d(TAG, "onCreate collect $it")
-//        }
-//    }
-    }
 }

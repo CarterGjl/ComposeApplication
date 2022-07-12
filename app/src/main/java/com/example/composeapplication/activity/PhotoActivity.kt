@@ -24,6 +24,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import coil.compose.*
 import com.example.composeapplication.activity.bsae.BaseActivity
+import com.example.composeapplication.extend.LocalNavHostController
 
 class PhotoActivity : BaseActivity() {
 
@@ -41,8 +42,9 @@ class PhotoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         val url = intent.getStringExtra(PHOTO_URL)
         setContent {
+            val current = LocalNavHostController.current
             PhotoViewPage(url = url!!) {
-                finish()
+                current.popBackStack()
             }
         }
     }
@@ -118,14 +120,23 @@ fun DropdownDemo() {
     val items = listOf("A", "B", "C", "D", "E", "F")
     val disabledValue = "B"
     var selectedIndex by remember { mutableStateOf(0) }
-    Box(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.TopEnd),contentAlignment = Alignment.CenterEnd) {
-        Text(items[selectedIndex],modifier = Modifier.fillMaxWidth().clickable(onClick = { expanded = true }).background(
-            Color.Gray))
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentSize(Alignment.TopEnd),contentAlignment = Alignment.CenterEnd) {
+        Text(items[selectedIndex],modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { expanded = true })
+            .background(
+                Color.Gray
+            ))
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(100.dp).background(
-                Color.Red)
+            modifier = Modifier
+                .width(100.dp)
+                .background(
+                    Color.Red
+                )
         ) {
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(onClick = {

@@ -18,12 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
@@ -91,11 +89,6 @@ fun CameraPreview() {
         it.setSurfaceProvider(previewView.surfaceProvider)
     }
     var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-    val insets = LocalWindowInsets.current
-    // 切记，这些信息都是px单位，使用时要根据需求转换单位
-    val top = with(LocalDensity.current) { insets.statusBars.layoutInsets.top.toDp() }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -119,7 +112,7 @@ fun CameraPreview() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)
-                .padding(top = top)
+                .statusBarsPadding()
                 .align(Alignment.TopEnd),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.Top

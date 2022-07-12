@@ -19,7 +19,7 @@ class SearchViewModel : ViewModel() {
 
     private val _searchResult = MutableLiveData<List<Article>>()
     var searchResult = _searchResult
-    val pageStateData: MutableLiveData<PageStateData> =
+    private val pageStateData: MutableLiveData<PageStateData> =
         MutableLiveData(PageStateData(PageState.EMPTY))
     private val _hotKeyResult = MutableLiveData<List<HotKey>>()
     var hotKeyResult = _hotKeyResult

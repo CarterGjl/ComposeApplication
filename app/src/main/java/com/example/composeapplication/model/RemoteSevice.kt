@@ -3,7 +3,6 @@ package com.example.composeapplication.model
 import android.annotation.SuppressLint
 import com.example.composeapplication.bean.HotKeyResult
 import com.example.composeapplication.bean.LoginResponse
-import com.example.composeapplication.bean.MoviePro
 import com.example.composeapplication.bean.ResultData
 import com.example.composeapplication.const.Constants
 import com.example.composeapplication.service.WanAndroidService
@@ -12,8 +11,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 class RemoteSevice private constructor() {
     private val wanAndroidInterface: WanAndroidService
@@ -73,10 +70,5 @@ class RemoteSevice private constructor() {
 
     suspend fun getHotKeys(): HotKeyResult {
         return wanAndroidInterface.getHotKeys()
-    }
-
-    @Suppress("unused")
-    suspend fun getMovieByCoroutines(movieID: String): MoviePro {
-        return wanAndroidInterface.requestDetailByCoroutines(movieID, Constants.OMDB_API_KEY)
     }
 }

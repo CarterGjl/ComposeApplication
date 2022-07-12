@@ -9,10 +9,9 @@ import kotlinx.coroutines.flow.onEach
 
 class SplashViewModel : ViewModel() {
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun countDownCoroutines(
         total: Int, onTick: (Int) -> Unit, onFinish: () -> Unit,
-        scope: CoroutineScope = GlobalScope
+        scope: CoroutineScope = MainScope()
     ): Job {
         return flow {
             for (i in total downTo 0) {

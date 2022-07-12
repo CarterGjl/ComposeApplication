@@ -10,10 +10,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
@@ -45,8 +42,6 @@ import com.example.composeapplication.ui.screen.type.TypeScreen
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.MainViewModel
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -127,15 +122,13 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 }
                 mycomposable("camera") {
                     val current = LocalContext.current
-                    ProvideWindowInsets {
-                        FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
-                            val intent =
-                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                    data = Uri.fromParts("package", current.packageName, null)
-                                }
-                            current.startActivity(intent)
-                        })
-                    }
+                    FeatureThatRequiresCameraPermission(navigateToSettingsScreen = {
+                        val intent =
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = Uri.fromParts("package", current.packageName, null)
+                            }
+                        current.startActivity(intent)
+                    })
                 }
                 composable(Screen.TypeTree.route) {
                     TypeScreen { knowledge ->
@@ -205,7 +198,7 @@ private fun AppBar(navController: NavHostController, mainViewModel: MainViewMode
     Column {
         Spacer(
             modifier = Modifier
-                .statusBarsHeight()
+                .windowInsetsTopHeight(WindowInsets.statusBars)
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.primaryVariant)
         )

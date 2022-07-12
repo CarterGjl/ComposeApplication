@@ -37,7 +37,6 @@ import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.ui.screen.SplashAdScreen
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
@@ -58,10 +57,8 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         Log.d(TAG, "onCreate:BOARD  ${Build.BOARD} BRAND ${Build.BRAND} HARDWARE ${Build.HARDWARE}")
         val splashScreen = installSplashScreen()
         setContent {
-            ProvideWindowInsets(consumeWindowInsets = false, windowInsetsAnimationsEnabled = true) {
-                ComposeApplicationTheme {
-                    MainPage()
-                }
+            ComposeApplicationTheme {
+                MainPage()
             }
         }
         splashScreen.setKeepOnScreenCondition {

@@ -13,26 +13,3 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 }
-
-
-val <T> List<T>.lastIndex: Int
-    get() = size - 1
-
-data class Person(var name: String, var age: Int)
-fun main() {
-    arrayListOf<String>().lastIndex
-    val p = Person(name = "lilei",age = 18)
-    val (_,age) = p
-    println(age)
-}
-
-class Demo{
-    companion object {
-        // 使用JvmStatic 完成 java 调用 kotlin
-        @JvmStatic
-        fun test() {
-
-        }
-        var title:String? = null
-    }
-}

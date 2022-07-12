@@ -3,9 +3,9 @@ package com.example.composeapplication.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -29,7 +29,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.composeapplication.Screen
 import com.example.composeapplication.viewmodel.MainViewModel
 import com.example.composeapplication.viewmodel.search.SearchViewModel
-import com.google.accompanist.insets.statusBarsHeight
 import java.net.URLEncoder
 
 
@@ -45,13 +44,11 @@ fun SearchScreen(
 
     Scaffold(
         topBar = {
-            Column {
-                Spacer(
-                    modifier = Modifier
-                        .statusBarsHeight()
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.primaryVariant)
-                )
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.primaryVariant)
+                    .statusBarsPadding()
+            ) {
                 TopAppBar(
                     actions = {
                         SearchContent {
