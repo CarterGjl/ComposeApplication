@@ -3,11 +3,13 @@ package com.example.composeapplication.ui.banner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -28,7 +30,9 @@ fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -
         HorizontalPager(
             count = topStories.size,
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(8.dp))
         ) { page ->
             val banner = topStories[page]
             AsyncImage(
@@ -37,6 +41,7 @@ fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(8.dp))
                     .clickable {
                         onClick(banner.url, banner.title)
                     }

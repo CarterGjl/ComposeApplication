@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,7 +21,7 @@ fun MyAppBar(
 ) {
     Column(
         modifier = Modifier
-            .background(color = MaterialTheme.colors.primarySurface)
+            .background(color = MaterialTheme.colors.primaryVariant)
             .statusBarsPadding()
     ) {
         TopAppBar(

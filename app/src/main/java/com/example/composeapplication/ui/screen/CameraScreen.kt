@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.example.composeapplication.ui.PermissionRequired
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 
 @ExperimentalPermissionsApi
@@ -39,10 +39,17 @@ fun FeatureThatRequiresCameraPermission(
             if (doNotShowRationale) {
                 Text("Feature not available")
             } else {
-                Column {
+                Column(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(10.dp)
+                ) {
                     Text("The camera is important for this app. Please grant the permission.")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
                             Text("Ok!")
                         }
