@@ -1,11 +1,10 @@
 package com.example.composeapplication.ui.bottom
 
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,9 +34,15 @@ fun BottomNavigationAlwaysShowLabelComponent(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    BottomNavigation(Modifier.height(80.dp)) {
+    NavigationBar(
+        Modifier
+            .height(80.dp +
+                    WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding())
+    ) {
         items.forEachIndexed { _, screen ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 icon = {
                     Icon(screen.icon, contentDescription = screen.route)
                 },
@@ -50,7 +55,7 @@ fun BottomNavigationAlwaysShowLabelComponent(
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     if (currentDestination?.route == screen.route) {
-                        return@BottomNavigationItem
+                        return@NavigationBarItem
                     }
                     mainViewModel.showTitle(screen.resourceId)
                     navController.navigate(screen.route) {
