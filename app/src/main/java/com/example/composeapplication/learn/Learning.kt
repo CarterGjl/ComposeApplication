@@ -30,13 +30,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.composeapplication.R
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.Navigation
 import com.example.composeapplication.ui.timer.*
 import com.example.composeapplication.viewmodel.ArticleViewModel
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 private const val TAG = "Learning"
 @Preview(showBackground = true)
@@ -268,8 +268,8 @@ fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
                     onClick(data.link)
                 }
         ) {
-            CoilImage(
-                data = data.envelopePic,
+            AsyncImage(
+                model = data.envelopePic,
                 contentDescription = "description of the image"
             )
             Text(
