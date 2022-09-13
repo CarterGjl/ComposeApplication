@@ -39,6 +39,7 @@ import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.ui.screen.SplashAdScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import java.util.concurrent.Executor
 
 
 // 官方demo地址

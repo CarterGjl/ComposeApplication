@@ -4,19 +4,13 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.OverscrollEffect
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.overscroll
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.CoroutineScope
@@ -30,11 +24,7 @@ import kotlin.math.sign
 // on the scrollable container.
 class OffsetOverscrollEffect(val scope: CoroutineScope) : OverscrollEffect {
     private val overscrollOffset = Animatable(0f)
-    override fun consumePreScroll(
-        scrollDelta: Offset,
-        pointerPosition: Offset?,
-        source: NestedScrollSource
-    ): Offset {
+    override fun consumePreScroll(scrollDelta: Offset, source: NestedScrollSource): Offset {
         // in pre scroll we relax the overscroll if needed
         // relaxation: when we are in progress of the overscroll and user scrolls in the
         // different direction = substract the overscroll first
@@ -60,7 +50,6 @@ class OffsetOverscrollEffect(val scope: CoroutineScope) : OverscrollEffect {
     override fun consumePostScroll(
         initialDragDelta: Offset,
         overscrollDelta: Offset,
-        pointerPosition: Offset?,
         source: NestedScrollSource
     ) {
         // if it is a drag, not a fling, add the delta left to our over scroll value

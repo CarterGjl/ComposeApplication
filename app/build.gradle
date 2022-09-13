@@ -41,8 +41,8 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.activity:activity-compose:1.6.0-alpha05'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.activity:activity-compose:1.6.0-rc02'
     implementation 'com.google.android.material:material:1.6.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
@@ -50,9 +50,9 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0'
-    implementation "androidx.navigation:navigation-compose:2.5.0"
-    implementation 'androidx.appcompat:appcompat:1.6.0-alpha04'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation "androidx.navigation:navigation-compose:2.5.2"
+    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -63,9 +63,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
 
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation('io.coil-kt:coil-compose:2.1.0')
@@ -80,13 +80,13 @@ dependencies {
     // 流式布局
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
 
-    implementation "androidx.core:core-splashscreen:1.0.0-rc01"
+    implementation "androidx.core:core-splashscreen:1.0.0"
     // 替代sharepreference
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation "androidx.datastore:datastore-preferences-core:1.0.0"
-    implementation("androidx.paging:paging-compose:1.0.0-alpha15")
-    implementation "androidx.paging:paging-runtime:3.1.0-rc01"
-    testImplementation "androidx.paging:paging-common:3.2.0-alpha01"
+    implementation("androidx.paging:paging-compose:1.0.0-alpha16")
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+    testImplementation "androidx.paging:paging-common-ktx:3.2.0-alpha02"
 
     def camerax_version = "1.1.0"
     // CameraX core library using camera2 implementation
@@ -95,8 +95,8 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
     // CameraX View class
     implementation "androidx.camera:camera-view:$camerax_version"
-    implementation "androidx.compose.material3:material3:1.0.0-alpha13"
-    def version = '2.4.2'
+    implementation "androidx.compose.material3:material3:1.0.0-beta02"
+    def version = '2.5.2'
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"
 }

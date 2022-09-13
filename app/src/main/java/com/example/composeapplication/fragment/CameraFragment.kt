@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import com.example.composeapplication.ui.screen.FeatureThatRequiresCameraPermission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
-@Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
 class CameraFragment : Fragment() {
 
     @OptIn(ExperimentalPermissionsApi::class)
