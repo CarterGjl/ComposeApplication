@@ -109,7 +109,7 @@ fun CameraPreview() {
                     try {
                         cameraProvider.unbindAll()
                         cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview)
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
 
                     }
                 }, ContextCompat.getMainExecutor(context)
