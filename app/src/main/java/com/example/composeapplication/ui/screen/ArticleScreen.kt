@@ -60,7 +60,6 @@ import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
-import org.jetbrains.annotations.NotNull
 
 
 private const val TAG = "ArticleScreen"
@@ -86,6 +85,15 @@ fun ArticleList(
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
+//        item {
+//            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw
+//                .loading_moving_box))
+//            val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
+//            LottieAnimation(
+//                composition = composition,
+//                progress = { progress },
+//            )
+//        }
         stickyHeader {
             Box(
                 Modifier
@@ -601,7 +609,7 @@ fun HotkeyItem(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LabelTextButton(
-    @NotNull text: String,
+    text: String,
     modifier: Modifier = Modifier,
     isSelect: Boolean = true,
     specTextColor: Color? = null,

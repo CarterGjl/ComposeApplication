@@ -1,5 +1,6 @@
 package com.example.composeapplication.activity.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.res.Resources
 import android.os.Process
@@ -13,6 +14,7 @@ fun Activity.killAppAndRemoveTask(){
     Process.killProcess(Process.myPid())
 }
 
+@SuppressLint("InternalInsetResource", "DiscouragedApi")
 fun Resources.getStatusBarHeight():Int {
     var statusBarHeight = 0
     val resourceId = getIdentifier("status_bar_height", "dimen", "android")
