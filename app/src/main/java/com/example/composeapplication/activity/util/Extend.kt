@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.composeapplication.activity.util
 
 import android.app.Activity
@@ -10,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions.Companion.ACTION_REQUEST_PERMISSIONS
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions.Companion.EXTRA_PERMISSIONS
-import androidx.activity.result.registerForActivityResult
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 

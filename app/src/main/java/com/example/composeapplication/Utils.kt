@@ -1,17 +1,14 @@
-@file:Suppress("unused", "LiftReturnOrAssignment", "NullableBooleanElvis", "DEPRECATION")
+@file:Suppress("unused", "LiftReturnOrAssignment", "NullableBooleanElvis")
 
 package com.example.composeapplication
 
 import android.content.Context
-import android.media.AudioAttributes
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
+import android.os.*
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 
 private val PATTERN = longArrayOf(200, 150)
 
@@ -28,21 +25,16 @@ object Utils {
 
     fun logDebug(tag: String, message: String, throwable: Throwable? = null) {
         if (Log.isLoggable(TAG_DEBUG, Log.DEBUG)) {
-            if (throwable != null)
-                Log.d(tag, message, throwable)
-            else
-                Log.d(tag, message)
+            if (throwable != null) Log.d(tag, message, throwable)
+            else Log.d(tag, message)
         }
     }
 
     fun ensureNetworkAvailable(context: Context, needToast: Boolean = true): Boolean {
         val isAvailable = isNetworkAvailable(context)
         if (!isAvailable && needToast) Toast.makeText(
-            context,
-            R.string.search_failure,
-            Toast.LENGTH_SHORT
-        )
-            .show()
+            context, R.string.search_failure, Toast.LENGTH_SHORT
+        ).show()
         return isAvailable
     }
 
@@ -63,27 +55,37 @@ object Utils {
     }
 
     fun Context.vibrateOnce() {
-        val defaultVibrator: Vibrator
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager =
                 getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            defaultVibrator = vibratorManager.defaultVibrator
+            tryVibrate(vibratorManager, VibrationEffect.Composition.PRIMITIVE_LOW_TICK)
         } else {
-            defaultVibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val defaultVibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             defaultVibrator.vibrate(
                 VibrationEffect.createOneShot(
-                    300,
-                    VibrationEffect.DEFAULT_AMPLITUDE
+                    300, VibrationEffect.DEFAULT_AMPLITUDE
                 )
             )
-        } else {
-            val audioAttribute = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .build()
-            defaultVibrator.vibrate(PATTERN, -1, audioAttribute)
         }
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun isPrimitiveSupported(vibratorManager: VibratorManager, effectId: Int): Boolean {
+        return vibratorManager.defaultVibrator.areAllPrimitivesSupported(effectId)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun tryVibrate(vibratorManager: VibratorManager, effectId: Int) {
+        if (isPrimitiveSupported(vibratorManager, effectId)) {
+            vibratorManager.vibrate(
+                CombinedVibration.createParallel(
+                    VibrationEffect.startComposition().addPrimitive(effectId).compose()
+                )
+            )
+        }
+
     }
 }

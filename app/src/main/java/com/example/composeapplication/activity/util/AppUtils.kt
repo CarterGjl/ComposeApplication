@@ -9,6 +9,7 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 
+@Suppress("unused")
 fun Activity.killAppAndRemoveTask(){
     finishAndRemoveTask()
     Process.killProcess(Process.myPid())
