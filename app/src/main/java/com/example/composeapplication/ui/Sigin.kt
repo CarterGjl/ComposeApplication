@@ -44,9 +44,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignInContent(
-    state: SignInState,
-    onSignIn: (email: String, password: String) -> Unit,
-    modifier: Modifier
+    state: SignInState, onSignIn: (email: String, password: String) -> Unit, modifier: Modifier
 ) {
     when (state) {
 //        SignInState.SignedOut -> SignIn(onSignIn)
@@ -115,7 +113,7 @@ fun Fool() {
         SideEffect {
             Log.d(TAG, "SideEffect")
         }
-        LaunchedEffect(key1 = text){
+        LaunchedEffect(key1 = text) {
             Log.d(TAG, "LaunchedEffect")
         }
         Log.d(TAG, "Button content lambda")
@@ -130,8 +128,7 @@ fun Email(
     imeAction: ImeAction = ImeAction.Next,
     omImeAction: () -> Unit = {}
 ) {
-    OutlinedTextField(
-        value = emailState.text,
+    OutlinedTextField(value = emailState.text,
         onValueChange = {
             emailState.text = it
         },
@@ -154,14 +151,11 @@ fun Email(
         textStyle = MaterialTheme.typography.body2,
         isError = emailState.showErrors(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                omImeAction()
-            }
-        )
-    )
+        keyboardActions = KeyboardActions(onDone = {
+            omImeAction()
+        }))
 
-    emailState.getError()?.let{ error ->
+    emailState.getError()?.let { error ->
         TextFieldError(textError = error)
     }
 }
@@ -177,8 +171,7 @@ fun Password(
     val showPassword = remember {
         mutableStateOf(false)
     }
-    OutlinedTextField(
-        value = passwordState.text,
+    OutlinedTextField(value = passwordState.text,
         onValueChange = {
             passwordState.text = it
             passwordState.enableShowErrors()
@@ -195,8 +188,7 @@ fun Password(
         label = {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
-                    text = label,
-                    style = MaterialTheme.typography.body2
+                    text = label, style = MaterialTheme.typography.body2
                 )
             }
         },
@@ -224,12 +216,9 @@ fun Password(
         },
         isError = passwordState.showErrors(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                onImeAction()
-            }
-        )
-    )
+        keyboardActions = KeyboardActions(onDone = {
+            onImeAction()
+        }))
 
     TextFieldError(textError = passwordState.errorText)
 }
@@ -274,7 +263,8 @@ fun SignIn(viewState: SignInState, onNavigationEvent: (SignInEvent) -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxWidth()) {
-        SignInContent(viewState
+        SignInContent(
+            viewState
         ) { email, password ->
             onNavigationEvent(SignInEvent.SignIn(email, password))
         }
@@ -283,12 +273,10 @@ fun SignIn(viewState: SignInState, onNavigationEvent: (SignInEvent) -> Unit) {
             onClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        message = "snackbarErrorText",
-                        actionLabel = "snackbarActionLabel"
+                        message = "snackbarErrorText", actionLabel = "snackbarActionLabel"
                     )
                 }
-            },
-            modifier = Modifier.fillMaxWidth()
+            }, modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(id = R.string.forgot_password))
         }
@@ -310,19 +298,18 @@ fun SignInContent(
         Email(emailState, omImeAction = { focusRequester.requestFocus() })
 
         Spacer(modifier = Modifier.height(16.dp))
-//    when(viewState){
-//        is SignInState.Error -> {
-//            passwordState.errorText = viewState.error
-//        }
-//        SignInState.InProgress -> passwordState.errorText = ""
-//    }
+        when (viewState) {
+            is SignInState.Error -> {
+                emailState.errorText = viewState.error
+            }
+            SignInState.InProgress -> emailState.errorText = ""
+            else -> {}
+        }
         val passwordState = remember { PasswordState() }
-        Password(
-            label = stringResource(id = R.string.password),
+        Password(label = stringResource(id = R.string.password),
             passwordState = passwordState,
             modifier = Modifier.focusRequester(focusRequester),
-            onImeAction = { onSignInSubmitted(emailState.text, passwordState.text) }
-        )
+            onImeAction = { onSignInSubmitted(emailState.text, passwordState.text) })
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { onSignInSubmitted(emailState.text, passwordState.text) },
@@ -341,21 +328,21 @@ fun SignInContent(
 @Composable
 fun LoginScreen(viewModel: SignInViewModel = viewModel(), navController: NavController) {
 
-    Scaffold(
-        topBar = {
-            MyAppBar(id = R.string.sign_in)
-        }
-    ) {
-
-        val viewState: SignInState by viewModel.state.observeAsState(initial = SignInState.SignedOut)
-        when (viewState) {
-            is SignInState.SignedOut,
-            is SignInState.Error
-            -> SignInScreen(viewModel = viewModel,viewState)
-            SignInState.InProgress -> SignInProgress()
-            SignInState.SignedIn -> {
-                navController.navigate("mine") {
-                    popUpTo("article")
+    Scaffold(topBar = {
+        MyAppBar(id = R.string.sign_in)
+    }) {
+        Column(modifier = Modifier.padding(it)) {
+            val viewState: SignInState by viewModel.state.observeAsState(initial = SignInState.SignedOut)
+            when (viewState) {
+                is SignInState.SignedOut, is SignInState.Error -> SignInScreen(
+                    viewModel = viewModel,
+                    viewState
+                )
+                SignInState.InProgress -> SignInProgress()
+                SignInState.SignedIn -> {
+                    navController.navigate("mine") {
+                        popUpTo("article")
+                    }
                 }
             }
         }
