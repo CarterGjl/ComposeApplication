@@ -1,10 +1,14 @@
 package com.example.composeapplication.ui.weather
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Text
@@ -29,6 +33,7 @@ import com.example.composeapplication.R
 
 private const val TAG = "WeatherPage"
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeatherPage() {
     Log.d(TAG, "WeatherPage: ")
@@ -87,7 +92,13 @@ fun WeatherPage() {
                             )
                         }
                     }
-                    LazyRow(Modifier.padding(0.dp, 60.dp, 0.dp, 0.dp)) {
+                    val state = rememberLazyListState()
+
+                    val snappingLayout = remember(state) { SnapLayoutInfoProvider(state) }
+                    LazyRow(
+                        Modifier.padding(0.dp, 60.dp, 0.dp, 0.dp),
+//                        flingBehavior = rememberSnapFlingBehavior(snappingLayout)
+                    ) {
                         items(weatherList.subList(1, weatherList.size)) {
                             WeatherItem(it)
                         }
