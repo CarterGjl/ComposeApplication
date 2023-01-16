@@ -21,6 +21,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -58,7 +61,6 @@ import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.gson.Gson
 
 
@@ -175,7 +177,7 @@ fun ArticleList(
 /*
 * 支持分页的文章列表
 * */
-@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun ArticleListPaging(
     onClick: (url: String, title: String) -> Unit
@@ -188,83 +190,87 @@ private fun ArticleListPaging(
     val banners by bannerViewModel.banners.observeAsState()
 
     val collectAsLazyPagingItems = viewState.pagingData.collectAsLazyPagingItems()
-    val state = rememberSwipeRefreshState(false)
+    var refreshing by remember { mutableStateOf(false) }
+    Log.d(TAG, "ArticleListPaging: $refreshing")
+    val pullRefreshState =
+        rememberPullRefreshState(refreshing, { collectAsLazyPagingItems.refresh() })
+
     val listState =
         if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(15.dp),
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-        modifier = Modifier.fillMaxHeight(),
-    ) {
-        item {
-            banners?.let { NewsBanner(it, onClick) }
-        }
-        items(collectAsLazyPagingItems) { data ->
-            ArticleItem2(data!!) {
-                onClick(it, data.title)
-            }
-        }
+    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+        LazyColumn(
+            state = listState,
+            contentPadding = PaddingValues(15.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            modifier = Modifier.fillMaxHeight(),
+        ) {
 
-        collectAsLazyPagingItems.apply {
-            state.isRefreshing = loadState.refresh is LoadState.Loading
-            when {
-                loadState.refresh is LoadState.Loading -> {
-                    item {
-                        Box(
-                            modifier = Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator(color = Color.Red).also {
-                                Log.d(TAG, "loading: ")
+            item {
+                banners?.let { NewsBanner(it, onClick) }
+            }
+            items(collectAsLazyPagingItems) { data ->
+                ArticleItem2(data!!) {
+                    onClick(it, data.title)
+                }
+            }
+
+            collectAsLazyPagingItems.apply {
+                refreshing = loadState.refresh is LoadState.Loading
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item {
+                            Box(
+                                modifier = Modifier.fillParentMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(color = Color.Red).also {
+                                    Log.d(TAG, "loading: ")
+                                }
                             }
                         }
                     }
-                }
-                loadState.append is LoadState.Loading -> {
-                    item {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.fillParentMaxWidth()
-                        ) {
-                            CircularProgressIndicator(color = Color.Red).also {
-                                Log.d(TAG, "loading: ")
+                    loadState.append is LoadState.Loading -> {
+                        item {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillParentMaxWidth()
+                            ) {
+                                CircularProgressIndicator(color = Color.Red).also {
+                                    Log.d(TAG, "loading: ")
+                                }
                             }
                         }
                     }
-                }
-                loadState.refresh is LoadState.Error -> {
-                    val e = loadState.refresh as LoadState.Error
-                    item {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.clickable {
-                                retry()
-                            }) {
-                            Text(text = e.error.message!!)
+                    loadState.refresh is LoadState.Error -> {
+                        val e = loadState.refresh as LoadState.Error
+                        item {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.clickable {
+                                    retry()
+                                }) {
+                                Text(text = e.error.message!!)
+                            }
                         }
                     }
-                }
-                loadState.append is LoadState.Error -> {
-                    val e = loadState.append as LoadState.Error
-                    item {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.clickable {
-                                retry()
-                            }) {
-                            Text(text = e.error.message!!)
+                    loadState.append is LoadState.Error -> {
+                        val e = loadState.append as LoadState.Error
+                        item {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.clickable {
+                                    retry()
+                                }) {
+                                Text(text = e.error.message!!)
+                            }
                         }
                     }
                 }
             }
         }
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
+
     }
-//    SwipeRefresh(state = state, onRefresh = {
-//        collectAsLazyPagingItems.refresh()
-//    }) {
-//
-//    }
 
 }
 
