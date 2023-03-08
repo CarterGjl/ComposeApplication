@@ -1,5 +1,6 @@
 package com.example.composeapplication.ui
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -37,7 +38,7 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
     var searchQuery by remember { mutableStateOf("") }
 
     val baseContext = articleViewModel.getApplication<Application>().baseContext
-    if (!Utils.ensureNetworkAvailable(baseContext, false))
+//    if (!Utils.ensureNetworkAvailable(baseContext, false))
 //        ShowDialog(R.string.search_dialog_tip, R.string.search_failure)
     Column {
         Row {

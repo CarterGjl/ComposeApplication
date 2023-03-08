@@ -402,16 +402,16 @@ fun ArticleDetailScreen(
 
 
                     settings.apply {
-                        if (Build.VERSION.SDK_INT >= 33) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             isAlgorithmicDarkeningAllowed = darkTheme
-                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        } /*else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                             val webViewTheme = if (darkTheme) {
                                 WebSettings.FORCE_DARK_ON
                             } else {
                                 WebSettings.FORCE_DARK_OFF
                             }
                             forceDark = webViewTheme
-                        }
+                        }*/
                         javaScriptEnabled = true
                         mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                         domStorageEnabled = true
