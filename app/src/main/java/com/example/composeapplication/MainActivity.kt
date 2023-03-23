@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -46,12 +47,21 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @Suppress("OPT_IN_IS_NOT_ENABLED")
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
-    @OptIn(ExperimentalPermissionsApi::class,
+    @RequiresApi(Build.VERSION_CODES.S)
+    @OptIn(
+        ExperimentalPermissionsApi::class,
         ExperimentalFoundationApi::class,
         ExperimentalPagerApi::class, ExperimentalCoilApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        val audioManager: AudioManager = getSystemService(AudioManager::class.java)
+//        val listener =
+//            OnCommunicationDeviceChangedListener { device -> // Handle changes
+//
+//                Log.d(TAG, "onCreate: $device")
+//            }
+//        audioManager.addOnCommunicationDeviceChangedListener(mainExecutor, listener)
         val splashScreen = installSplashScreen()
         setContent {
             ComposeApplicationTheme {

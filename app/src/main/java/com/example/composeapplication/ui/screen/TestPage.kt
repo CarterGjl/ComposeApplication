@@ -1,100 +1,156 @@
 package com.example.composeapplication.ui.screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import OffsetOverscrollEffect
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.composeapplication.ui.base.*
+import kotlin.math.roundToInt
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TestPage(
 
 ) {
 
-    var pageStateData by remember {
-        mutableStateOf(PageState.CONTENT.bindData())
-    }
-    var isCustomLayout by remember {
-        mutableStateOf(false)
-    }
-    Box(modifier = Modifier.fillMaxSize()) {
-        DefaultStateLayout(
-            modifier = Modifier.fillMaxSize(),
-            pageStateData = pageStateData,
-            onRetry = {
-                pageStateData = PageState.LOADING.bindData()
-            },
-            loading = {
-                if (isCustomLayout) {
-                    CustomLoadingLayout(it)
-                } else {
-                    DefaultLoadingLayout(it)
-                }
-            }
-        ) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "加载成功内容", style = MaterialTheme.typography.h5)
+    val scope = rememberCoroutineScope()
+    val overscroll = remember(scope) { OffsetOverscrollEffect(scope) }
+    LazyColumn(modifier = Modifier.overscroll(overscroll)) {
+        for (i in 1..20){
+            item {
+                CardItem()
             }
         }
 
-        Column(
-            modifier = Modifier
-                .padding(0.dp, 20.dp)
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .align(Alignment.BottomCenter)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                BottomButton(text = "加载中") {
-                    pageStateData = PageState.LOADING.bindData()
-                }
-                BottomButton(text = "空页面") {
-                    pageStateData = PageState.EMPTY.bindData()
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                BottomButton(text = "加载失败") {
-                    pageStateData = PageState.ERROR.bindData()
-                }
-                BottomButton(text = "加载成功") {
-                    pageStateData = PageState.CONTENT.bindData()
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                BottomButton(text = "自定义加载中文案") {
-                    pageStateData = PageState.LOADING.bindData(StateData(tipTex = "自定义加载中文案"))
-                }
-                BottomButton(text = "自定义加载中布局") {
-                    isCustomLayout = !isCustomLayout
-                }
-            }
-        }
     }
+//    val offset = remember { mutableStateOf(0f) }
+//    val scope = rememberCoroutineScope()
+//    // Create the overscroll controller
+//    val overscroll = remember(scope) { OffsetOverscrollEffect(scope) }
+//    // let's build a scrollable that scroll until -512 to 512
+//    val scrollStateRange = (-512f).rangeTo(512f)
+//    Box(
+//        Modifier
+//            .size(150.dp)
+//            .scrollable(
+//                orientation = Orientation.Vertical,
+//                state = rememberScrollableState { delta ->
+//                    // use the scroll data and indicate how much this element consumed.
+//                    val oldValue = offset.value
+//                    // coerce to our range
+//                    offset.value = (offset.value + delta).coerceIn(scrollStateRange)
+//
+//                    offset.value - oldValue // indicate that we consumed what's needed
+//                },
+//                // pass the overscroll to the scrollable so the data is updated
+//                overscrollEffect = overscroll
+//            )
+//            .background(Color.LightGray),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        Text(
+//            offset.value.roundToInt().toString(),
+//            style = TextStyle(fontSize = 32.sp),
+//            modifier = Modifier
+//                // show the overscroll only on the text, not the containers (just for fun)
+//                .overscroll(overscroll)
+//        )
+//    }
+
+//    var pageStateData by remember {
+//        mutableStateOf(PageState.CONTENT.bindData())
+//    }
+//    var isCustomLayout by remember {
+//        mutableStateOf(false)
+//    }
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        DefaultStateLayout(
+//            modifier = Modifier.fillMaxSize(),
+//            pageStateData = pageStateData,
+//            onRetry = {
+//                pageStateData = PageState.LOADING.bindData()
+//            },
+//            loading = {
+//                if (isCustomLayout) {
+//                    CustomLoadingLayout(it)
+//                } else {
+//                    DefaultLoadingLayout(it)
+//                }
+//            }
+//        ) {
+//            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                Text(text = "加载成功内容", style = MaterialTheme.typography.h5)
+//            }
+//        }
+//
+//        Column(
+//            modifier = Modifier
+//                .padding(0.dp, 20.dp)
+//                .fillMaxWidth()
+//                .wrapContentHeight()
+//                .align(Alignment.BottomCenter)
+//        ) {
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .wrapContentHeight(),
+//                horizontalArrangement = Arrangement.SpaceEvenly
+//            ) {
+//                BottomButton(text = "加载中") {
+//                    pageStateData = PageState.LOADING.bindData()
+//                }
+//                BottomButton(text = "空页面") {
+//                    pageStateData = PageState.EMPTY.bindData()
+//                }
+//            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .wrapContentHeight(),
+//                horizontalArrangement = Arrangement.SpaceEvenly
+//            ) {
+//                BottomButton(text = "加载失败") {
+//                    pageStateData = PageState.ERROR.bindData()
+//                }
+//                BottomButton(text = "加载成功") {
+//                    pageStateData = PageState.CONTENT.bindData()
+//                }
+//            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .wrapContentHeight(),
+//                horizontalArrangement = Arrangement.SpaceEvenly
+//            ) {
+//                BottomButton(text = "自定义加载中文案") {
+//                    pageStateData = PageState.LOADING.bindData(StateData(tipTex = "自定义加载中文案"))
+//                }
+//                BottomButton(text = "自定义加载中布局") {
+//                    isCustomLayout = !isCustomLayout
+//                }
+//            }
+//        }
+//    }
 }
 
 @Composable
@@ -144,10 +200,23 @@ fun CustomLoadingLayout(stateLayoutData: StateLayoutData) {
     }
 }
 
+
+@Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
+@Composable
+fun TestPagePreview() {
+    TestPage()
+}
+
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
 @Composable
 fun CardViewPreview() {
-    Column() {
+    CardItem()
+
+}
+
+@Composable
+private fun CardItem() {
+    Column {
 
         var checked by remember { mutableStateOf(true) }
         Switch(modifier = Modifier.fillMaxSize(), checked = checked, onCheckedChange = {
@@ -167,10 +236,7 @@ fun CardViewPreview() {
             )
         }
     }
-
 }
-
-
 
 
 //                    val insets = LocalWindowInsets.current
@@ -200,3 +266,23 @@ fun CardViewPreview() {
 //                        }
 //                    }) {
 //                    }
+
+@OptIn(ExperimentalFoundationApi::class)
+class NoAOpOverscrollEffect : OverscrollEffect {
+    override fun applyToScroll(
+        delta: Offset,
+        source: NestedScrollSource,
+        performScroll: (Offset) -> Offset
+    ): Offset = performScroll(delta)
+
+    override suspend fun applyToFling(
+        velocity: Velocity,
+        performFling: suspend (Velocity) -> Velocity
+    ) { performFling(velocity) }
+
+    override val isInProgress: Boolean
+        get() = false
+
+    override val effectModifier: Modifier
+        get() = Modifier
+}
