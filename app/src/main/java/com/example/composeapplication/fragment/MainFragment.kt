@@ -13,7 +13,6 @@ import com.example.composeapplication.navigation.navigate
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.viewmodel.MainViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 class MainFragment : Fragment() {
@@ -22,7 +21,7 @@ class MainFragment : Fragment() {
     @OptIn(
         ExperimentalPermissionsApi::class,
         ExperimentalFoundationApi::class,
-        ExperimentalPagerApi::class, ExperimentalCoilApi::class
+        ExperimentalCoilApi::class
     )
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

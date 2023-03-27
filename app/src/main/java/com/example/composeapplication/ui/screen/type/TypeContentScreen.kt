@@ -3,12 +3,16 @@
 package com.example.composeapplication.ui.screen.type
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
@@ -24,16 +28,12 @@ import com.example.composeapplication.extend.LocalNavHostController
 import com.example.composeapplication.ui.screen.ArticleItem2
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.screen.type.viewmodel.TypeContentViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 
 private const val TAG = "TypeContentScreen"
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
     val pagerState = rememberPagerState()
@@ -44,7 +44,7 @@ fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
     ) {
 
         HorizontalPager(
-            count = knowledge.children?.size ?: 0,
+            pageCount = knowledge.children?.size ?: 0,
             state = pagerState,
             modifier = Modifier
                 .padding(it)
@@ -71,7 +71,7 @@ fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun TypeContentAppbar(
     knowledge: TreeListResponse.Knowledge,
@@ -128,7 +128,7 @@ private fun TypeContentAppbar(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun LeadingIconTabView(
@@ -167,7 +167,7 @@ fun LeadingIconTabView(
 }
 
 
-@OptIn(ExperimentalPagerApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TypeContentDetail(
     pagerState: PagerState,

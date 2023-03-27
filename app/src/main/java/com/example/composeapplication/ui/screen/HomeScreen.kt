@@ -16,13 +16,11 @@ import androidx.navigation.navigation
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.*
 import com.example.composeapplication.ui.MineScreen
-import com.google.accompanist.pager.ExperimentalPagerApi
 
 private const val TAG = "HomeScreen"
 
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
-@ExperimentalPagerApi
 @Composable
 fun HomeScreen() {
     val navController = rememberNavController()

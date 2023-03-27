@@ -45,7 +45,6 @@ import com.example.composeapplication.viewmodel.MainViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.gson.Gson
 import java.net.URLDecoder
@@ -56,7 +55,6 @@ import java.net.URLEncoder
 @ExperimentalPermissionsApi
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
-@ExperimentalPagerApi
 @Composable
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
@@ -181,7 +179,6 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
 
 @OptIn(ExperimentalPermissionsApi::class,
     ExperimentalFoundationApi::class,
-    ExperimentalPagerApi::class,
     ExperimentalCoilApi::class
 )
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)

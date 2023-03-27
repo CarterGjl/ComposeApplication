@@ -60,7 +60,6 @@ import com.example.composeapplication.viewmodel.State
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.gson.Gson
 
 
@@ -177,7 +176,7 @@ fun ArticleList(
 /*
 * 支持分页的文章列表
 * */
-@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun ArticleListPaging(
     onClick: (url: String, title: String) -> Unit
@@ -275,7 +274,6 @@ private fun ArticleListPaging(
 }
 
 @ExperimentalCoilApi
-@ExperimentalPagerApi
 @Composable
 fun ArticleScreen(
     navController: NavController,

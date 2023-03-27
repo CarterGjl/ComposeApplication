@@ -21,9 +21,6 @@
             android:name=".WebViewActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.bsae.BaseActivity"
-            android:exported="true" />
-        <activity
             android:name=".activity.PhotoActivity"
             android:launchMode="singleTop"
             android:exported="true" />

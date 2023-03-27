@@ -17,7 +17,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composeapplication.Screen
 import com.example.composeapplication.viewmodel.MainViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
 
 val items = listOf(
     Screen.Article,
@@ -26,7 +25,6 @@ val items = listOf(
     Screen.Mine
 )
 
-@ExperimentalPagerApi
 @Composable
 fun BottomNavigationAlwaysShowLabelComponent(
     navController: NavHostController,

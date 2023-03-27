@@ -37,7 +37,6 @@ import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.MainPage
 import com.example.composeapplication.ui.screen.SplashAdScreen
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
@@ -51,7 +50,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
     @OptIn(
         ExperimentalPermissionsApi::class,
         ExperimentalFoundationApi::class,
-        ExperimentalPagerApi::class, ExperimentalCoilApi::class
+        ExperimentalCoilApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
