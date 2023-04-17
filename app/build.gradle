@@ -41,7 +41,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.activity:activity-compose:1.7.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation "androidx.compose.ui:ui:$compose_version"
@@ -90,7 +90,7 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$camerax_version"
     implementation "androidx.compose.material3:material3:1.0.1"
-    def version = '2.6.0-alpha08'
+    def version = '2.6.0-alpha09'
     implementation "androidx.navigation:navigation-compose:$version"
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"
