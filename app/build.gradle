@@ -42,7 +42,7 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.0'
-    implementation 'androidx.activity:activity-compose:1.7.0'
+    implementation 'androidx.activity:activity-compose:1.7.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
@@ -53,7 +53,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0-alpha02'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8'
@@ -75,11 +75,11 @@ dependencies {
     // 流式布局
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
 
-    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation 'androidx.core:core-splashscreen:1.0.1'
     // 替代sharepreference
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation "androidx.datastore:datastore-preferences-core:1.0.0"
-    implementation("androidx.paging:paging-compose:1.0.0-alpha18")
+    implementation('androidx.paging:paging-compose:1.0.0-alpha19')
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 
     def camerax_version = '1.2.2'
@@ -90,7 +90,7 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$camerax_version"
     implementation "androidx.compose.material3:material3:1.0.1"
-    def version = '2.6.0-alpha09'
+    def version = '2.6.0-beta01'
     implementation "androidx.navigation:navigation-compose:$version"
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"

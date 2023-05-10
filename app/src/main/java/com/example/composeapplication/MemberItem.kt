@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 
 @Preview(
     showBackground = true, showSystemUi = true, backgroundColor = 0xFF262629,
-    device = Devices.PIXEL_3, name = "MeeingItem"
+    device = Devices.PIXEL_3, name = "MeetingItem"
 )
 @Composable
 fun MemberItem() {
@@ -92,12 +92,12 @@ fun MemberItem() {
     }
 }
 
-@Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true,backgroundColor = 0xFF262629)
+@Preview(device = Devices.PIXEL_3, showBackground = true, showSystemUi = true,backgroundColor = 0xFF262629)
 @Composable
 fun MeetingList() {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
         items(count = 10, key = {
-
+            it
         }) {
             MemberItem()
         }

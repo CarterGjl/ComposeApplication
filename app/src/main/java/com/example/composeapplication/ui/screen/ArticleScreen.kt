@@ -1,4 +1,4 @@
-@file:Suppress("OPT_IN_IS_NOT_ENABLED", "unused")
+@file:Suppress("unused")
 
 package com.example.composeapplication.ui.screen
 
@@ -58,6 +58,7 @@ import com.example.composeapplication.viewmodel.ArticleViewModel
 import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.State
 import com.example.composeapplication.viewmodel.search.SearchViewModel
+import com.example.composeapplication.widget.FpsMonitor
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import com.google.gson.Gson
@@ -294,6 +295,9 @@ fun ArticleScreen(
                 }
             )
         },
+        floatingActionButton = {
+            FpsMonitor(modifier = Modifier)
+        }
     ) {
         LoadingPage(state = state, loadInit = {
             bannerViewModel.getBanners()
