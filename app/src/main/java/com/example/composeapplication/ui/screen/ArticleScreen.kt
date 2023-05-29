@@ -42,7 +42,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.DIALOG
 import com.example.composeapplication.R
@@ -208,9 +209,15 @@ private fun ArticleListPaging(
             item {
                 banners?.let { NewsBanner(it, onClick) }
             }
-            items(collectAsLazyPagingItems) { data ->
-                ArticleItem2(data!!) {
-                    onClick(it, data.title)
+            items(
+                count = collectAsLazyPagingItems.itemCount,
+                key = collectAsLazyPagingItems.itemKey(),
+                contentType = collectAsLazyPagingItems.itemContentType(
+                )
+            ) { index ->
+                val item = collectAsLazyPagingItems[index]
+                ArticleItem2(item!!) {
+                    onClick(it, item.title)
                 }
             }
 
@@ -229,6 +236,7 @@ private fun ArticleListPaging(
                             }
                         }
                     }
+
                     loadState.append is LoadState.Loading -> {
                         item {
                             Box(
@@ -241,6 +249,7 @@ private fun ArticleListPaging(
                             }
                         }
                     }
+
                     loadState.refresh is LoadState.Error -> {
                         val e = loadState.refresh as LoadState.Error
                         item {
@@ -253,6 +262,7 @@ private fun ArticleListPaging(
                             }
                         }
                     }
+
                     loadState.append is LoadState.Error -> {
                         val e = loadState.append as LoadState.Error
                         item {

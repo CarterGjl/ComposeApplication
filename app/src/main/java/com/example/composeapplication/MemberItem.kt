@@ -1,5 +1,6 @@
 package com.example.composeapplication
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,11 +16,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 
 @Preview(
-    showBackground = true, showSystemUi = true, backgroundColor = 0xFF262629,
-    device = Devices.PIXEL_3, name = "MeetingItem"
+    showSystemUi = true,
+    backgroundColor = 0xFF262629,
+    device = "spec:width=1080px,height=2160px,dpi=440",
+    name = "MeetingItem",
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
+    wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE,
+    showBackground = true
 )
 @Composable
 fun MemberItem() {
@@ -42,20 +49,16 @@ fun MemberItem() {
             contentDescription = "icon"
         )
         Column(
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.wrapContentHeight()
+            verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.wrapContentHeight()
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
-                    modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "金字经",
-                        color = Color(0xFFE8E9EB)
+                        text = "金字经", color = Color(0xFFE8E9EB)
                     )
                     Box(
                         modifier = Modifier
@@ -82,7 +85,9 @@ fun MemberItem() {
                 Button(
                     modifier = Modifier
                         .height(21.dp)
-                        .width(48.dp), onClick = { /*TODO*/ }, contentPadding = PaddingValues(0.dp)
+                        .width(48.dp),
+                    onClick = { /*TODO*/ },
+                    contentPadding = PaddingValues(0.dp)
                 ) {
                     Text(text = "呼叫")
                 }
@@ -92,10 +97,19 @@ fun MemberItem() {
     }
 }
 
-@Preview(device = Devices.PIXEL_3, showBackground = true, showSystemUi = true,backgroundColor = 0xFF262629)
+@Preview(
+    device = Devices.PIXEL_3,
+    showBackground = true,
+    showSystemUi = true,
+    backgroundColor = 0xFF262629
+)
 @Composable
 fun MeetingList() {
-    LazyColumn(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
         items(count = 10, key = {
             it
         }) {
