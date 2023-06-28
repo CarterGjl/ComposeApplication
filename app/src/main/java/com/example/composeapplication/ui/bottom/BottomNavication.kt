@@ -22,7 +22,8 @@ val items = listOf(
     Screen.Article,
     Screen.TypeTree,
     Screen.Weather,
-    Screen.Mine
+    Screen.Mine,
+    Screen.Music
 )
 
 @Composable
@@ -34,10 +35,12 @@ fun BottomNavigationAlwaysShowLabelComponent(
     val currentDestination = navBackStackEntry?.destination
     BottomNavigation(
         Modifier
-            .height(80.dp +
-                    WindowInsets.navigationBars
-                        .asPaddingValues()
-                        .calculateBottomPadding())
+            .height(
+                80.dp +
+                        WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateBottomPadding()
+            )
     ) {
         items.forEachIndexed { _, screen ->
             BottomNavigationItem(

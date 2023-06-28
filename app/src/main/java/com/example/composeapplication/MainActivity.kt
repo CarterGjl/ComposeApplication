@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -43,7 +42,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
-    @RequiresApi(Build.VERSION_CODES.S)
     @OptIn(
         ExperimentalPermissionsApi::class,
         ExperimentalFoundationApi::class,
@@ -168,6 +166,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     object Weather : Screen("weather", R.string.weather, Icons.Filled.AccountBox)
     object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
     object Mine : Screen("mine", R.string.mine, Icons.Filled.AdminPanelSettings)
+    object Music : Screen("music", R.string.music, Icons.Filled.QueueMusic)
     object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
     object Search : Screen("search", R.string.search, Icons.Filled.Search)

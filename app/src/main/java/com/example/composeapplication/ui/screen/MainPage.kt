@@ -147,6 +147,9 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                     val fromJson = Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
                     TypeContentScreen(knowledge = fromJson)
                 }
+                composable(Screen.Music.route) {
+                    PlayerPage()
+                }
                 navigation("login", Screen.Mine.route) {
                     composable("login") {
                         LoginScreen(navController = navController)

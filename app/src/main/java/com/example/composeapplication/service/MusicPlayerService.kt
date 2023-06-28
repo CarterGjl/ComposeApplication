@@ -7,7 +7,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
-import com.example.composeapplication.R
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
@@ -18,10 +17,14 @@ import com.google.common.util.concurrent.ListenableFuture
  */
 class MusicPlayerService : MediaLibraryService() {
 
+    companion object {
+        private const val PLAYBACK_NOTIFICATION_ID = 1
+        private const val PLAYBACK_CHANNEL_ID = "playback_channel"
+    }
+
     private lateinit var player: ExoPlayer
     private lateinit var session: MediaLibrarySession
-    private val PLAYBACK_NOTIFICATION_ID = 1
-    private val PLAYBACK_CHANNEL_ID = "playback_channel"
+
     private lateinit var playerNotificationManager: PlayerNotificationManager
 
     @androidx.media3.common.util.UnstableApi
@@ -56,11 +59,7 @@ class MusicPlayerService : MediaLibraryService() {
             applicationContext,
             PLAYBACK_NOTIFICATION_ID,
             PLAYBACK_CHANNEL_ID
-        )
-            .setSmallIconResourceId(R.drawable.ic_bruce)
-            .build()
-//        playerNotificationManager.setColorized(true)
-//        playerNotificationManager.setColor(0xFF2d3b2d.toInt())
+        ).build()
         playerNotificationManager.setPlayer(player)
     }
 
