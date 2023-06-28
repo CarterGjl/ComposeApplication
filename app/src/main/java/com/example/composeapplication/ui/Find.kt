@@ -1,6 +1,5 @@
 package com.example.composeapplication.ui
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,8 +37,6 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
     var searchQuery by remember { mutableStateOf("") }
 
     val baseContext = articleViewModel.getApplication<Application>().baseContext
-//    if (!Utils.ensureNetworkAvailable(baseContext, false))
-//        ShowDialog(R.string.search_dialog_tip, R.string.search_failure)
     Column {
         Row {
 
@@ -110,19 +107,19 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
             articleViewModel.searchMoviesComposeCoroutines()
         }
     }
-    val movieData: State<List<Movie>>? = null
-    val movies = movieData?.value ?: return
+    val movieData = remember {
+        emptyList<Movie>()
+    }
 
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxWidth()
             .padding(2.dp),
-        // cells = GridCells.Adaptive(minSize = 128.dp),
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(2.dp)
     ) {
-        items(movies.size) { index ->
-            MovieThumbnail(movies[index], onClick = { onClick(movies[index]) })
+        items(movieData.size) { index ->
+            MovieThumbnail(movieData[index], onClick = { onClick(movieData[index]) })
         }
     }
 }

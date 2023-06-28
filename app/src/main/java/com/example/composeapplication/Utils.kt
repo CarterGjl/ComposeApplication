@@ -54,6 +54,7 @@ object Utils {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun Context.vibrateOnce() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -61,11 +62,11 @@ object Utils {
                 getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             tryVibrate(vibratorManager, VibrationEffect.Composition.PRIMITIVE_LOW_TICK)
         } else {
+            @Suppress("DEPRECATION")
             val defaultVibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            val effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
             defaultVibrator.vibrate(
-                VibrationEffect.createOneShot(
-                    300, VibrationEffect.DEFAULT_AMPLITUDE
-                )
+                effect
             )
         }
 

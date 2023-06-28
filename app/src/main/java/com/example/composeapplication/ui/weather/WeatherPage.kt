@@ -15,8 +15,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -92,12 +93,12 @@ fun WeatherPage() {
                             )
                         }
                     }
-                    val state = rememberLazyListState()
+                    val state1 = rememberLazyListState()
 
-                    val snappingLayout = remember(state) { SnapLayoutInfoProvider(state) }
+                    val snappingLayout = remember { SnapLayoutInfoProvider(state1) }
                     LazyRow(
                         Modifier.padding(0.dp, 60.dp, 0.dp, 0.dp),
-//                        flingBehavior = rememberSnapFlingBehavior(snappingLayout)
+                        flingBehavior = rememberSnapFlingBehavior(snappingLayout)
                     ) {
                         items(weatherList.subList(1, weatherList.size)) {
                             WeatherItem(it)
@@ -160,12 +161,12 @@ fun Counter(count: Int, updateCount: (Int) -> Unit) {
 @Preview
 @Composable
 fun PreviewCounter() {
-    val counterState = remember { mutableStateOf(0) }
+    var counterState by remember { mutableIntStateOf(0) }
 
     Counter(
-        count = counterState.value,
+        count = counterState,
         updateCount = { newCount ->
-            counterState.value = newCount
+            counterState = newCount
         }
     )
 }

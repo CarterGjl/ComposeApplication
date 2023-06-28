@@ -36,7 +36,12 @@ private const val TAG = "TypeContentScreen"
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        knowledge.children?.size ?: 0
+    }
     Scaffold(
         topBar = {
             TypeContentAppbar(knowledge, pagerState)
@@ -44,7 +49,6 @@ fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
     ) {
 
         HorizontalPager(
-            pageCount = knowledge.children?.size ?: 0,
             state = pagerState,
             modifier = Modifier
                 .padding(it)

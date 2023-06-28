@@ -60,8 +60,6 @@ import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.State
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.example.composeapplication.widget.FpsMonitor
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
 import com.google.gson.Gson
 
 
@@ -600,6 +598,7 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
 /**
  * 搜索热词的item
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HotkeyItem(
     hotkeys: List<HotKey>,
@@ -609,7 +608,6 @@ fun HotkeyItem(
         Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        mainAxisSize = SizeMode.Expand
     ) {
         hotkeys.forEach {
             LabelTextButton(

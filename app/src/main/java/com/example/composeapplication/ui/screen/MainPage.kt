@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.AppRuntime
 import com.example.composeapplication.Screen
@@ -40,23 +42,22 @@ import com.example.composeapplication.ui.screen.type.TypeScreen
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.weather.WeatherPage
 import com.example.composeapplication.viewmodel.MainViewModel
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+//import com.google.accompanist.navigation.animation.composable
+
+//import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.gson.Gson
 import java.net.URLDecoder
 import java.net.URLEncoder
 
 
-@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalPermissionsApi
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
 @Composable
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     val rememberScaffoldState = rememberScaffoldState()
     AppRuntime.rememberScaffoldState = rememberScaffoldState
     viewModel.setNavControllerA(navController)
@@ -82,7 +83,7 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
         scaffoldState = rememberScaffoldState
     ) {
         ProvideNavHostController(navHostController = navController) {
-            AnimatedNavHost(
+            NavHost(
                 modifier = Modifier.padding(it),
                 navController = navController,
                 startDestination = Screen.Article.route
@@ -221,7 +222,6 @@ private fun AppBar(navController: NavHostController, mainViewModel: MainViewMode
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.mycomposable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
@@ -232,7 +232,7 @@ fun NavGraphBuilder.mycomposable(
         route = route,
         content = content,
         arguments = arguments,
-        deepLinks = deepLinks
+        deepLinks = deepLinks,
 //        enterTransition = {
 //            slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(700))
 //        },

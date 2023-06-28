@@ -28,7 +28,7 @@ fun SplashAdScreen(onCloseAd:()->Unit,splashViewModel: SplashViewModel = viewMod
     Box(modifier = Modifier.fillMaxSize()){
         //广告或者推广的背景图
         var time by remember {
-            mutableStateOf(3)
+            mutableIntStateOf(3)
         }
         LaunchedEffect(true) {
             splashViewModel.countDownCoroutines(3, onTick = {

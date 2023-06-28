@@ -32,9 +32,13 @@ import kotlin.math.sign
 @Composable
 fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -> Unit) {
     Box(modifier = Modifier.height(200.dp)) {
-        val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0f
+        ) {
+            topStories.size
+        }
         HorizontalPager(
-            pageCount = topStories.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize()

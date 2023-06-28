@@ -1,5 +1,6 @@
 package com.example.composeapplication.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import coil.compose.SubcomposeAsyncImage
+import com.example.composeapplication.R
 import com.example.composeapplication.Utils
 
 @Composable
@@ -39,9 +42,9 @@ fun LoadImage(
                 "Image succeed with source:${it.result}"
             )
         },
-//        error = {
-//            Image(painterResource(R.drawable.ic_error), contentDescription = "Error")
-//        },
+        error = {
+            Image(painterResource(R.drawable.ic_error), contentDescription = "Error")
+        },
         loading = {
             if (placeholderColor != null) {
                 Spacer(

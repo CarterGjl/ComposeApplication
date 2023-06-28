@@ -1,5 +1,3 @@
-@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
-
 package com.example.composeapplication
 
 import android.animation.Animator
@@ -43,7 +41,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 // 官方demo地址
 // https://github.com/android/compose-samples
 
-@Suppress("OPT_IN_IS_NOT_ENABLED")
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
     @RequiresApi(Build.VERSION_CODES.S)
