@@ -125,7 +125,9 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                                 data = Uri.fromParts("package", current.packageName, null)
                             }
                         current.startActivity(intent)
-                    })
+                    }) {
+                        CameraPreview()
+                    }
                 }
                 composable(Screen.TypeTree.route) {
                     TypeScreen { knowledge ->
@@ -144,7 +146,8 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 }
                 composable("type_content?knowledge={knowledge}") { backStackEntry ->
                     val knowledge: String = backStackEntry.arguments?.getString("knowledge") ?: ""
-                    val fromJson = Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
+                    val fromJson =
+                        Gson().fromJson(knowledge, TreeListResponse.Knowledge::class.java)
                     TypeContentScreen(knowledge = fromJson)
                 }
                 composable(Screen.Music.route) {
@@ -179,7 +182,8 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class,
+@OptIn(
+    ExperimentalPermissionsApi::class,
     ExperimentalFoundationApi::class,
     ExperimentalCoilApi::class
 )

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
+import com.example.composeapplication.ui.screen.CameraPreview
 import com.example.composeapplication.ui.screen.FeatureThatRequiresCameraPermission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
@@ -30,7 +31,9 @@ class CameraFragment : Fragment() {
                             data = Uri.fromParts("package", current.packageName, null)
                         }
                     current.startActivity(intent)
-                })
+                }) {
+                    CameraPreview()
+                }
             }
         }
     }

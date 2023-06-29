@@ -29,12 +29,33 @@ import com.google.accompanist.permissions.rememberPermissionState
 @ExperimentalPermissionsApi
 @Composable
 fun FeatureThatRequiresCameraPermission(
-    navigateToSettingsScreen: () -> Unit
+    navigateToSettingsScreen: () -> Unit,
+    content: @Composable (() -> Unit),
+) {
+    PermissionRequest(
+        navigateToSettingsScreen = navigateToSettingsScreen,
+        content = content
+    )
+}
+
+@ExperimentalPermissionsApi
+@Composable
+fun PermissionRequest(
+    permission: String = Manifest.permission.CAMERA,
+    navigateToSettingsScreen: () -> Unit,
+
+    permissionNotAvailable: String = "Camera permission denied. See this FAQ with information about why we need this permission. Please, grant us access on the Settings screen.",
+    desc: String = "The camera is important for this app. Please grant the permission.",
+    content: @Composable () -> Unit,
 ) {
     var doNotShowRationale by rememberSaveable { mutableStateOf(false) }
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+    val cameraPermissionState = rememberPermissionState(permission)
+    LaunchedEffect(key1 = "permission") {
+        cameraPermissionState.launchPermissionRequest()
+    }
     PermissionRequired(
         permissionState = cameraPermissionState,
+        content = content,
         permissionNotGrantedContent = {
             if (doNotShowRationale) {
                 Text("Feature not available")
@@ -44,7 +65,7 @@ fun FeatureThatRequiresCameraPermission(
                         .statusBarsPadding()
                         .padding(10.dp)
                 ) {
-                    Text("The camera is important for this app. Please grant the permission.")
+                    Text(desc)
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         horizontalArrangement = Arrangement.Center,
@@ -64,8 +85,7 @@ fun FeatureThatRequiresCameraPermission(
         permissionNotAvailableContent = {
             Column {
                 Text(
-                    "Camera permission denied. See this FAQ with information about why we " +
-                            "need this permission. Please, grant us access on the Settings screen."
+                    ""
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = navigateToSettingsScreen) {
@@ -73,9 +93,6 @@ fun FeatureThatRequiresCameraPermission(
                 }
             }
         })
-    {
-        CameraPreview()
-    }
 }
 
 @Composable
