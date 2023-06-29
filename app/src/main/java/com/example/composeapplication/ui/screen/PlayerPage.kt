@@ -4,10 +4,16 @@ import android.content.ComponentName
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -80,12 +86,22 @@ fun PlayerPage() {
         LazyColumn(
             Modifier
                 .padding(it)
-                .padding(vertical = 8.dp),
+                .padding(top = 8.dp),
 
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
 
+
             items(count = list.size) { position ->
+                val bottom = if (position == list.size - 1) {
+                    WindowInsets
+                        .navigationBars
+                        .only(WindowInsetsSides.Bottom)
+                        .asPaddingValues()
+                        .calculateBottomPadding()
+                } else {
+                    0.dp
+                }
                 Surface(
                     shape = RoundedCornerShape(10.dp),
                     elevation = 10.dp,
@@ -93,7 +109,7 @@ fun PlayerPage() {
                         .padding(horizontal = 8.dp)
                         .fillMaxWidth()
                         .height(100.dp)
-
+                        .padding(bottom = bottom)
                 ) {
                     Button(
                         colors = ButtonDefaults.buttonColors(
@@ -112,7 +128,11 @@ fun PlayerPage() {
                             val album = list[position].album
                             if (album != null) {
                                 Image(
-                                    modifier = Modifier.clip(RoundedCornerShape(10.dp)),
+                                    modifier = Modifier
+                                        .height(60.dp)
+                                        .width(60.dp)
+                                        .clip(RoundedCornerShape(10.dp)),
+
                                     painter = BitmapPainter(album.asImageBitmap()),
                                     contentDescription = ""
                                 )

@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Size
+import androidx.compose.ui.unit.dp
 import com.example.composeapplication.R
 
 /**
@@ -85,7 +86,20 @@ object MetadataReaderUtils {
                 contentUri, Size(120, 120), null
             )
         } catch (e: Exception) {
-            return BitmapFactory.decodeResource(context.resources, R.drawable.ic_bruce)
+            var albumPicture =
+                BitmapFactory.decodeResource(context.resources, R.drawable.ic_bruce)
+            val width = albumPicture.width
+            val height = albumPicture.height
+            // 创建操作图片用的Matrix对象
+            val matrix = Matrix()
+            // 计算缩放比例
+            val sx = (120.dp.value/ width)
+            val sy = (120.dp.value / height)
+            // 设置缩放比例
+            matrix.postScale(sx, sy)
+            // 建立新的bitmap，其内容是对原bitmap的缩放后的图
+            albumPicture = Bitmap.createBitmap(albumPicture, 0, 0, width, height, matrix, false)
+            return albumPicture
         }
     }
 
