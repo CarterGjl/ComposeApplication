@@ -151,7 +151,8 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                     TypeContentScreen(knowledge = fromJson)
                 }
                 composable(Screen.Music.route) {
-                    PlayerPage()
+                    VideoScreen()
+//                    PlayerPage()
                 }
                 navigation("login", Screen.Mine.route) {
                     composable("login") {

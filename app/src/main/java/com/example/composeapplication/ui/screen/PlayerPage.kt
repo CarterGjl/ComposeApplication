@@ -2,10 +2,7 @@ package com.example.composeapplication.ui.screen
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -38,6 +35,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.core.content.IntentCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
@@ -65,9 +63,15 @@ fun PlayerPage() {
         Manifest.permission.READ_EXTERNAL_STORAGE
     }
     PermissionRequest(permission = permission, navigateToSettingsScreen = {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", current.packageName, null)
-        }
+//        val intent = Intent("miui.intent.action.APP_PERM_EDITOR")
+//        intent.putExtra("extra_pkgname",current.packageName)
+//        val componentName = ComponentName("com.miui.securitycenter","com.miui.permcenter.permissions.PermissionsEditorActivity")
+//            intent.component = componentName
+        val intent =
+            IntentCompat.createManageUnusedAppRestrictionsIntent(current, current.packageName)
+//        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+//            data = Uri.fromParts("package", current.packageName, null)
+//        }
         current.startActivity(intent)
     }) {
         lateinit var player: Player
