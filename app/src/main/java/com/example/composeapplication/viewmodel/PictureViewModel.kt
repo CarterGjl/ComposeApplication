@@ -13,7 +13,7 @@ private const val TAG = "PictureViewModel"
 
 class PictureViewModel :BaseViewModel() {
 
-    var laLazyPagingItems : LazyPagingItems<PictureModel>? =null
+    private var laLazyPagingItems : LazyPagingItems<PictureModel>? =null
 
     fun setLazyPagingItems(laLazyPagingItems: LazyPagingItems<PictureModel>) {
         this.laLazyPagingItems = laLazyPagingItems

@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -13,10 +15,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,7 +45,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 // 官方demo地址
 // https://github.com/android/compose-samples
+val LocalScaffoldState = compositionLocalOf<ScaffoldState> { error("LocalScaffoldState 没有提供值！") }
 
+private const val TAG = "MainActivity"
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
     @OptIn(
@@ -56,10 +64,32 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 //                Log.d(TAG, "onCreate: $device")
 //            }
 //        audioManager.addOnCommunicationDeviceChangedListener(mainExecutor, listener)
+
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        //            try {
+//                field = PowerManager.class.getField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").getInt(null);
+//            } catch (Throwable t) {
+//                VoiceChannel.voipError(TAG, "", t);
+//            }
+        val wakeLockLevelSupported =
+            powerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)
+
+        Log.d(TAG, "onCreate: wakeLockLevelSupported  $wakeLockLevelSupported")
+        val wakeLockProximity = powerManager.newWakeLock(
+            PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "Baiduhi" +
+                    ":CallProximitySensor"
+        )
+        wakeLockProximity.setReferenceCounted(false)
+        wakeLockProximity.acquire(2 * 3600 * 1000)
+        Utils.ensureNetworkAvailable(application)
         val splashScreen = installSplashScreen()
         setContent {
+
             ComposeApplicationTheme {
-                MainPage()
+                val rememberScaffoldState = rememberScaffoldState()
+                CompositionLocalProvider(LocalScaffoldState provides rememberScaffoldState) {
+                    MainPage()
+                }
             }
         }
         splashScreen.setKeepOnScreenCondition {

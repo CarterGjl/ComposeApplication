@@ -6,7 +6,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
@@ -16,9 +17,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FpsMonitor(modifier: Modifier) {
-    var fpsCount by remember { mutableStateOf(0) }
-    var fps by remember { mutableStateOf(0) }
-    var lastUpdate by remember { mutableStateOf(0L) }
+    var fpsCount by remember { mutableIntStateOf(0) }
+    var fps by remember { mutableIntStateOf(0) }
+    var lastUpdate by remember { mutableLongStateOf(0L) }
     Text(
         text = "Fps: $fps", modifier = modifier
             .size(60.dp), color = Color.Red, style = MaterialTheme.typography.body1

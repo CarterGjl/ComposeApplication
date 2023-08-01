@@ -55,10 +55,10 @@ class PhotoActivity : BaseActivity() {
 @Composable
 fun PhotoViewPage(url: String, click: () -> Unit) {
     var scale by remember {
-        mutableStateOf(1f)
+        mutableFloatStateOf(1f)
     }
     val rotation by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
     val state = rememberTransformableState{
             zoomChange, _, _ ->
@@ -121,7 +121,7 @@ fun DropdownDemo() {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("A", "B", "C", "D", "E", "F")
     val disabledValue = "B"
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(0) }
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentSize(Alignment.TopEnd),contentAlignment = Alignment.CenterEnd) {

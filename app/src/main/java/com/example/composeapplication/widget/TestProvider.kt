@@ -3,7 +3,6 @@ package com.example.composeapplication.widget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.widget.RemoteViews
 
 class TestProvider : AppWidgetProvider() {
 

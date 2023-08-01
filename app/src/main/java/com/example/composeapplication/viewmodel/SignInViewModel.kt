@@ -34,8 +34,8 @@ class SignInViewModel : ViewModel() {
 }
 
 sealed class SignInState {
-    object SignedOut : SignInState()
-    object InProgress : SignInState()
+    data object SignedOut : SignInState()
+    data object InProgress : SignInState()
     data class Error(val error: String) : SignInState()
-    object SignedIn : SignInState()
+    data object SignedIn : SignInState()
 }

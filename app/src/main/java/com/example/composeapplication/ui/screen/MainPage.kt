@@ -31,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.AppRuntime
+import com.example.composeapplication.LocalScaffoldState
 import com.example.composeapplication.Screen
 import com.example.composeapplication.extend.ProvideNavHostController
 import com.example.composeapplication.ui.ComposeApplicationTheme
@@ -58,7 +59,7 @@ import java.net.URLEncoder
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
     val navController = rememberNavController()
-    val rememberScaffoldState = rememberScaffoldState()
+    val rememberScaffoldState = LocalScaffoldState.current
     AppRuntime.rememberScaffoldState = rememberScaffoldState
     viewModel.setNavControllerA(navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -102,7 +102,7 @@ private const val TAG = "Sigin"
 @Composable
 fun Fool() {
     var text by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
     Log.d(TAG, "Fool: ")
     Button(onClick = {
@@ -358,7 +358,7 @@ fun MineScreen() {
 
 sealed class SignInEvent {
     data class SignIn(val email: String, val password: String) : SignInEvent()
-    object SignUp : SignInEvent()
-    object SignInAsGuest : SignInEvent()
-    object NavigateBack : SignInEvent()
+    data object SignUp : SignInEvent()
+    data object SignInAsGuest : SignInEvent()
+    data object NavigateBack : SignInEvent()
 }
