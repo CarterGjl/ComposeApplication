@@ -69,7 +69,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation('io.coil-kt:coil-compose:2.4.0')
 
-    def accompanist_version = '0.31.6-rc'
+    def accompanist_version = '0.33.1-alpha'
     implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 
@@ -88,13 +88,13 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$camerax_version"
     implementation 'androidx.compose.material3:material3:1.1.1'
-    def version = '2.7.0-rc01'
+    def version = '2.7.1'
     implementation "androidx.navigation:navigation-compose:$version"
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"
     implementation 'com.airbnb.android:lottie-compose:6.1.0'
 
-    def media3version = "1.1.0"
+    def media3version = '1.1.1'
     implementation("androidx.media3:media3-exoplayer:$media3version")
     implementation("androidx.media3:media3-ui:$media3version")
     implementation("androidx.media3:media3-session:$media3version")

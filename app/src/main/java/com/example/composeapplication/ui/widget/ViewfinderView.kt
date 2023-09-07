@@ -27,7 +27,7 @@ private const val TAG = "ViewfinderView"
 fun Scanner() {
 
     var topValue by remember {
-        mutableStateOf(500F)
+        mutableFloatStateOf(500F)
     }
     var frame by remember {
         mutableStateOf(Rect(0F, 0F, 0F, 0F))

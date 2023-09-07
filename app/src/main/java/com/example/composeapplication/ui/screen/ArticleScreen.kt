@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.example.composeapplication.ui.screen
 
 import android.annotation.SuppressLint

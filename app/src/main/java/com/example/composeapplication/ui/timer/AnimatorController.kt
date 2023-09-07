@@ -14,12 +14,12 @@ class AnimatorController(private val viewModel: TimerViewModel) {
     private var valueAnimator: ValueAnimator? = null
 
     fun start() {
-        if (viewModel.totalTime.value == 0L) return
+        if (viewModel.totalTime.longValue == 0L) return
         if (valueAnimator == null) {
-            valueAnimator = ValueAnimator.ofInt(viewModel.totalTime.value.toInt(), 0)
+            valueAnimator = ValueAnimator.ofInt(viewModel.totalTime.longValue.toInt(), 0)
             valueAnimator?.interpolator = LinearInterpolator()
             valueAnimator?.addUpdateListener {
-                viewModel.timeLef.value = (it.animatedValue as Int).toLong()
+                viewModel.timeLef.longValue = (it.animatedValue as Int).toLong()
             }
             valueAnimator?.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
@@ -28,15 +28,15 @@ class AnimatorController(private val viewModel: TimerViewModel) {
                 }
             })
         } else {
-            valueAnimator?.setIntValues(viewModel.totalTime.value.toInt(), 0)
+            valueAnimator?.setIntValues(viewModel.totalTime.longValue.toInt(), 0)
         }
-        valueAnimator?.duration = viewModel.totalTime.value * 1000L
+        valueAnimator?.duration = viewModel.totalTime.longValue * 1000L
         valueAnimator?.start()
         viewModel.status.value = StartedStatus(viewModel)
     }
 
     private fun complete() {
-        viewModel.totalTime.value = 0
+        viewModel.totalTime.longValue = 0
     }
 
     fun pause() {
@@ -51,7 +51,7 @@ class AnimatorController(private val viewModel: TimerViewModel) {
 
     fun stop() {
         valueAnimator?.cancel()
-        viewModel.timeLef.value = 0
+        viewModel.timeLef.longValue = 0
         viewModel.status.value = CompletedStatus(viewModel)
     }
 

@@ -20,7 +20,7 @@ class WebViewScreen(val title: String, val url: String) : Screen()
 
 class PhotoScreen(val url: String) : Screen()
 
-object CameraScreen : Screen()
+data object CameraScreen : Screen()
 
 
 class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {

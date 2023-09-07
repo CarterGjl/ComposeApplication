@@ -25,8 +25,8 @@ open class BaseViewModel: ViewModel() {
 }
 
 sealed class State {
-    object Loading : State()
-    object Success : State()
+    data object Loading : State()
+    data object Success : State()
     class Error(val errorMsg: String?) : State()
 
     fun isLoading() = this is Loading

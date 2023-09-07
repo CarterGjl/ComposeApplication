@@ -1,4 +1,4 @@
-@file:Suppress("unused", "LiftReturnOrAssignment", "NullableBooleanElvis")
+@file:Suppress("unused", "LiftReturnOrAssignment")
 
 package com.example.composeapplication
 

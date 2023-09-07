@@ -1,6 +1,7 @@
 package com.example.composeapplication.ui.timer
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.composeapplication.ui.timer.status.CompletedStatus
@@ -13,8 +14,8 @@ class TimerViewModel : ViewModel() {
     var animatorController = AnimatorController(this)
     var status: MutableState<IStatus> = mutableStateOf(NotStartedStatus(this))
 
-    var totalTime = mutableStateOf(0L)
-    var timeLef = mutableStateOf(0L)
+    var totalTime = mutableLongStateOf(0L)
+    var timeLef = mutableLongStateOf(0L)
     fun updateValue(text: String) {
         if (status.value is CompletedStatus) {
             status.value = NotStartedStatus(this)
@@ -29,7 +30,7 @@ class TimerViewModel : ViewModel() {
         if (value.isBlank()) {
             value = "0"
         }
-        totalTime.value = value.toLong()
-        timeLef.value = value.toLong()
+        totalTime.longValue = value.toLong()
+        timeLef.longValue = value.toLong()
     }
 }

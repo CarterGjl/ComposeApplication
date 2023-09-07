@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TimeLeftText(viewModel: TimerViewModel) {
     Text(
-        text = TimeFormatUtils.formatTime(viewModel.timeLef.value),
+        text = TimeFormatUtils.formatTime(viewModel.timeLef.longValue),
         modifier = Modifier.padding(16.dp)
     )
 }
@@ -28,7 +28,7 @@ fun EditText(viewModel: TimerViewModel) {
         if (viewModel.status.value.showEditText()) {
             TextField(
                 modifier = Modifier.size(200.dp, 60.dp),
-                value = if (viewModel.totalTime.value == 0L) "" else viewModel.totalTime.value.toString(),
+                value = if (viewModel.totalTime.longValue == 0L) "" else viewModel.totalTime.longValue.toString(),
                 onValueChange = viewModel::updateValue,
                 label = { Text(text = "Countdown Seconds") },
                 maxLines = 1,
@@ -43,7 +43,7 @@ fun StartButton(viewModel: TimerViewModel) {
     Button(modifier = Modifier
         .width(150.dp)
         .padding(16.dp),
-        enabled = viewModel.totalTime.value > 0,
+        enabled = viewModel.totalTime.longValue > 0,
         onClick = {
             viewModel.status.value.clickStartButton()
         })

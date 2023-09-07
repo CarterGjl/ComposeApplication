@@ -144,11 +144,11 @@ private fun TopBar(
 }
 
 sealed class Screen(val route: String, val icon: ImageVector, @StringRes val resourceId: Int) {
-    object Find : Screen(Constants.ROUTE_FIND, Icons.Default.Search, R.string.tab_find)
-    object Store : Screen(Constants.ROUTE_STORE, Icons.Default.Store, R.string.tab_store)
-    object Favourite :
+    data object Find : Screen(Constants.ROUTE_FIND, Icons.Default.Search, R.string.tab_find)
+    data object Store : Screen(Constants.ROUTE_STORE, Icons.Default.Store, R.string.tab_store)
+    data object Favourite :
         Screen(Constants.ROUTE_FAVOURITE, Icons.Default.Favorite, R.string.tab_favourite)
 
-    object Profile :
+    data object Profile :
         Screen(Constants.ROUTE_PROFILE, Icons.Default.AccountCircle, R.string.tab_profile)
 }

@@ -191,16 +191,16 @@ const val DIALOG = "dialog"
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 
-    object Article : Screen("article", R.string.article, Icons.Filled.Article)
-    object Picture : Screen("picture", R.string.picture, Icons.Filled.Favorite)
-    object Weather : Screen("weather", R.string.weather, Icons.Filled.AccountBox)
-    object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
-    object Mine : Screen("mine", R.string.mine, Icons.Filled.AdminPanelSettings)
-    object Music : Screen("music", R.string.music, Icons.Filled.QueueMusic)
-    object ArticleDetail :
+    data object Article : Screen("article", R.string.article, Icons.Filled.Article)
+    data object Picture : Screen("picture", R.string.picture, Icons.Filled.Favorite)
+    data object Weather : Screen("weather", R.string.weather, Icons.Filled.AccountBox)
+    data object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
+    data object Mine : Screen("mine", R.string.mine, Icons.Filled.AdminPanelSettings)
+    data object Music : Screen("music", R.string.music, Icons.Filled.QueueMusic)
+    data object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
 
-    object Search : Screen("search", R.string.search, Icons.Filled.Search)
-    object WebView : Screen("webview", R.string.search, Icons.Filled.Search)
-    object TypeTree : Screen("type", R.string.knowledge, Icons.Filled.Search)
+    data object Search : Screen("search", R.string.search, Icons.Filled.Search)
+    data object WebView : Screen("webview", R.string.search, Icons.Filled.Search)
+    data object TypeTree : Screen("type", R.string.knowledge, Icons.Filled.Search)
 }

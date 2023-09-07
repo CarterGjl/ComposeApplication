@@ -34,7 +34,6 @@ import coil.compose.AsyncImage
 import com.example.composeapplication.R
 import com.example.composeapplication.bean.Article
 import com.example.composeapplication.ui.ComposeApplicationTheme
-import com.example.composeapplication.ui.Navigation
 import com.example.composeapplication.ui.timer.*
 import com.example.composeapplication.viewmodel.ArticleViewModel
 
@@ -184,7 +183,6 @@ val Purple700 = Color(0xFF8100EF)
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 private fun InitSearchBox() {
     Spacer(modifier = Modifier.sizeIn(8.dp))
-    Navigation()
 }
 
 @Composable
