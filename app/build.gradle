@@ -41,9 +41,9 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.activity:activity-compose:1.7.2'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.activity:activity-compose:1.8.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    def livecycle_version = "2.6.1"
+    def livecycle_version = "2.6.2"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$livecycle_version"
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$livecycle_version"
@@ -77,8 +77,8 @@ dependencies {
     // 替代sharepreference
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation "androidx.datastore:datastore-preferences-core:1.0.0"
-    implementation('androidx.paging:paging-compose:3.2.0')
-    implementation 'androidx.paging:paging-runtime-ktx:3.2.0'
+    implementation('androidx.paging:paging-compose:3.2.1')
+    implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
 
     def camerax_version = '1.2.3'
     // CameraX core library using camera2 implementation
@@ -87,8 +87,8 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
     // CameraX View class
     implementation "androidx.camera:camera-view:$camerax_version"
-    implementation 'androidx.compose.material3:material3:1.1.1'
-    def version = '2.7.1'
+    implementation 'androidx.compose.material3:material3:1.1.2'
+    def version = '2.7.4'
     implementation "androidx.navigation:navigation-compose:$version"
     implementation "androidx.navigation:navigation-fragment-ktx:$version"
     implementation "androidx.navigation:navigation-ui-ktx:$version"

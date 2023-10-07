@@ -5,11 +5,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Store
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -130,7 +130,7 @@ private fun TopBar(
 ) {
     if (canPop) {
         IconButton(onClick = { navController.popBackStack() }) {
-            Icon(Icons.Outlined.ArrowBack, "back", tint = Color.Blue)
+            Icon(Icons.AutoMirrored.Outlined.ArrowBack, "back", tint = Color.Blue)
         }
     } else {
         IconButton(onClick = {}) {

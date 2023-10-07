@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.automirrored.filled.QueueMusic
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -191,12 +193,12 @@ const val DIALOG = "dialog"
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
 
-    data object Article : Screen("article", R.string.article, Icons.Filled.Article)
+    data object Article : Screen("article", R.string.article, Icons.AutoMirrored.Filled.Article)
     data object Picture : Screen("picture", R.string.picture, Icons.Filled.Favorite)
     data object Weather : Screen("weather", R.string.weather, Icons.Filled.AccountBox)
     data object Test : Screen("test", R.string.test, Icons.Filled.AccessAlarms)
     data object Mine : Screen("mine", R.string.mine, Icons.Filled.AdminPanelSettings)
-    data object Music : Screen("music", R.string.music, Icons.Filled.QueueMusic)
+    data object Music : Screen("music", R.string.music, Icons.AutoMirrored.Filled.QueueMusic)
     data object ArticleDetail :
         Screen("article_detail?url={url}", R.string.detail, Icons.Filled.AccountBox)
 

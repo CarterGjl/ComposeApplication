@@ -5,6 +5,7 @@ import android.net.http.SslError
 import android.os.Build
 import android.util.Log
 import android.webkit.*
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -15,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material.icons.filled.Update
@@ -359,7 +359,7 @@ fun ArticleDetailScreen(
                 IconButton(onClick = {
                     naviBack()
                 }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
+                    Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "back")
                 }
             },
             backgroundColor = MaterialTheme.colors.primaryVariant,

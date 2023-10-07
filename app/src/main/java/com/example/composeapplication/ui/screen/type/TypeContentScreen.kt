@@ -16,7 +16,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -103,7 +103,7 @@ private fun TypeContentAppbar(
                 IconButton(onClick = {
                     navHostController.popBackStack()
                 }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
+                    Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "back")
                 }
             },
             backgroundColor = MaterialTheme.colors.primaryVariant,

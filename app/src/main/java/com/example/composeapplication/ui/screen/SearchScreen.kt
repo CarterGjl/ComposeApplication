@@ -10,7 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -65,7 +65,7 @@ fun SearchScreen(
                         IconButton(onClick = {
                             mainViewModel.popUp()
                         }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+                            Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "back")
                         }
                     },
                     backgroundColor = MaterialTheme.colors.primaryVariant,
