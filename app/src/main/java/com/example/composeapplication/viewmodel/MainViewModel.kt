@@ -44,7 +44,7 @@ class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         return mSelectLiveData
     }
 
-    var dataLoaded: Boolean = false
+    private var dataLoaded: Boolean = false
 
     fun mockDataLoading(): Boolean {
         viewModelScope.launch {
@@ -67,7 +67,7 @@ class MainViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     }
 
     fun saveSelectIndex(selectIndex: Int) {
-        savedStateHandle.set(HOME_PAGE_SELECTED_INDEX, selectIndex)
+        savedStateHandle[HOME_PAGE_SELECTED_INDEX] = selectIndex
         mSelectLiveData.value = selectIndex
     }
 
