@@ -28,6 +28,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    kotlin {
+        sourceSets.all {
+            languageSettings {
+                languageVersion = "2.0"
+            }
+        }
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -68,7 +76,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$livecycleVersion")
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     val accompanistVersion = "0.33.2-alpha"
     implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
@@ -81,7 +89,7 @@ dependencies {
     implementation("androidx.paging:paging-compose:3.2.1")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
-    val cameraxVersion = "1.2.3"
+    val cameraxVersion = "1.3.0"
     // CameraX core library using camera2 implementation
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
     // CameraX Lifecycle Library
