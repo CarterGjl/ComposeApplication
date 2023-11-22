@@ -49,9 +49,9 @@ android {
 }
 
 dependencies {
-    val composeVersion = "1.6.0-alpha08"
+    val composeVersion = "1.6.0-beta01"
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation("androidx.activity:activity-compose:1.8.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
@@ -97,13 +97,13 @@ dependencies {
     // CameraX View class
     implementation("androidx.camera:camera-view:$cameraxVersion")
     implementation("androidx.compose.material3:material3:1.1.2")
-    val version = "2.7.4"
+    val version = "2.7.5"
     implementation("androidx.navigation:navigation-compose:$version")
     implementation("androidx.navigation:navigation-fragment-ktx:$version")
     implementation("androidx.navigation:navigation-ui-ktx:$version")
-    implementation("com.airbnb.android:lottie-compose:6.1.0")
+    implementation("com.airbnb.android:lottie-compose:6.2.0")
 
-    val media3version = "1.1.1"
+    val media3version = "1.2.0"
     implementation("androidx.media3:media3-exoplayer:$media3version")
     implementation("androidx.media3:media3-ui:$media3version")
     implementation("androidx.media3:media3-session:$media3version")
