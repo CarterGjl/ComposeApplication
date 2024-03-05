@@ -32,7 +32,7 @@ class SearchViewModel : ViewModel() {
             val result = async.await()
             Log.d(TAG, "searchArticle: $result")
             if (result.data.datas.isEmpty()) {
-                AppRuntime.rememberScaffoldState?.snackbarHostState?.showSnackbar("未搜索到关键词相关文章")
+                AppRuntime.rememberScaffoldState?.showSnackbar("未搜索到关键词相关文章")
                 pageStateData.value = PageStateData(PageState.EMPTY)
                 return@launch
             } else {

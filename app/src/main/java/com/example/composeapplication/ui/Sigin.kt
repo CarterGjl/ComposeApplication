@@ -4,10 +4,21 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -133,10 +144,10 @@ fun Email(
             emailState.text = it
         },
         label = {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
                 Text(
                     text = stringResource(id = R.string.email),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         },
@@ -148,7 +159,7 @@ fun Email(
                     emailState.enableShowErrors()
                 }
             },
-        textStyle = MaterialTheme.typography.body2,
+        textStyle = MaterialTheme.typography.bodyMedium,
         isError = emailState.showErrors(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
         keyboardActions = KeyboardActions(onDone = {
@@ -184,11 +195,11 @@ fun Password(
                     passwordState.enableShowErrors()
                 }
             },
-        textStyle = MaterialTheme.typography.body2,
+        textStyle = MaterialTheme.typography.bodyMedium,
         label = {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            CompositionLocalProvider(LocalContentColor provides  MaterialTheme.colorScheme.onSurface) {
                 Text(
-                    text = label, style = MaterialTheme.typography.body2
+                    text = label, style = MaterialTheme.typography.bodyMedium
                 )
             }
         },
@@ -230,7 +241,7 @@ fun TextFieldError(textError: String) {
         Text(
             text = textError,
             modifier = Modifier.fillMaxWidth(),
-            style = LocalTextStyle.current.copy(color = MaterialTheme.colors.error)
+            style = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.error)
         )
     }
 }

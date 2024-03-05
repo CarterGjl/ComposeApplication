@@ -13,10 +13,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.*
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -75,7 +85,7 @@ fun TypeContentScreen(knowledge: TreeListResponse.Knowledge) {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun TypeContentAppbar(
     knowledge: TreeListResponse.Knowledge,
@@ -89,14 +99,14 @@ private fun TypeContentAppbar(
             modifier = Modifier
                 .windowInsetsTopHeight(WindowInsets.statusBars)
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.primaryVariant)
+                .background(MaterialTheme.colorScheme.secondary)
         )
         TopAppBar(
             title = {
                 Text(
                     text = knowledge.name,
-                    style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             },
             navigationIcon = {
@@ -106,19 +116,20 @@ private fun TypeContentAppbar(
                     Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "back")
                 }
             },
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            elevation = 0.dp
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.secondary
+            ),
         )
         ScrollableTabRow(
-            backgroundColor = MaterialTheme.colors.primaryVariant,
+            containerColor = MaterialTheme.colorScheme.secondary,
             selectedTabIndex = tabIndex,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            contentColor = MaterialTheme.colors.primaryVariant,
+            contentColor = MaterialTheme.colorScheme.secondary,
             edgePadding = 0.dp,
             indicator = {
-                TabRowDefaults.Indicator(
+                TabRowDefaults.SecondaryIndicator(
                     Modifier.tabIndicatorOffset(it[tabIndex]),
                     color = Color.White,
                     height = 4.dp
@@ -133,7 +144,6 @@ private fun TypeContentAppbar(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-@ExperimentalMaterialApi
 @Composable
 fun LeadingIconTabView(
     index: Int,

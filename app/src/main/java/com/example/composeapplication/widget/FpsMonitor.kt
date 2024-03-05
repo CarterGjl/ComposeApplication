@@ -1,8 +1,8 @@
 package com.example.composeapplication.widget
 
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,7 +22,7 @@ fun FpsMonitor(modifier: Modifier) {
     var lastUpdate by remember { mutableLongStateOf(0L) }
     Text(
         text = "Fps: $fps", modifier = modifier
-            .size(60.dp), color = Color.Red, style = MaterialTheme.typography.body1
+            .width(100.dp), color = Color.Red, style = MaterialTheme.typography.bodyLarge
     )
 
     LaunchedEffect(Unit) {

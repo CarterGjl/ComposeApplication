@@ -7,12 +7,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
@@ -34,8 +33,7 @@ import com.example.composeapplication.viewmodel.PictureViewModel
 
 private const val TAG = "PicturePage"
 
-@OptIn(ExperimentalMaterialApi::class)
-@ExperimentalCoilApi
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalFoundationApi
 @Composable
 fun PicturePage(
@@ -44,7 +42,7 @@ fun PicturePage(
 ) {
     val picList = viewModel.pics.collectAsLazyPagingItems()
     var refreshing by remember { mutableStateOf(false) }
-    val pullRefreshState = rememberPullRefreshState(refreshing, { picList.refresh() })
+    val pullRefreshState = rememberPullToRefreshState()
 
     Scaffold(
         topBar = {
@@ -55,9 +53,7 @@ fun PicturePage(
             Modifier
                 .padding(it)
                 .fillMaxSize()) {
-           Box(modifier = Modifier.pullRefresh(
-               pullRefreshState
-           )){
+           Box {
                LazyVerticalGrid(
                    columns = GridCells.Fixed(3),
                    contentPadding = PaddingValues(5.dp),
@@ -147,6 +143,13 @@ fun PicturePage(
                    }
                    refreshing = picList.loadState.refresh is LoadState.Loading
                }
+               PullToRefreshContainer(
+                   modifier = Modifier
+                       .align(Alignment.TopCenter),
+//                       .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
+                   state = pullRefreshState,
+               )
+
            }
         }
     }

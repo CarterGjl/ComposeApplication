@@ -5,9 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,7 +80,7 @@ fun DefaultLoadingLayout(stateLayoutData: StateLayoutData) {
                     CircularProgressIndicator()
                     Text(
                         text = item.tipTex ?: "",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -108,7 +108,7 @@ fun DefaultEmptyLayout(stateLayoutData: StateLayoutData) {
                     )
                     Text(
                         text = item.tipTex ?: "",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -136,7 +136,7 @@ fun DefaultErrorLayout(stateLayoutData: StateLayoutData) {
                     )
                     Text(
                         text = item.tipTex ?: "",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .padding(16.dp, 0.dp)
                             .offset(0.dp, -(20.dp))
@@ -145,7 +145,7 @@ fun DefaultErrorLayout(stateLayoutData: StateLayoutData) {
                     Text(
                         text = item.btnText ?: "",
                         color = Color.White,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .padding(16.dp, 0.dp)

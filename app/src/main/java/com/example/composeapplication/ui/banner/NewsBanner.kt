@@ -9,7 +9,9 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +23,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
 import com.example.composeapplication.bean.Banner
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 @OptIn(ExperimentalFoundationApi::class)
-@ExperimentalCoilApi
 @Composable
 fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -> Unit) {
     Box(modifier = Modifier.height(200.dp)) {
@@ -77,7 +77,7 @@ fun NewsBanner(topStories: List<Banner>, onClick: (url: String, title: String) -
             modifier = Modifier
                 .padding(6.dp)
                 .align(Alignment.BottomCenter),
-            activeColor = MaterialTheme.colors.primary,
+            activeColor = MaterialTheme.colorScheme.primary,
             inactiveColor = Color.White
         )
     }
@@ -90,8 +90,8 @@ private fun HorizontalPagerIndicator(
     pageCount: Int,
     modifier: Modifier = Modifier,
     pageIndexMapping: (Int) -> Int = { it },
-    activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-    inactiveColor: Color = activeColor.copy(ContentAlpha.disabled),
+    activeColor: Color = LocalContentColor.current.copy(alpha = LocalContentColor.current.alpha),
+    inactiveColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
     indicatorWidth: Dp = 8.dp,
     indicatorHeight: Dp = indicatorWidth,
     spacing: Dp = indicatorWidth,

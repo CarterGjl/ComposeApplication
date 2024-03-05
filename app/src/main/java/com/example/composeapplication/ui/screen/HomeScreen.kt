@@ -3,8 +3,8 @@ package com.example.composeapplication.ui.screen
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
@@ -13,13 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.*
 import com.example.composeapplication.ui.MineScreen
 
 private const val TAG = "HomeScreen"
 
-@ExperimentalCoilApi
 @ExperimentalFoundationApi
 @Composable
 fun HomeScreen() {

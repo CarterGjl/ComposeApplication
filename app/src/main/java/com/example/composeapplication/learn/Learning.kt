@@ -13,10 +13,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,17 +74,17 @@ fun NewsStory() {
                 "A day wandering through the sandhills " +
                         "in Shark Fin Cove, and a few of the " +
                         "sights I saw",
-                style = typography.h6,
+                style = typography.titleLarge,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 "Davenport, California",
-                style = typography.body2
+                style = typography.titleLarge
             )
             Text(
                 "December 2018",
-                style = typography.body2
+                style = typography.titleLarge
             )
             val arrayList = ArrayList<Message>()
             for (index in 0..1000) {
@@ -185,6 +194,7 @@ private fun InitSearchBox() {
     Spacer(modifier = Modifier.sizeIn(8.dp))
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyApp() {
     val viewModel: TimerViewModel = viewModel()
@@ -272,7 +282,7 @@ fun ExpandingCard(data: Article, onClick: (url: String) -> Unit) {
             )
             Text(
                 text = data.title,
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.titleSmall
             )
 
             // content of the card depends on the current value of expanded

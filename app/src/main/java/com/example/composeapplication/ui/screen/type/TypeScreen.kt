@@ -2,21 +2,23 @@ package com.example.composeapplication.ui.screen.type
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -40,7 +42,12 @@ fun TypeScreen(
     Scaffold(
         topBar = {
             MyAppBar(id = R.string.knowledge)
-        }
+        },
+        bottomBar = {
+                    Box(modifier = Modifier.height(80.dp)) {
+
+                    }
+        },
     ) {
 
         val observeAsState: List<TreeListResponse.Knowledge> by treeViewModel.knowledges.observeAsState(
@@ -75,7 +82,7 @@ fun TypeListItem(
 ) {
     Surface(
         shape = RoundedCornerShape(10.dp),
-        elevation = 10.dp,
+        shadowElevation = 10.dp,
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -91,14 +98,14 @@ fun TypeListItem(
             Column(Modifier.weight(10.0F)) {
                 Text(
                     text = knowledge.name,
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.titleMedium
                 )
                 val body: String? = knowledge.children?.let { children ->
                     children.joinToString("     ", transform = { child -> child.name })
                 }
                 Text(
                     text = body ?: "",
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             Icon(

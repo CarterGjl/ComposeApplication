@@ -1,15 +1,19 @@
 package com.example.composeapplication.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Store
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +29,7 @@ import com.example.composeapplication.Utils
 import com.example.composeapplication.const.Constants
 import com.example.composeapplication.viewmodel.ArticleViewModel
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation() {
     val articleViewModel: ArticleViewModel = viewModel()
@@ -108,7 +112,6 @@ fun Navigation() {
 //        Detail(moviePro.value)
 //    }
 //}
-@ExperimentalFoundationApi
 @Composable
 fun FindScreen(
     navController: NavHostController,

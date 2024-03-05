@@ -5,14 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyAppBar(
     actions: @Composable RowScope.() -> Unit = {},
@@ -21,7 +23,7 @@ fun MyAppBar(
 ) {
     Column(
         modifier = Modifier
-            .background(color = MaterialTheme.colors.primaryVariant)
+            .background(color = MaterialTheme.colorScheme.primaryContainer)
             .statusBarsPadding()
     ) {
         TopAppBar(
@@ -29,12 +31,13 @@ fun MyAppBar(
             title = {
                 Text(
                     text = stringResource(id = id),
-                    style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             },
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            elevation = 0.dp
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
         )
     }
 }

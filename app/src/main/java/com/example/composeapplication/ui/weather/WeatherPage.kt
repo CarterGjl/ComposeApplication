@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -152,7 +152,7 @@ fun Counter(count: Int, updateCount: (Int) -> Unit) {
     Button(
         onClick = { updateCount(count + 1) },
         colors = buttonColors(
-            backgroundColor = if (count > 5) Color.Green else Color.White
+            containerColor = if (count > 5) Color.Green else Color.White
         )
     ) {
         Text("I've been clicked $count times")

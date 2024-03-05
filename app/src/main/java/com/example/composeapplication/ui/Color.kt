@@ -2,14 +2,13 @@
 
 package com.example.composeapplication.ui
 
-import androidx.compose.material.Colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 
 @Composable
-fun Colors.compositedOnSurface(alpha: Float): Color {
-    return onSurface.copy(alpha = alpha).compositeOver(surface)
+fun Color.compositedOnSurface(alpha: Float): Color {
+    return this.copy(alpha = alpha).compositeOver(this)
 }
 
 val purple200 = Color(0xFFBB86FC)

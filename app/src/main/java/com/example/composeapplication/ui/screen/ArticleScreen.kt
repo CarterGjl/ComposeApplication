@@ -7,6 +7,7 @@ import android.util.Log
 import android.webkit.*
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,20 +15,33 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material.icons.filled.Update
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +56,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.DIALOG
 import com.example.composeapplication.R
 import com.example.composeapplication.Screen
@@ -64,8 +77,7 @@ import com.google.gson.Gson
 private const val TAG = "ArticleScreen"
 
 @OptIn(
-    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class,
-    androidx.compose.ui.ExperimentalComposeUiApi::class
+    ExperimentalFoundationApi::class,
 )
 @Composable
 fun ArticleList(
@@ -97,9 +109,9 @@ fun ArticleList(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.primaryVariant)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
             ) {
-                ListItem(text = {
+                ListItem(headlineContent = {
                     Text(text = "搜索热词")
                 })
             }
@@ -122,9 +134,9 @@ fun ArticleList(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.primaryVariant)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
             ) {
-                ListItem(text = {
+                ListItem(headlineContent = {
                     Text(text = "搜索结果")
                 })
             }
@@ -145,7 +157,7 @@ fun ArticleList(
                         )
                         Text(
                             text = "这里空空的。。。",
-                            style = MaterialTheme.typography.body1,
+                            style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(16.dp)
                         )
                     }
@@ -174,7 +186,7 @@ fun ArticleList(
 /*
 * 支持分页的文章列表
 * */
-@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ArticleListPaging(
     onClick: (url: String, title: String) -> Unit
@@ -189,12 +201,18 @@ private fun ArticleListPaging(
     val collectAsLazyPagingItems = viewState.pagingData.collectAsLazyPagingItems()
     var refreshing by remember { mutableStateOf(false) }
     Log.d(TAG, "ArticleListPaging: $refreshing")
-    val pullRefreshState =
-        rememberPullRefreshState(refreshing, { collectAsLazyPagingItems.refresh() })
 
+    val pullRefreshState =
+        rememberPullToRefreshState(enabled = { true })
+    if (pullRefreshState.isRefreshing) {
+        LaunchedEffect(true) {
+            // fetch something
+            collectAsLazyPagingItems.refresh()
+        }
+    }
     val listState =
         if (collectAsLazyPagingItems.itemCount > 0) viewState.listState else LazyListState()
-    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+    Box(Modifier.nestedScroll(pullRefreshState.nestedScrollConnection)) {
         LazyColumn(
             state = listState,
             contentPadding = PaddingValues(15.dp),
@@ -219,6 +237,9 @@ private fun ArticleListPaging(
 
             collectAsLazyPagingItems.apply {
                 refreshing = loadState.refresh is LoadState.Loading
+                if (!refreshing) {
+                    pullRefreshState.endRefresh()
+                }
                 when {
                     loadState.refresh is LoadState.Loading -> {
                         item {
@@ -274,13 +295,22 @@ private fun ArticleListPaging(
                 }
             }
         }
-        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
+        val scaleFraction = if (pullRefreshState.isRefreshing) 1f else
+            LinearOutSlowInEasing.transform(pullRefreshState.progress).coerceIn(0f, 1f)
+
+        Box(modifier = Modifier.padding(top = 60.dp).align(Alignment.TopCenter)) {
+            PullToRefreshContainer(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
+                state = pullRefreshState,
+            )
+        }
 
     }
 
 }
 
-@ExperimentalCoilApi
 @Composable
 fun ArticleScreen(
     navController: NavController,
@@ -302,7 +332,7 @@ fun ArticleScreen(
             )
         },
         floatingActionButton = {
-            FpsMonitor(modifier = Modifier)
+            FpsMonitor(modifier = Modifier.padding(bottom = 80.dp))
         }
     ) {
         LoadingPage(state = state, loadInit = {
@@ -329,6 +359,7 @@ fun ArticleScreen(navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun ArticleDetailScreen(
@@ -340,7 +371,7 @@ fun ArticleDetailScreen(
     var refreshing by remember { mutableStateOf(true) }
     Column(
         modifier = Modifier
-            .background(MaterialTheme.colors.primaryVariant)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .statusBarsPadding()
     ) {
         TopAppBar(
@@ -350,8 +381,8 @@ fun ArticleDetailScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         text = title.parseHighlight(),
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onPrimary
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             },
@@ -359,11 +390,15 @@ fun ArticleDetailScreen(
                 IconButton(onClick = {
                     naviBack()
                 }) {
-                    Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "back")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                        contentDescription = "back"
+                    )
                 }
             },
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            elevation = 0.dp
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
         )
         if (refreshing) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = Color.Gray)
@@ -466,19 +501,19 @@ fun ArticleItem(data: Article, onClick: (url: String) -> Unit) {
     ) {
         Text(
             text = data.title,
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.titleMedium
         )
         Row(modifier = Modifier.padding(top = 8.dp)) {
             Icon(imageVector = Icons.Filled.Timeline, contentDescription = "time")
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 text = data.niceDate,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.bodyLarge
             )
         }
         Row(modifier = Modifier.padding(top = 8.dp)) {
             Text(
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyLarge,
                 color = Color.Red,
                 text = data.superChapterName,
                 modifier = Modifier
@@ -503,9 +538,9 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
     val navHostController = LocalNavHostController.current
     Surface(
         shape = RoundedCornerShape(10.dp),
-        elevation = 10.dp,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        shadowElevation = 10.dp
     ) {
         Column(
             modifier = Modifier
@@ -519,14 +554,14 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
         ) {
             Text(
                 text = data.title.parseHighlight(),
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.titleMedium
             )
             Row(modifier = Modifier.padding(top = 8.dp)) {
                 Icon(imageVector = Icons.Filled.Update, contentDescription = "time")
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
                     text = data.niceDate,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
 //            Row(modifier = Modifier.padding(top = 8.dp)) {
@@ -550,7 +585,7 @@ fun ArticleItem2(data: Article, onClick: (url: String) -> Unit) {
 //            }
             Row(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = Color.Red,
                     text = data.chapterName,
                     modifier = Modifier
@@ -638,7 +673,7 @@ fun LabelTextButton(
             .height(25.dp)
             .clip(shape = RoundedCornerShape(cornerValue))
             .background(
-                color = if (isSelect && !isLoading) Color.Black else MaterialTheme.colors.primaryVariant,
+                color = if (isSelect && !isLoading) Color.Black else MaterialTheme.colorScheme.primaryContainer,
             )
             .combinedClickable(
                 enabled = !isLoading,

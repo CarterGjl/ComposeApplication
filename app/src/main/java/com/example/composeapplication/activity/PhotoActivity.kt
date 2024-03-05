@@ -14,9 +14,14 @@ import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,8 +65,7 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
     val rotation by remember {
         mutableFloatStateOf(0f)
     }
-    val state = rememberTransformableState{
-            zoomChange, _, _ ->
+    val state = rememberTransformableState { zoomChange, _, _ ->
         scale *= zoomChange
         if (scale >= 6.0) scale = 6.0f
         else if (scale <= 1.0) scale = 1.0f
@@ -90,7 +94,7 @@ fun PhotoViewPage(url: String, click: () -> Unit) {
                     )
                 }
         )
-        if (painter.state is  AsyncImagePainter.State.Loading) {
+        if (painter.state is AsyncImagePainter.State.Loading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
         BackArrowDown(click = click)
@@ -122,15 +126,19 @@ fun DropdownDemo() {
     val items = listOf("A", "B", "C", "D", "E", "F")
     val disabledValue = "B"
     var selectedIndex by remember { mutableIntStateOf(0) }
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentSize(Alignment.TopEnd),contentAlignment = Alignment.CenterEnd) {
-        Text(items[selectedIndex],modifier = Modifier
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { expanded = true })
-            .background(
-                Color.Gray
-            ))
+            .wrapContentSize(Alignment.TopEnd), contentAlignment = Alignment.CenterEnd
+    ) {
+        Text(
+            items[selectedIndex], modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { expanded = true })
+                .background(
+                    Color.Gray
+                )
+        )
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -141,17 +149,19 @@ fun DropdownDemo() {
                 )
         ) {
             items.forEachIndexed { index, s ->
-                DropdownMenuItem(onClick = {
-                    selectedIndex = index
-                    expanded = false
-                }) {
-                    val disabledText = if (s == disabledValue) {
-                        " (Disabled)"
-                    } else {
-                        ""
-                    }
-                    Text(text = s + disabledText)
-                }
+                DropdownMenuItem(
+                    text = {
+                        val disabledText = if (s == disabledValue) {
+                            " (Disabled)"
+                        } else {
+                            ""
+                        }
+                        Text(text = s + disabledText)
+                    },
+                    onClick = {
+                        selectedIndex = index
+                        expanded = false
+                    })
             }
         }
     }

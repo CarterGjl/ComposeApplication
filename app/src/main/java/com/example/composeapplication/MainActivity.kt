@@ -1,30 +1,45 @@
 package com.example.composeapplication
 
+import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.PowerManager
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.automirrored.filled.QueueMusic
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.icons.filled.AccessAlarms
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,12 +47,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.animation.doOnEnd
+import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.core.view.postDelayed
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
-import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.activity.bsae.BaseActivity
 import com.example.composeapplication.ui.ComposeApplicationTheme
 import com.example.composeapplication.ui.screen.MainPage
@@ -47,18 +62,30 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 // 官方demo地址
 // https://github.com/android/compose-samples
-val LocalScaffoldState = compositionLocalOf<ScaffoldState> { error("LocalScaffoldState 没有提供值！") }
+val LocalSnackbarHostState = compositionLocalOf<SnackbarHostState> { error("LocalSnackbarHostState 没有提供值！") }
 
-private const val TAG = "MainActivity"
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
+    private val receive = BluetoothStateBroadcastReceive()
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @OptIn(
         ExperimentalPermissionsApi::class,
         ExperimentalFoundationApi::class,
-        ExperimentalCoilApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val permission: Array<String> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.BLUETOOTH
+            )
+        }
+        ActivityCompat.requestPermissions(this, permission, 102)
+
 //        val audioManager: AudioManager = getSystemService(AudioManager::class.java)
 //        val listener =
 //            OnCommunicationDeviceChangedListener { device -> // Handle changes
@@ -66,30 +93,57 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 //                Log.d(TAG, "onCreate: $device")
 //            }
 //        audioManager.addOnCommunicationDeviceChangedListener(mainExecutor, listener)
+//
+//        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+//        //            try {
+////                field = PowerManager.class.getField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").getInt(null);
+////            } catch (Throwable t) {
+////                VoiceChannel.voipError(TAG, "", t);
+////            }
+//        val wakeLockLevelSupported =
+//            powerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)
+//
+//        Log.d(TAG, "onCreate: wakeLockLevelSupported  $wakeLockLevelSupported")
+//        val wakeLockProximity = powerManager.newWakeLock(
+//            PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "Baiduhi" +
+//                    ":CallProximitySensor"
+//        )
+//        wakeLockProximity.setReferenceCounted(false)
+//        wakeLockProximity.acquire(2 * 3600 * 1000)
+//        Utils.ensureNetworkAvailable(application)
+        val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
-        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-        //            try {
-//                field = PowerManager.class.getField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").getInt(null);
-//            } catch (Throwable t) {
-//                VoiceChannel.voipError(TAG, "", t);
-//            }
-        val wakeLockLevelSupported =
-            powerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)
+        val adapter = bluetoothManager.adapter
+        adapter
+            .getProfileProxy(this, object : BluetoothProfile.ServiceListener {
+                override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
+                    val devices : List<BluetoothDevice>? = proxy?.connectedDevices
+                    Log.d(TAG, "onServiceConnected: devices $devices")
+                }
 
-        Log.d(TAG, "onCreate: wakeLockLevelSupported  $wakeLockLevelSupported")
-        val wakeLockProximity = powerManager.newWakeLock(
-            PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "Baiduhi" +
-                    ":CallProximitySensor"
-        )
-        wakeLockProximity.setReferenceCounted(false)
-        wakeLockProximity.acquire(2 * 3600 * 1000)
-        Utils.ensureNetworkAvailable(application)
+                override fun onServiceDisconnected(profile: Int) {
+                    Log.d(TAG, "onServiceDisconnected: ")
+                }
+
+            }, BluetoothProfile.HEADSET)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+        intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_OFF")
+        intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_ON")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(receive, intentFilter,
+                RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(receive, intentFilter)
+        }
         val splashScreen = installSplashScreen()
         setContent {
 
             ComposeApplicationTheme {
-                val rememberScaffoldState = rememberScaffoldState()
-                CompositionLocalProvider(LocalScaffoldState provides rememberScaffoldState) {
+                val rememberScaffoldState = remember { SnackbarHostState() }
+                CompositionLocalProvider(LocalSnackbarHostState provides rememberScaffoldState) {
                     MainPage()
                 }
             }
@@ -101,7 +155,11 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         splashScreen.setOnExitAnimationListener(this)
     }
 
-    @OptIn(ExperimentalCoilApi::class)
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receive)
+    }
+
     override fun onSplashScreenExit(splashScreenViewProvider: SplashScreenViewProvider) {
 
         if (splashScreenViewProvider.view is ViewGroup) {
@@ -205,4 +263,65 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     data object Search : Screen("search", R.string.search, Icons.Filled.Search)
     data object WebView : Screen("webview", R.string.search, Icons.Filled.Search)
     data object TypeTree : Screen("type", R.string.knowledge, Icons.Filled.Search)
+}
+
+
+class BluetoothStateBroadcastReceive : BroadcastReceiver() {
+
+    @Suppress("DEPRECATION")
+    override fun onReceive(context: Context, intent: Intent) {
+        val action = intent.action
+        val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(
+                BluetoothDevice.EXTRA_DEVICE,
+                BluetoothDevice::class.java
+            )
+        } else {
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+        }
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        when (action) {
+            BluetoothDevice.ACTION_ACL_CONNECTED -> Toast.makeText(
+                context,
+                "蓝牙设备:" + device!!.getName() + "已链接",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            BluetoothDevice.ACTION_ACL_DISCONNECTED -> Toast.makeText(
+                context,
+                "蓝牙设备:" + device!!.getName() + "已断开",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            BluetoothAdapter.ACTION_STATE_CHANGED -> {
+                val blueState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)
+                when (blueState) {
+                    BluetoothAdapter.STATE_OFF -> Toast.makeText(
+                        context,
+                        "蓝牙已关闭",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    BluetoothAdapter.STATE_ON -> Toast.makeText(
+                        context,
+                        "蓝牙已开启",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
 }

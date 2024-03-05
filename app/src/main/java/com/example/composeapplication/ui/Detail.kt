@@ -4,7 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +54,9 @@ fun Detail(moviePro: MoviePro) {
             Card(
                 modifier = Modifier.padding(6.dp),
                 shape = RoundedCornerShape(50),
-                // elevation = 8.dp,
-                backgroundColor = likeColorBg
+                colors = CardDefaults.cardColors(
+                    containerColor = likeColorBg
+                )
             ) {
                 IconToggleButton(
                     modifier = Modifier
@@ -77,7 +85,7 @@ fun Detail(moviePro: MoviePro) {
                         .weight(0.9f)
                         .align(Alignment.CenterVertically),
                     text = moviePro.Title,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.titleLarge,
                     color = nameColor,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
@@ -87,7 +95,7 @@ fun Detail(moviePro: MoviePro) {
                     modifier = Modifier
                         .align(Alignment.CenterVertically),
                     text = "Ratings:",
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                     color = nameColor,
                 )
 
@@ -95,14 +103,14 @@ fun Detail(moviePro: MoviePro) {
                     modifier = Modifier
                         .align(Alignment.CenterVertically),
                     text = moviePro.imdbRating,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.titleLarge,
                     color = nameColor,
                 )
             }
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = moviePro.Director,
-                style = MaterialTheme.typography.subtitle2,
+                style = MaterialTheme.typography.titleSmall,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -111,7 +119,7 @@ fun Detail(moviePro: MoviePro) {
 
             Text(
                 text = moviePro.Actors,
-                style = MaterialTheme.typography.subtitle2,
+                style = MaterialTheme.typography.titleSmall,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -120,7 +128,7 @@ fun Detail(moviePro: MoviePro) {
 
             Text(
                 text = moviePro.Plot,
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.bodySmall,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 3
             )
@@ -137,7 +145,7 @@ fun Detail(moviePro: MoviePro) {
                         .weight(0.5f),
                     onClick = {},
                     shape = shapes.large,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = infoButtonColor)
+                    colors = ButtonDefaults.buttonColors(containerColor = infoButtonColor)
                 ) {
                     Text(
                         text = stringResource(id = R.string.movie_info_rent),
@@ -153,7 +161,7 @@ fun Detail(moviePro: MoviePro) {
                         .weight(0.5f),
                     onClick = {},
                     shape = shapes.large,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
                 ) {
                     Text(
                         text = stringResource(id = R.string.movie_info_buy),
@@ -169,17 +177,17 @@ fun Detail(moviePro: MoviePro) {
             ) {
                 Text(
                     text = moviePro.Type + "・",
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                 )
 
                 Text(
                     text = moviePro.Year + "・",
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                 )
 
                 Text(
                     text = moviePro.Runtime,
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
         }

@@ -1,9 +1,9 @@
 package com.example.composeapplication
 
 import android.annotation.SuppressLint
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material3.SnackbarHostState
 
 @SuppressLint("StaticFieldLeak")
 object AppRuntime {
-    var rememberScaffoldState: ScaffoldState? = null
+    var rememberScaffoldState: SnackbarHostState? = null
 }

@@ -2,9 +2,10 @@ package com.example.composeapplication.activity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,14 +14,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun ExpressLocationItem() {
     Scaffold(
         topBar = {
-            TopAppBar {
-                Text(text = "hello")
-            }
+            TopAppBar(
+                title = {
+                    Text(text = "hello")
+                }
+            )
         },
 
         ) {

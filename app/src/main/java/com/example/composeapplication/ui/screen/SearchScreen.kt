@@ -8,10 +8,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -21,7 +31,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -31,6 +40,7 @@ import com.example.composeapplication.viewmodel.search.SearchViewModel
 import java.net.URLEncoder
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = viewModel(),
@@ -44,7 +54,6 @@ fun SearchScreen(
         topBar = {
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colors.primaryVariant)
                     .statusBarsPadding()
             ) {
                 TopAppBar(
@@ -57,8 +66,8 @@ fun SearchScreen(
                     title = {
                         Text(
                             text = "搜索文章",
-                            style = MaterialTheme.typography.subtitle1,
-                            color = MaterialTheme.colors.onPrimary
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     },
                     navigationIcon = {
@@ -68,8 +77,9 @@ fun SearchScreen(
                             Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "back")
                         }
                     },
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
-                    elevation = 0.dp
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    ),
                 )
             }
         }
@@ -109,11 +119,10 @@ private fun SearchContent(search: (key: String) -> Unit) {
     ) {
 
         OutlinedTextField(
-            colors = TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = Color.Transparent,
-                cursorColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                cursorColor = LocalContentColor.current.copy(alpha = LocalContentColor.current.alpha)
             ),
             modifier = Modifier
                 .fillMaxWidth()

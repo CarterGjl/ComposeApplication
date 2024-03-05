@@ -2,15 +2,22 @@ package com.example.composeapplication.ui
 
 import android.app.Application
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -29,7 +36,6 @@ import com.example.composeapplication.bean.Movie
 import com.example.composeapplication.bean.testMovies
 import com.example.composeapplication.viewmodel.ArticleViewModel
 
-@ExperimentalFoundationApi
 @Composable
 fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
     val warningTip = stringResource(id = R.string.input_search_warning)
@@ -89,12 +95,11 @@ fun Find(articleViewModel: ArticleViewModel, onClick: (Movie) -> Unit) {
 
                 shape = editShapes.large,
 
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Blue,
                     focusedLabelColor = Color.Blue,
-                    backgroundColor = pink900,
                     cursorColor = Color.White,
-                    textColor = Color.White,
+                    focusedTextColor = Color.White,
                     unfocusedLabelColor = Color.LightGray
                 )
             )
@@ -129,44 +134,43 @@ fun MovieThumbnail(movie: Movie, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .wrapContentSize()
-            .padding(8.dp)
-    ) {
-        Card(
-            Modifier
-                .border(0.5.dp, Color.Gray, shape = MaterialTheme.shapes.small)
-                .shadow(4.dp),
-            shape = shapes.small,
-            backgroundColor = itemCardColor
-        ) {
-            Column(
-                modifier = Modifier
-                    .clickable(onClick = onClick)
-                    .wrapContentSize()
+            .padding(8.dp),
+        content = {
+            Card(
+                Modifier
+                    .border(0.5.dp, Color.Gray, shape = MaterialTheme.shapes.small)
+                    .shadow(4.dp),
             ) {
-                val contentWidth = 100.dp
-                val contentHeight = 141.dp
-                LoadImage(
-                    url = movie.Poster,
+                Column(
                     modifier = Modifier
-                        .width(contentWidth)
-                        .height(contentHeight),
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = movie.Title
-                )
-                Text(
-                    text = movie.Title,
-                    fontSize = 11.sp,
-                    modifier = Modifier
-                        .width(contentWidth)
-                        .padding(3.dp),
-                    style = MaterialTheme.typography.h6,
-                    color = nameColor,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
+                        .clickable(onClick = onClick)
+                        .wrapContentSize()
+                ) {
+                    val contentWidth = 100.dp
+                    val contentHeight = 141.dp
+                    LoadImage(
+                        url = movie.Poster,
+                        modifier = Modifier
+                            .width(contentWidth)
+                            .height(contentHeight),
+                        contentScale = ContentScale.FillWidth,
+                        contentDescription = movie.Title
+                    )
+                    Text(
+                        text = movie.Title,
+                        fontSize = 11.sp,
+                        modifier = Modifier
+                            .width(contentWidth)
+                            .padding(3.dp),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = nameColor,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 @Preview(showBackground = true)
@@ -185,7 +189,7 @@ fun HelloContent() {
             Text(
                 text = "Hello, $name!",
                 modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.titleMedium
             )
         }
         OutlinedTextField(

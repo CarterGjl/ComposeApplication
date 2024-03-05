@@ -1,6 +1,7 @@
 package com.example.composeapplication.ui.screen
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -8,13 +9,19 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -22,8 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -31,9 +36,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.annotation.ExperimentalCoilApi
 import com.example.composeapplication.AppRuntime
-import com.example.composeapplication.LocalScaffoldState
+import com.example.composeapplication.LocalSnackbarHostState
 import com.example.composeapplication.Screen
 import com.example.composeapplication.extend.ProvideNavHostController
 import com.example.composeapplication.ui.ComposeApplicationTheme
@@ -54,15 +58,15 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalPermissionsApi
-@ExperimentalCoilApi
 @ExperimentalFoundationApi
 @Composable
 fun MainPage(viewModel: MainViewModel = viewModel()) {
 
     val navController = rememberNavController()
-    val rememberScaffoldState = LocalScaffoldState.current
-    AppRuntime.rememberScaffoldState = rememberScaffoldState
+
+    AppRuntime.rememberScaffoldState = LocalSnackbarHostState.current
     viewModel.setNavControllerA(navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -83,11 +87,10 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                 Icon(imageVector = Icons.Filled.Camera, contentDescription = "camera")
             }
         },
-        scaffoldState = rememberScaffoldState
     ) {
         ProvideNavHostController(navHostController = navController) {
             NavHost(
-                modifier = Modifier.padding(it),
+//                modifier = Modifier.padding(it),
                 navController = navController,
                 startDestination = Screen.Article.route
             ) {
@@ -154,8 +157,8 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
                     TypeContentScreen(knowledge = fromJson)
                 }
                 composable(Screen.Music.route) {
-                    VideoScreen()
-//                    PlayerPage()
+//                    VideoScreen()
+                    PlayerPage()
                 }
                 navigation("login", Screen.Mine.route) {
                     composable("login") {
@@ -189,7 +192,6 @@ fun MainPage(viewModel: MainViewModel = viewModel()) {
 @OptIn(
     ExperimentalPermissionsApi::class,
     ExperimentalFoundationApi::class,
-    ExperimentalCoilApi::class
 )
 @Preview(device = Devices.PIXEL_2_XL, showBackground = true, showSystemUi = true)
 @Composable
@@ -199,6 +201,7 @@ fun MainPagePreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppBar(navController: NavHostController, mainViewModel: MainViewModel = viewModel()) {
     val observeAsState by mainViewModel.titleId.observeAsState(Screen.Article.resourceId)
@@ -207,7 +210,7 @@ private fun AppBar(navController: NavHostController, mainViewModel: MainViewMode
             modifier = Modifier
                 .windowInsetsTopHeight(WindowInsets.statusBars)
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.primaryVariant)
+                .background(MaterialTheme.colorScheme.primaryContainer)
         )
         TopAppBar(
             actions = {
@@ -223,12 +226,13 @@ private fun AppBar(navController: NavHostController, mainViewModel: MainViewMode
             title = {
                 Text(
                     text = stringResource(id = observeAsState),
-                    style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.onPrimary
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             },
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            elevation = 0.dp
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
         )
     }
 }

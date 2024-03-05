@@ -18,10 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.media3.common.MediaItem
@@ -117,53 +118,67 @@ fun PlayerPage() {
                     } else {
                         0.dp
                     }
-                    Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        elevation = 10.dp,
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxWidth()
-                            .height(100.dp)
-                            .padding(bottom = bottom)
-                    ) {
-                        Button(colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.DarkGray
-                        ), onClick = {
-                            player.seekTo(position, 0)
-                            player.prepare()
-                            player.play()
-                        }) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()
-                            ) {
-                                val album = list[position].album
-                                if (album != null) {
-                                    Image(
-                                        modifier = Modifier
-                                            .height(60.dp)
-                                            .width(60.dp)
-                                            .clip(RoundedCornerShape(10.dp)),
-
-                                        painter = BitmapPainter(album.asImageBitmap()),
-                                        contentDescription = ""
-                                    )
-                                }
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = list[position].title ?: "",
-                                    style = TextStyle(
-                                        color = Color.White
-                                    )
-                                )
-                            }
-                        }
-                    }
+                    val musicData = list[position]
+                    MusicItem(bottom, musicData, onClick = {
+                        player.seekTo(position, 0)
+                        player.prepare()
+                        player.play()
+                    })
                 }
             }
         }
     }
 
 
+}
+
+@Composable
+private fun MusicItem(
+    bottom: Dp,
+    musicData: MusicData,
+    onClick: () -> Unit,
+) {
+    Surface(
+        shape = RoundedCornerShape(10.dp),
+        shadowElevation = 10.dp,
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+            .height(100.dp)
+            .padding(bottom = bottom)
+    ) {
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.DarkGray,
+            ),
+            onClick = onClick,
+            shape = RoundedCornerShape(10.dp),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+                val album = musicData.album
+                if (album != null) {
+                    Image(
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(60.dp)
+                            .clip(RoundedCornerShape(10.dp)),
+
+                        painter = BitmapPainter(album.asImageBitmap()),
+                        contentDescription = ""
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = musicData.title ?: "",
+                    style = TextStyle(
+                        color = Color.White
+                    )
+                )
+            }
+        }
+    }
 }

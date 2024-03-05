@@ -5,7 +5,12 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -151,7 +156,7 @@ fun BottomButton(text: String, callback: () -> Unit) {
     Text(
         text = text,
         color = Color.White,
-        style = MaterialTheme.typography.body1,
+        style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .padding(16.dp, 8.dp)
@@ -178,13 +183,13 @@ fun CustomLoadingLayout(stateLayoutData: StateLayoutData) {
                 ) {
                     Text(
                         text = item.tipTex ?: "",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp)
                     )
                     CircularProgressIndicator()
                     Text(
                         text = "自定义布局",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -221,7 +226,7 @@ private fun CardItem() {
                 .background(color = Color.Gray)
                 .wrapContentHeight()
                 .padding(top = 8.dp),
-            elevation = 8.dp
+            elevation = CardDefaults.cardElevation()
         ) {
             Text(
                 text = "This is a Card",
