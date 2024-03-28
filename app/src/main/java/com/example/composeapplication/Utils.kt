@@ -2,9 +2,6 @@
 
 package com.example.composeapplication
 
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities

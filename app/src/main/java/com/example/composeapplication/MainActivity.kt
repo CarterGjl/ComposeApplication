@@ -21,11 +21,13 @@ import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.automirrored.filled.QueueMusic
@@ -40,12 +42,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen
@@ -62,11 +66,57 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 // 官方demo地址
 // https://github.com/android/compose-samples
-val LocalSnackbarHostState = compositionLocalOf<SnackbarHostState> { error("LocalSnackbarHostState 没有提供值！") }
+val LocalSnackbarHostState =
+    compositionLocalOf<SnackbarHostState> { error("LocalSnackbarHostState 没有提供值！") }
 
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
     private val receive = BluetoothStateBroadcastReceive()
+    private var requestPermissionName: String = ""
+
+    private val requestSinglePermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            for (key in it.keys) {
+                val granted = it[key]
+                if (granted == true && key == Manifest.permission.BLUETOOTH_CONNECT) {
+                    //同意授权
+                    val bluetoothManager: BluetoothManager =
+                        getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+
+                    val adapter = bluetoothManager.adapter
+                    adapter
+                        .getProfileProxy(this, object : BluetoothProfile.ServiceListener {
+                            override fun onServiceConnected(
+                                profile: Int,
+                                proxy: BluetoothProfile?
+                            ) {
+                                val devices: List<BluetoothDevice>? = proxy?.connectedDevices
+                                Log.d(TAG, "onServiceConnected: devices $devices")
+                            }
+
+                            override fun onServiceDisconnected(profile: Int) {
+                                Log.d(TAG, "onServiceDisconnected: ")
+                            }
+
+                        }, BluetoothProfile.HEADSET)
+                    Log.d("-,-,-", "$requestPermissionName granted")
+                } else {
+                    Log.d("-,-,-", "$requestPermissionName not granted")
+                    //未同意授权
+                    if (!shouldShowRequestPermissionRationale(requestPermissionName)) {
+                        //用户拒绝权限并且系统不再弹出请求权限的弹窗
+                        //这时需要我们自己处理，比如自定义弹窗告知用户为何必须要申请这个权限
+                        Log.e(
+                            "-,-,-",
+                            "$requestPermissionName not granted and should not show rationale"
+                        )
+                    }
+                }
+            }
+
+        }
+
+
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @OptIn(
         ExperimentalPermissionsApi::class,
@@ -84,7 +134,8 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
                 Manifest.permission.BLUETOOTH
             )
         }
-        ActivityCompat.requestPermissions(this, permission, 102)
+
+        requestSinglePermissionLauncher.launch(permission)
 
 //        val audioManager: AudioManager = getSystemService(AudioManager::class.java)
 //        val listener =
@@ -111,21 +162,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 //        wakeLockProximity.setReferenceCounted(false)
 //        wakeLockProximity.acquire(2 * 3600 * 1000)
 //        Utils.ensureNetworkAvailable(application)
-        val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
-        val adapter = bluetoothManager.adapter
-        adapter
-            .getProfileProxy(this, object : BluetoothProfile.ServiceListener {
-                override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
-                    val devices : List<BluetoothDevice>? = proxy?.connectedDevices
-                    Log.d(TAG, "onServiceConnected: devices $devices")
-                }
-
-                override fun onServiceDisconnected(profile: Int) {
-                    Log.d(TAG, "onServiceDisconnected: ")
-                }
-
-            }, BluetoothProfile.HEADSET)
         val intentFilter = IntentFilter()
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
@@ -133,8 +170,10 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_OFF")
         intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_ON")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(receive, intentFilter,
-                RECEIVER_NOT_EXPORTED)
+            registerReceiver(
+                receive, intentFilter,
+                RECEIVER_NOT_EXPORTED
+            )
         } else {
             registerReceiver(receive, intentFilter)
         }
@@ -159,6 +198,8 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         super.onDestroy()
         unregisterReceiver(receive)
     }
+
+
 
     override fun onSplashScreenExit(splashScreenViewProvider: SplashScreenViewProvider) {
 
@@ -235,13 +276,17 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 @Composable
 fun BoxScope() {
     Box(
-        contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
+            .height(30.dp)
+
+            .blur(30.dp)
+            .background(Color.DarkGray)
+//            .graphicsLayer(renderEffect = BlurEffect(radiusX = 25F, radiusY = 25F))
     ) {
-        Text(text = "empty")
+
     }
+    Text(text = "empty")
 }
 
 

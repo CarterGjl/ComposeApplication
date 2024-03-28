@@ -21,7 +21,7 @@ import com.example.composeapplication.viewmodel.MainViewModel
 val items = listOf(
     Screen.Article,
     Screen.TypeTree,
-    Screen.Weather,
+//    Screen.Weather,
     Screen.Mine,
     Screen.Music
 )
