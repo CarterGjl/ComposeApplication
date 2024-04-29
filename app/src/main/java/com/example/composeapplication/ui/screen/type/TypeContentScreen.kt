@@ -1,5 +1,3 @@
-@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
-
 package com.example.composeapplication.ui.screen.type
 
 import android.util.Log
@@ -95,12 +93,6 @@ private fun TypeContentAppbar(
     val tabDatas = knowledge.children
     val tabIndex = pagerState.currentPage
     Column {
-        Spacer(
-            modifier = Modifier
-                .windowInsetsTopHeight(WindowInsets.statusBars)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-        )
         TopAppBar(
             title = {
                 Text(
@@ -117,11 +109,11 @@ private fun TypeContentAppbar(
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.secondary
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
             ),
         )
         ScrollableTabRow(
-            containerColor = MaterialTheme.colorScheme.secondary,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedTabIndex = tabIndex,
             modifier = Modifier
                 .fillMaxWidth()

@@ -1,5 +1,6 @@
 package com.example.composeapplication.ui.screen
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.net.http.SslError
 import android.os.Build
@@ -7,6 +8,9 @@ import android.util.Log
 import android.webkit.*
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -16,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material.icons.filled.Update
@@ -71,6 +76,8 @@ import com.example.composeapplication.viewmodel.BannerViewModel
 import com.example.composeapplication.viewmodel.State
 import com.example.composeapplication.viewmodel.search.SearchViewModel
 import com.example.composeapplication.widget.FpsMonitor
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.gson.Gson
 
 
@@ -298,7 +305,9 @@ private fun ArticleListPaging(
         val scaleFraction = if (pullRefreshState.isRefreshing) 1f else
             LinearOutSlowInEasing.transform(pullRefreshState.progress).coerceIn(0f, 1f)
 
-        Box(modifier = Modifier.padding(top = 60.dp).align(Alignment.TopCenter)) {
+        Box(modifier = Modifier
+            .padding(top = 60.dp)
+            .align(Alignment.TopCenter)) {
             PullToRefreshContainer(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -311,11 +320,36 @@ private fun ArticleListPaging(
 
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ArticleScreen(
     navController: NavController,
     onClick: (url: String, title: String) -> Unit
 ) {
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        //When the user has selected a photo, its URL is returned here
+    }
+    val strings = remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+            )
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    val rememberMultiplePermissionsState = rememberMultiplePermissionsState(permissions = strings.asList())
+
     val bannerViewModel: BannerViewModel = viewModel()
     val state by bannerViewModel.stateLiveData.observeAsState(State.Loading)
     Scaffold(
@@ -327,6 +361,19 @@ fun ArticleScreen(
                         navController.navigate(Screen.Search.route)
                     }) {
                         Icon(Icons.Filled.Search, contentDescription = "Search")
+                    }
+                    IconButton(onClick = {
+                        launcher.launch(
+                            PickVisualMediaRequest(
+                            //Here we request only photos. Change this to .ImageAndVideo if
+                            //you want videos too.
+                            //Or use .VideoOnly if you only want videos.
+                            mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                        )
+
+                    }) {
+                        Icon(Icons.Filled.Photo, contentDescription = "Search")
                     }
                 }
             )

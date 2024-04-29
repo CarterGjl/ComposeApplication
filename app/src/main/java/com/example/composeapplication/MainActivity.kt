@@ -1,9 +1,14 @@
 package com.example.composeapplication
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_MEDIA_IMAGES
+import android.Manifest.permission.READ_MEDIA_VIDEO
+import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothA2dp
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -68,7 +73,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 // https://github.com/android/compose-samples
 val LocalSnackbarHostState =
     compositionLocalOf<SnackbarHostState> { error("LocalSnackbarHostState 没有提供值！") }
-
+private const val TAG = "MainActivity"
 class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
 
     private val receive = BluetoothStateBroadcastReceive()
@@ -84,6 +89,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
                         getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
                     val adapter = bluetoothManager.adapter
+
                     adapter
                         .getProfileProxy(this, object : BluetoothProfile.ServiceListener {
                             override fun onServiceConnected(
@@ -167,6 +173,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        intentFilter.addAction(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)
         intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_OFF")
         intentFilter.addAction("android.bluetooth.BluetoothAdapter.STATE_ON")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -338,6 +345,7 @@ class BluetoothStateBroadcastReceive : BroadcastReceiver() {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
+        Log.d(TAG, "onReceive: $action")
         when (action) {
             BluetoothDevice.ACTION_ACL_CONNECTED -> Toast.makeText(
                 context,
