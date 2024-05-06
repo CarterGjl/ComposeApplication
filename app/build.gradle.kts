@@ -49,8 +49,8 @@ android {
 }
 
 dependencies {
-    val composeVersion = "1.6.6"
-    implementation("androidx.core:core-ktx:1.13.0")
+    val composeVersion = "1.6.7"
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.compose.ui:ui:$composeVersion")
 //    implementation("androidx.compose.material:material:$composeVersion")
@@ -58,7 +58,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    implementation("androidx.appcompat:appcompat:1.7.0-alpha03")
+    implementation("androidx.appcompat:appcompat:1.7.0-beta01")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -83,7 +83,7 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     // 替代sharepreference
-    val preferencesVersion = "1.1.0"
+    val preferencesVersion = "1.1.1"
     implementation("androidx.datastore:datastore-preferences:$preferencesVersion")
     implementation("androidx.datastore:datastore-preferences-core:$preferencesVersion")
     implementation("androidx.paging:paging-compose:3.2.1")
