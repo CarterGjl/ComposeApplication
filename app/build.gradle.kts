@@ -25,8 +25,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     kotlin {
         sourceSets.all {
@@ -37,13 +37,13 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "19"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.12"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     namespace = "com.example.composeapplication"
 }
@@ -53,21 +53,20 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.compose.ui:ui:$composeVersion")
-//    implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    implementation("androidx.appcompat:appcompat:1.7.0-beta01")
+    implementation("androidx.appcompat:appcompat:1.7.0-rc01")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    val livecycleVersion = "2.7.0"
+    val livecycleVersion = "2.8.0"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$livecycleVersion")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$livecycleVersion")
@@ -86,8 +85,8 @@ dependencies {
     val preferencesVersion = "1.1.1"
     implementation("androidx.datastore:datastore-preferences:$preferencesVersion")
     implementation("androidx.datastore:datastore-preferences-core:$preferencesVersion")
-    implementation("androidx.paging:paging-compose:3.2.1")
-    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-compose:3.3.0")
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
 
     val cameraxVersion = "1.3.3"
     // CameraX core library using camera2 implementation
