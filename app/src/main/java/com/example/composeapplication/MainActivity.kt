@@ -125,6 +125,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         ExperimentalFoundationApi::class,
     )
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         val permission: Array<String> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             arrayOf(
@@ -180,7 +181,7 @@ class MainActivity : BaseActivity(), SplashScreen.OnExitAnimationListener {
         } else {
             registerReceiver(receive, intentFilter)
         }
-        val splashScreen = installSplashScreen()
+
         setContent {
 
             ComposeApplicationTheme {

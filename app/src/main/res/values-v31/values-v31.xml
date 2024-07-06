@@ -8,9 +8,24 @@
         </item>
         <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>
-    <style name="Theme.SplashScreen.IconBackground" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenIconBackgroundColor">
-            ?windowSplashScreenIconBackgroundColor
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.App</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSplashScreenAnimatedIcon">?windowSplashScreenAnimatedIcon</item>
+        <item name="android:windowSplashScreenBackground">?windowSplashScreenBackground</item>
+        <item name="android:windowSplashScreenAnimationDuration">
+            ?windowSplashScreenAnimationDuration
         </item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>
+<!--  官方里面提供了  -->
+<!--    <style name="Theme.SplashScreen.IconBackground" parent="Theme.SplashScreen">-->
+<!--        <item name="android:windowSplashScreenIconBackgroundColor">-->
+<!--            ?windowSplashScreenIconBackgroundColor-->
+<!--        </item>-->
+<!--    </style>-->
 </resources>

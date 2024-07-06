@@ -1,6 +1,9 @@
 package com.example.composeapplication.ui.screen.type
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -22,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,11 +36,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composeapplication.R
 import com.example.composeapplication.ui.screen.LoadingPage
+import com.example.composeapplication.ui.screen.VerticalOverscroll
 import com.example.composeapplication.ui.screen.type.bean.TreeListResponse
 import com.example.composeapplication.ui.screen.type.viewmodel.TypeTreeViewModel
 import com.example.composeapplication.ui.screen.widget.MyAppBar
 import com.example.composeapplication.viewmodel.State
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TypeScreen(
     treeViewModel: TypeTreeViewModel = viewModel(),
@@ -53,13 +62,24 @@ fun TypeScreen(
         val observeAsState: List<TreeListResponse.Knowledge> by treeViewModel.knowledges.observeAsState(
             emptyList()
         )
+        val listState = rememberLazyListState()
         val state by treeViewModel.stateLiveData.observeAsState(State.Loading)
-
+        val coroScope = rememberCoroutineScope()
+        val overscrollEffect = remember(coroScope) { VerticalOverscroll(coroScope) }
         LoadingPage(state = state, loadInit = {
             treeViewModel.getTreeResponse()
         }) {
             LazyColumn(
-                modifier = Modifier.padding(it),
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxWidth()
+                    .overscroll(overscrollEffect)
+                    .scrollable(
+                        orientation = Orientation.Vertical,
+                        reverseDirection = true,
+                        state = listState,
+                        overscrollEffect = overscrollEffect
+                    ),
                 contentPadding = PaddingValues(15.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
